@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#ffe6f2"/>
+  <path d="M120,100 C120,80 180,80 180,100 L180,180 C180,200 120,200 120,180 Z" fill="#ffb3d9" stroke="#cc0066" stroke-width="2"/>
+  <text x="150" y="150" font-family="Arial" font-size="14" text-anchor="middle" fill="#800040">Biotin</text>
+  <text x="150" y="170" font-family="Arial" font-size="14" text-anchor="middle" fill="#800040">Supplement</text>
+</svg>

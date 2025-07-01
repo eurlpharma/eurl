@@ -1,0 +1,170 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String    @id @default(cuid())
+  name                 String
+  email                String    @unique
+  password             String
+  role                 Role      @default(USER)
+  isActive             Boolean   @default(true)
+  avatar               String?   @default("")
+  phone                String?
+  street               String?
+  city                 String?
+  postalCode           String?
+  country              String?
+  adminNotes           String?   @default("")
+  resetPasswordToken   String?
+  resetPasswordExpire  DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  // Relations
+  products             Product[]
+  orders               Order[]
+  reviews              Review[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  image       String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id             String    @id @default(cuid())
+  userId         String
+  name           String
+  slug           String    @unique
+  images         Json      // Array of strings
+  imagesFolder   String?
+  categoryId     String
+  description    String    @db.Text
+  richDescription String?  @db.Text
+  price          Float
+  oldPrice       Float     @default(0)
+  countInStock   Int       @default(0)
+  rating         Float     @default(0)
+  numReviews     Int       @default(0)
+  isFeatured     Boolean   @default(false)
+  isVisible      Boolean   @default(true)
+  brand          String?
+  specifications Json?     // Array of objects
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Relations
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category       Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  reviews        Review[]
+  orderItems     OrderItem[]
+
+  @@map("products")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  name      String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  userId            String
+  orderItems        OrderItem[]
+  shippingAddress   Json        // Object with address details
+  paymentMethod     String
+  paymentResult     Json?       // Object with payment details
+  itemsPrice        Float
+  taxPrice          Float       @default(0)
+  shippingPrice     Float       @default(0)
+  totalPrice        Float
+  isPaid            Boolean     @default(false)
+  paidAt            DateTime?
+  isDelivered       Boolean     @default(false)
+  deliveredAt       DateTime?
+  status            OrderStatus @default(PENDING)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  // Relations
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  productId String
+  name      String
+  qty       Int
+  image     String
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+model Settings {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String   @db.Text
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("settings")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+} 

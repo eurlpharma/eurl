@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#e6f7ff"/>
+  <circle cx="150" cy="150" r="80" fill="#b3e0ff" stroke="#0099cc" stroke-width="2"/>
+  <text x="150" y="160" font-family="Arial" font-size="16" text-anchor="middle" fill="#005580">Omega-3 Fish Oil</text>
+</svg>

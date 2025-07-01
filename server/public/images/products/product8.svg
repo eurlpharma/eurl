@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#e6ffee"/>
+  <rect x="110" y="80" width="80" height="140" fill="#b3ffcc" stroke="#00cc66" stroke-width="2" rx="5" ry="5"/>
+  <rect x="120" y="90" width="60" height="120" fill="#e6ffee" stroke="#00cc66" stroke-width="1" rx="3" ry="3"/>
+  <text x="150" y="160" font-family="Arial" font-size="14" text-anchor="middle" fill="#006633">First Aid Kit</text>
+</svg>
