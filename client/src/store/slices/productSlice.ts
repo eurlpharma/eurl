@@ -160,7 +160,6 @@ export const createProduct = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      console.error('Error creating product:', error.response?.data || error);
       const message = 
         error.response?.data?.message || 
         error.message || 
@@ -220,9 +219,7 @@ export const deleteProduct = createAsyncThunk(
       try {
         await axios.delete(`/api/upload/product/${id}`);
       } catch (folderError) {
-        // If folder deletion fails, we still want to continue
-        // Just log the error but don't reject the promise
-        console.warn('Failed to delete product folder:', folderError);
+        return null
       }
       
       return id;

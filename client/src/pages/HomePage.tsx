@@ -2,9 +2,7 @@ import {
   Box,
 } from '@mui/material';
 import HeroHome from '@/components/hero/HeroHome';
-import ServicesSection from '@/components/home/ServicesSection';
-import FeaturedSection from '@/components/home/FeaturedSection';
-import QuickAboutSection from '@/components/home/QuickAboutSection';
+
 import TopTheCharts from '@/components/global/TopTheCharts';
 import StretchSection from '@/components/global/StretchSection';
 import CatsBlog from '@/components/global/CatsBlog';

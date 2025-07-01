@@ -35,9 +35,9 @@ import { getProducts, deleteProduct } from '@/store/slices/productSlice';
 import AIButton from '@/components/buttons/AIButton';
 import { AppDispatch } from '@/store';
 
-const API_URL = import.meta.env.VITE_API_URL || `http://192.168.1.2:5000`;
 
-// Página de administración de productos
+const API_URL = import.meta.env.VITE_API_URL || `https://eurl-server.onrender.com`;
+
 const ProductsPage = () => {
   const { t } = useTranslation();
   const { success } = useNotification();

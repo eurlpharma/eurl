@@ -8,21 +8,15 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
-import { HeroUIProvider } from "@heroui/react";
 import "./styles/index.css";
-import 'animate.css'
+import "animate.css";
 
-
-
-// Polyfill for global to fix Draft.js error
 if (typeof window !== "undefined" && !window.global) {
   (window as any).global = window;
 }
 
-// إخفاء إنذارات React Router وإنذارات CSS
 const originalConsoleWarn = console.warn;
 console.warn = function filterWarnings(msg, ...args) {
-  // تجاهل إنذارات React Router وإنذارات CSS
   if (
     typeof msg === "string" &&
     (msg.includes("React Router Future Flag Warning") ||
@@ -34,10 +28,8 @@ console.warn = function filterWarnings(msg, ...args) {
   return originalConsoleWarn(msg, ...args);
 };
 
-// إخفاء أخطاء CSS في وحدة التحكم
 const originalConsoleError = console.error;
 console.error = function filterErrors(msg, ...args) {
-  // تجاهل أخطاء CSS
   if (
     typeof msg === "string" &&
     (msg.includes("Could not access stylesheet rules") ||
@@ -49,7 +41,6 @@ console.error = function filterErrors(msg, ...args) {
   return originalConsoleError(msg, ...args);
 };
 
-// تطبيق إعدادات React Router لتجاهل الإنذارات المستقبلية
 const routerOptions = {
   future: {
     v7_startTransition: true,
@@ -59,18 +50,16 @@ const routerOptions = {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <HeroUIProvider>
-      <Provider store={store}>
-        <BrowserRouter {...routerOptions}>
-          <I18nextProvider i18n={i18n}>
-            <ThemeProvider>
-              <AuthProvider>
-                <App />
-              </AuthProvider>
-            </ThemeProvider>
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>
-    </HeroUIProvider>
+    <Provider store={store}>
+      <BrowserRouter {...routerOptions}>
+        <I18nextProvider i18n={i18n}>
+          <ThemeProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </ThemeProvider>
+        </I18nextProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );

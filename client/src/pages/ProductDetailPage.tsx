@@ -68,7 +68,7 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
-const API_URL = import.meta.env.VITE_API_URL || `http://192.168.1.2:5000`;
+const API_URL = import.meta.env.VITE_API_URL || `https://eurl-server.onrender.com`;
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -269,7 +269,6 @@ const ProductDetailPage = () => {
                               onError={(e) => {
                                 (e.target as HTMLImageElement).src =
                                   "/images/product-placeholder.svg";
-                                console.error(`فشل تحميل الصورة: ${image}`);
                               }}
                             />
                           </PhotoView>
@@ -341,10 +340,9 @@ const ProductDetailPage = () => {
               {product?.price !== undefined ? product.price.toFixed(2) : "0.00"}
             </Typography>
 
-            <Typography variant="body1" className="mb-6">
-              <p dir="auto" className="whitespace-pre">
-                {product?.description || t("products.noDescription")}
-              </p>
+
+            <Typography variant="body1" className="mb-6" dir="auto" style={{ whiteSpace: 'pre' }}>
+              {product?.description || t("products.noDescription")}
             </Typography>
 
             <Divider className="mb-6" />

@@ -53,8 +53,7 @@ const ForgotPasswordPage = () => {
       await dispatch(forgotPasswordRequest(data.email)).unwrap();
       setEmailSent(true);
     } catch (err) {
-      // Error is handled by the auth slice and displayed below
-      console.error('Forgot password error:', err);
+      return null;
     }
   };
   

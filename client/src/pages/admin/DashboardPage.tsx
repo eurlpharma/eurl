@@ -150,7 +150,7 @@ const DashboardPage = () => {
 
       <Grid container spacing={3} className="mb-6">
         {statsData.map((stat, index) => {
-          const colorClass = bgColors[stat.color] || "bg-gray-400"; // لون افتراضي
+          const colorClass = bgColors[stat.color] || "bg-gray-400";  
 
           return (
             <Grid item xs={12} sm={6} md={3} key={index}>
@@ -357,11 +357,12 @@ const DashboardPage = () => {
                               <ul style={{margin:0, padding:0, listStyle:'none'}}>
                                 {order.orderItems.map((item, i) => (
                                   <li key={i} style={{display:'flex', alignItems:'center', gap:6, marginBottom:2}}>
-                                    {item.product && item.product.images && item.product.images.length > 0 ? (
+
+                                    {item.image ? (
                                       <img
-                                        src={item.product.images[0].startsWith('http')
-                                          ? item.product.images[0]
-                                          : `${import.meta.env.VITE_API_URL}/uploads/${item.product.images[0]}`}
+                                        src={item.image.startsWith('http')
+                                          ? item.image
+                                          : `${import.meta.env.VITE_API_URL}/uploads/${item.image}`}
                                         alt={item.name}
                                         style={{width:28, height:28, objectFit:'cover', borderRadius:4, marginRight:4}}
                                       />
@@ -381,7 +382,7 @@ const DashboardPage = () => {
                               <ul style={{margin:0, padding:0, listStyle:'none'}}>
                                 {order.orderItems.map((item, i) => (
                                   <li key={i}>
-                                    <p>{item.qty}</p>
+                                    <p>{item.quantity}</p>
                                   </li>
                                 ))}
                               </ul>

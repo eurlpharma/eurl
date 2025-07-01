@@ -81,8 +81,7 @@ const LoginPage = () => {
         }, 100);
       }
     } catch (err) {
-      // Error is handled by the auth slice and displayed below
-      console.error("Login error:", err);
+      return null;
     }
   };
 

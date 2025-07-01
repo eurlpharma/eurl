@@ -141,7 +141,6 @@ const OrderDetailPage = () => {
     navigate("/admin/orders");
   };
 
-  // Get status chip color
   const getStatusColor = (status: OrderStatus) => {
     switch (status) {
       case "pending":
@@ -159,7 +158,6 @@ const OrderDetailPage = () => {
     }
   };
 
-  // Get current step in order process
   const getCurrentStep = (status?: string) => {
     if (!status) return 0;
     switch (status.toLowerCase()) {

@@ -138,7 +138,7 @@ const CheckoutPage = () => {
       await dispatch(createOrder(orderData)).unwrap();
     } catch (error: any) {
       if (error.response?.status === 401) {
-        console.error("Error creating order:", error);
+        return null;
       }
       throw error;
     }

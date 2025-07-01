@@ -329,16 +329,15 @@ const ProductsPage = () => {
       <Breadcrumb pageName="Products" />
 
       <Container maxWidth="xl" className="py-16">
-        <Grid container spacing={4}>
-          {/* Filters - Desktop */}
+
+        <Grid container spacing={4} key="main-container">
           {!isMobile && (
-            <Grid item xs={12} md={3} lg={2}>
+            <Grid item xs={12} md={3} lg={2} key="filters-desktop">
               <Box className="sticky top-24 ">{filtersContent}</Box>
             </Grid>
           )}
 
-          {/* Products */}
-          <Grid item xs={12} md={9} lg={10}>
+          <Grid item xs={12} md={9} lg={10} key="products-section">
             {/* Toolbar */}
             <Box className="flex flex-wrap justify-between items-center mb-6">
               <div className="products-filter">
@@ -432,8 +431,8 @@ const ProductsPage = () => {
               </Box>
             )}
 
-            {/* Products grid */}
-            <Grid container spacing={2}>
+
+            <Grid container spacing={2} key="products-grid">
               {loading ? (
                 // Loading placeholders
                 Array.from(new Array(limit)).map((_, index) => (
@@ -442,8 +441,9 @@ const ProductsPage = () => {
                   </Grid>
                 ))
               ) : products && products.length > 0 ? (
-                products.map((product: any) => (
-                  <Grid item xs={6} sm={6} md={4} lg={3} key={product.id}>
+
+                products.map((product: any, index: number) => (
+                  <Grid item xs={6} sm={6} md={4} lg={3} key={product._id || `product-${index}`}>
                     <ProductCardList product={product} />
                   </Grid>
                 ))

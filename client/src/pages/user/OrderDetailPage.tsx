@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useParams, Link as RouterLink } from "react-router-dom";
+
+import { useParams } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -193,8 +194,7 @@ const OrderDetailPage = () => {
 
               <Box className="mt-2 sm:mt-0">
                 <Tooltip title="Update Order Status">
-                  <div onClick={() => console.log("update status")}>
-
+                  <div>
                   <Chip
                     label={
                       order.status

@@ -51,15 +51,11 @@ export const login = createAsyncThunk(
   'auth/login',
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
-      console.log('authSlice: login called with credentials:', credentials);
       const data = await loginUser(credentials);
-      console.log('authSlice: loginUser response:', data);
       
       // Check if response has the expected structure
       if (data && data.success && data.token) {
-        localStorage.setItem('token', data.token);
-        console.log('authSlice: login successful, user:', data.user);
-        
+        localStorage.setItem('token', data.token);        
         // Dispatch custom event to notify AuthContext
         window.dispatchEvent(new CustomEvent('tokenUpdated', { 
           detail: { token: data.token } 
@@ -71,7 +67,6 @@ export const login = createAsyncThunk(
           token: data.token
         } as AuthResponse;
       } else {
-        console.log('authSlice: invalid response structure:', data);
         return rejectWithValue('Invalid response structure from server');
       }
     } catch (error: any) {
@@ -79,7 +74,6 @@ export const login = createAsyncThunk(
         error.response?.data?.message || 
         error.message || 
         'Login failed';
-      console.log('authSlice: login error:', message);
       return rejectWithValue(message);
     }
   }

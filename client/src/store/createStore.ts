@@ -9,6 +9,7 @@ type ReducersMapObject = { [key: string]: Reducer<any, AnyAction> };
 export function createAppStore(reducers: ReducersMapObject) {
   return configureStore({
     reducer: reducers,
+    devTools: false,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {

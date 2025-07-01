@@ -25,7 +25,7 @@ export const useFormWithValidation = <T extends FieldValues>({
       setIsSubmitting(true);
       await onSubmit(data);
     } catch (error) {
-      console.error('Form submission error:', error);
+      return null;
     } finally {
       setIsSubmitting(false);
     }

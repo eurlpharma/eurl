@@ -42,7 +42,6 @@ const RichTextEditor: FC<RichTextEditorProps> = ({
       );
       return EditorState.createWithContent(contentState);
     } catch (error) {
-      console.error("Error parsing HTML to Draft:", error);
       return EditorState.createEmpty();
     }
   });
@@ -72,10 +71,9 @@ const RichTextEditor: FC<RichTextEditorProps> = ({
           contentBlocks,
           entityMap
         );
-        if (isMounted.current) setEditorState(EditorState.createWithContent(contentState));
-      } catch (error) {
-        console.error("Error parsing HTML to Draft:", error);
-      }
+        if (isMounted.current)
+          setEditorState(EditorState.createWithContent(contentState));
+      } catch (error) {}
     }
   }, [value]);
 
@@ -104,12 +102,7 @@ const RichTextEditor: FC<RichTextEditorProps> = ({
           editorClassName={`px-3 py-2 font-poppins min-h-[${height}px]`}
           placeholder={placeholder || t("form.richTextPlaceholder")}
           toolbar={{
-            options: [
-              "inline",
-              "blockType",
-              "list",
-              "textAlign",
-            ],
+            options: ["inline", "blockType", "list", "textAlign"],
             inline: {
               options: ["bold", "italic", "underline", "strikethrough"],
             },

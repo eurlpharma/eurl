@@ -17,11 +17,9 @@ const FloatingLeaf = ({ src }: FloatingLeafProps) => {
     const leaf = leafRef.current;
     if (!leaf) return;
 
-    // مركز مبدئي
     let baseX = getRandom(0, screenWidth);
     let baseY = getRandom(0, screenHeight);
 
-    // سرعة الانجراف في الاتجاهات العامة (يسار/يمين، فوق/تحت)
     const driftX = getRandom(-0.2, 0.2);
     const driftY = getRandom(-0.2, 0.2);
 
@@ -47,11 +45,9 @@ const FloatingLeaf = ({ src }: FloatingLeafProps) => {
 
       t += speedFactor;
 
-      // انجراف تدريجي لموقع مركز الورقة
       baseX += driftX;
       baseY += driftY;
 
-      // الحفاظ على الورقة داخل الإطار
       if (baseX < 0) baseX = screenWidth;
       if (baseX > screenWidth) baseX = 0;
       if (baseY < 0) baseY = screenHeight;

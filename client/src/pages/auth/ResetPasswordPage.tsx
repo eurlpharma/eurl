@@ -21,6 +21,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { AppDispatch, RootState } from '@/store';
 import { resetPasswordRequest, verifyResetTokenRequest } from '@/store/slices/authSlice';
+import Preloader from '@/components/global/Preloader';
 
 interface ResetPasswordFormData {
   password: string;
@@ -100,8 +101,7 @@ const ResetPasswordPage = () => {
         navigate('/auth/login');
       }, 3000);
     } catch (err) {
-      // Error is handled by the auth slice and displayed below
-      console.error('Reset password error:', err);
+      return null;
     }
   };
   
@@ -116,12 +116,7 @@ const ResetPasswordPage = () => {
   // Show loading state while checking token
   if (!tokenChecked) {
     return (
-      <Container maxWidth="sm" className="py-12">
-        <Paper elevation={3} className="p-8 text-center">
-          <CircularProgress size={40} className="mb-4" />
-          <Typography>{t('common.loading')}</Typography>
-        </Paper>
-      </Container>
+      <Preloader />
     );
   }
   

@@ -1,4 +1,4 @@
-// facebookPixel.ts
+
 declare global {
   interface Window {
     fbq: any;

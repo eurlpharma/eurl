@@ -1,6 +1,5 @@
 import i18n from '../i18n';
 
-// تنسيق التاريخ
 export const formatDate = (date: string | Date | undefined) => {
   if (!date) return '-';
   return new Date(date).toLocaleDateString('en-US', {
@@ -12,7 +11,6 @@ export const formatDate = (date: string | Date | undefined) => {
   });
 };
 
-// تنسيق السعر
 export const formatPrice = (price: number) => {
   const lang = i18n.language || 'en';
   let symbol = 'DA';

@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import "swiper/css";
 
-
 interface ProductCardListProps extends HTMLAttributes<HTMLElement> {
   product: ProductCartType | null;
   isSale?: boolean;
@@ -63,15 +62,10 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
     }
   };
 
-  console.log(product);
-
   return (
     <div
       className="product"
-      // onMouseEnter={() => console.log("mouse enter")}
-      // onMouseLeave={() => console.log("mouse leave")}
       data-aos="fade-up"
-      // data-aos-duration={`${(index + 1) * 300}`}
       onClick={() => navigate(`/products/${product.id}`)}
       {...props}
     >
@@ -91,7 +85,7 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
                 src &&
                 (src.startsWith("/uploads") || src.startsWith("uploads/"))
               ) {
-                imageUrl = `http://192.168.1.2:5000${
+                imageUrl = `https://eurl-server.onrender.com${
                   src.startsWith("/") ? "" : "/"
                 }${src}`;
               } else if (
@@ -101,7 +95,7 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
                 imageUrl = src;
               }
               return (
-                <SwiperSlide key={idx}>
+                <SwiperSlide key={`${product.id}-image-${idx}`}>
                   <img src={imageUrl} className="image" />
                 </SwiperSlide>
               );

@@ -61,9 +61,6 @@ const Header = () => {
 
   const cart = useSelector((state: RootState) => state.cart);
   const items = cart?.items || [];
-
-  console.log('Header Debug:', { isAuthenticated, user, loading });
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [langAnchorEl, setLangAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

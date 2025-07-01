@@ -15,8 +15,6 @@ import { getCategories } from "@/store/slices/categorySlice";
 import { toast } from "react-toastify";
 import { RootState } from "@/store";
 import { v4 as uuidv4 } from 'uuid';
-
-// UI Components
 import { Grid, Paper, Typography } from "@mui/material";
 import FormField from "@/components/form/FormField";
 import RichTextEditor from "@/components/form/RichTextEditor";
@@ -25,7 +23,6 @@ import AIButton from "@/components/buttons/AIButton";
 import { IconAI, IconAIBold, IconTrashBold } from "@/components/Iconify";
 import { GeminiAI } from "@/utils/gemini";
 
-// Types
 interface ProductFormData {
   name: string;
   description: string;
@@ -42,9 +39,9 @@ interface ProductFormData {
   }>;
   stock: number;
   isActive: boolean;
+  images?: string[];
 }
 
-// Validation schema
 const productSchema = yup.object().shape({
   name: yup.string().required("Product name is required"),
   description: yup.string().required("Product description is required"),
@@ -156,7 +153,6 @@ const ProductFormPage = () => {
       });
 
       if (product.images && product.images.length > 0) {
-        // تأكد من أن مسارات الصور كاملة
         const fullImageUrls = product.images.map((image: string) => {
           if (image.startsWith("http")) {
             return image;
@@ -172,7 +168,7 @@ const ProductFormPage = () => {
   }, [isEditMode, product, form]);
 
   useEffect(() => {
-    // عند إنشاء منتج جديد، أنشئ productId مؤقت
+
     if (!isEditMode && !productId) {
       setProductId(uuidv4());
     } else if (isEditMode && product?.id) {
@@ -186,7 +182,6 @@ const ProductFormPage = () => {
       let response;
       let submitData = { ...data };
 
-      // إذا تم إدخال سعر جديد
       if (data.newPrice && Number(data.newPrice) !== Number(product?.price)) {
         submitData.oldPrice = product?.price;
         submitData.price = Number(data.newPrice);
@@ -194,8 +189,6 @@ const ProductFormPage = () => {
         submitData.oldPrice = product?.price;
       }
       delete submitData.newPrice;
-
-      // --- رفع الصور هنا فقط عند الحفظ ---
       let uploadedImageUrls: string[] = [...imageUrls];
       if (images.length > 0 && productId) {
         const token = localStorage.getItem('token');
@@ -218,10 +211,8 @@ const ProductFormPage = () => {
       submitData.images = uploadedImageUrls;
 
       if (isEditMode && id) {
-        // Update existing product
-        const formData = new FormData();
 
-        // Add product data
+        const formData = new FormData();
         Object.entries(submitData).forEach(([key, value]) => {
           if (value !== undefined) {
             if (key === "specifications" && value) {
@@ -255,10 +246,7 @@ const ProductFormPage = () => {
           throw new Error(response.message || "Failed to update product");
         }
       } else {
-        // Create new product
         const formData = new FormData();
-
-        // Add product data
         Object.entries(submitData).forEach(([key, value]) => {
           if (value !== undefined) {
             if (key === "specifications" && value) {
@@ -292,7 +280,6 @@ const ProductFormPage = () => {
         }
       }
     } catch (error: any) {
-      console.error("Error submitting form:", error);
       toast.error(error.message || t("notifications.error"));
     } finally {
       setIsSubmitting(false);
@@ -443,7 +430,6 @@ const ProductFormPage = () => {
       <Paper elevation={0} className="p-6 mb-6">
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <Grid container spacing={3}>
-            {/* Basic Information */}
             <Grid item xs={12}>
               <Typography variant="h6" className="mb-4">
                 {t("admin.basicInformation")}
@@ -620,7 +606,6 @@ const ProductFormPage = () => {
               />
             </Grid>
 
-            {/* Images */}
             <Grid item xs={12}>
               <Typography variant="h6" className="mb-4">
                 {t("admin.images")}
@@ -634,7 +619,6 @@ const ProductFormPage = () => {
               />
             </Grid>
 
-            {/* Submit Button */}
             <Grid item xs={12}>
               <AIButton
                 type="submit"

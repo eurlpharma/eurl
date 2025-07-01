@@ -1,9 +1,7 @@
-/* تخصيص معرض الصور */
 .product-image-gallery {
   margin-bottom: 20px;
 }
 
-/* تحسين أزرار التنقل */
 .image-gallery-left-nav, .image-gallery-right-nav {
   padding: 10px 15px;
   background-color: rgba(255, 255, 255, 0.7);
@@ -15,7 +13,6 @@
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-/* تحسين زر التكبير */
 .image-gallery-fullscreen-button {
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.7);
@@ -27,7 +24,6 @@
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-/* تحسين الصور المصغرة */
 .image-gallery-thumbnail {
   border-radius: 4px;
   overflow: hidden;
@@ -35,7 +31,7 @@
 }
 
 .image-gallery-thumbnail.active {
-  border: 2px solid #1976d2; /* لون الحدود للصورة المصغرة النشطة */
+  border: 2px solid #1976d2;
 }
 
 .image-gallery-thumbnail:hover {
@@ -43,19 +39,16 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* تحسين الصورة الرئيسية */
 .image-gallery-image {
   border-radius: 8px;
   cursor: zoom-in;
 }
 
-/* تحسين وضع ملء الشاشة */
 .fullscreen .image-gallery-image {
   border-radius: 0;
   cursor: zoom-out;
 }
 
-/* تحسين التنقل في الهاتف المحمول */
 @media (max-width: 768px) {
   .image-gallery-left-nav, .image-gallery-right-nav {
     padding: 5px 10px;

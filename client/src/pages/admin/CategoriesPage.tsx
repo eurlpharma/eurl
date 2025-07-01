@@ -42,27 +42,22 @@ interface Category {
   image?: string;
 }
 
-// Página de administración de categorías
 const CategoriesPage = () => {
   const { t } = useTranslation();
   const { success, error } = useNotification();
   
-  // Redux
   const dispatch = useDispatch();
   const { categories, loading, error: categoriesError } = useSelector((state: RootState) => state.categories);
 
-  // جلب التصنيفات عند تحميل الصفحة
   useEffect(() => {
     dispatch(getCategories() as any);
   }, [dispatch]);
   
-  // Estado para el diálogo
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   
-  // Estado del formulario
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -72,7 +67,6 @@ const CategoriesPage = () => {
 
   const [previewImage, setPreviewImage] = useState<string>('');
   
-  // Manejadores para el diálogo de categoría
   const handleOpenDialog = (category: Category | null = null) => {
     if (category) {
       setFormData({
@@ -86,7 +80,8 @@ const CategoriesPage = () => {
         setPreviewImage(
           category.image.startsWith('http')
             ? category.image
-            : `http://192.168.1.2:5000/uploads/categories/${category.image}`
+
+            : `https://eurl-server.onrender.com/uploads/categories/${category.image}`
         );
       } else {
         setPreviewImage('');
@@ -109,7 +104,6 @@ const CategoriesPage = () => {
     setDialogOpen(false);
   };
   
-  // Manejadores para el diálogo de eliminación
   const handleOpenDeleteDialog = (category: Category) => {
     setSelectedCategory(category);
     setDeleteDialogOpen(true);
@@ -119,7 +113,6 @@ const CategoriesPage = () => {
     setDeleteDialogOpen(false);
   };
   
-  // Manejador para cambios en el formulario
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }> | SelectChangeEvent) => {
     const { name, value } = e.target;
     setFormData({
@@ -139,7 +132,6 @@ const CategoriesPage = () => {
     }
   };
   
-  // Validación del formulario
   const validateForm = () => {
     const errors: Record<string, string> = {};
     if (!formData.name.trim()) {
@@ -149,7 +141,6 @@ const CategoriesPage = () => {
     return Object.keys(errors).length === 0;
   };
   
-  // حفظ أو تعديل التصنيف
   const handleSaveCategory = async () => {
     if (!validateForm()) return;
     try {
@@ -158,45 +149,39 @@ const CategoriesPage = () => {
       formDataToSend.append('description', formData.description);
       formDataToSend.append('isActive', formData.isActive.toString());
       
-      // إضافة الصورة فقط إذا تم اختيار صورة جديدة
       if (formData.image) {
         formDataToSend.append('image', formData.image);
       }
 
       if (selectedCategory) {
-        // تعديل تصنيف
         const result = await dispatch(updateCategory({ 
           id: selectedCategory.id, 
           categoryData: formDataToSend 
         }) as any).unwrap();
         
-        // تحديث الصورة المعاينة بعد التحديث
         if (result.image) {
           setPreviewImage(
             result.image.startsWith('http')
               ? result.image
-              : `http://192.168.1.2:5000/uploads/categories/${result.image}`
+              : `https://eurl-server.onrender.com/uploads/categories/${result.image}`
           );
         }
         
         success(t('admin.categoryUpdated'));
       } else {
-        // إضافة تصنيف جديد
         const result = await dispatch(createCategory(formDataToSend) as any).unwrap();
         
-        // تحديث الصورة المعاينة بعد الإنشاء
         if (result.image) {
           setPreviewImage(
             result.image.startsWith('http')
               ? result.image
-              : `http://192.168.1.2:5000/uploads/categories/${result.image}`
+              : `https://eurl-server.onrender.com/uploads/categories/${result.image}`
           );
         }
         
         success(t('admin.categoryCreated'));
       }
       
-      // تحديث قائمة التصنيفات
       dispatch(getCategories() as any);
       handleCloseDialog();
     } catch (err: any) {
@@ -204,7 +189,6 @@ const CategoriesPage = () => {
     }
   };
   
-  // حذف تصنيف
   const handleDeleteCategory = async () => {
     if (selectedCategory) {
       try {
@@ -234,7 +218,6 @@ const CategoriesPage = () => {
         </Button>
       </Box>
       
-      {/* Tabla de categorías */}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -247,7 +230,6 @@ const CategoriesPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* حالة التحميل */}
             {loading && (
               <TableRow>
                 <TableCell colSpan={5} align="center">
@@ -255,7 +237,6 @@ const CategoriesPage = () => {
                 </TableCell>
               </TableRow>
             )}
-            {/* حالة الخطأ */}
             {categoriesError && (
               <TableRow>
                 <TableCell colSpan={5} align="center" style={{ color: 'red' }}>
@@ -263,7 +244,6 @@ const CategoriesPage = () => {
                 </TableCell>
               </TableRow>
             )}
-            {/* عرض التصنيفات */}
             {!loading && !categoriesError && categories && categories.length > 0 ? (
               categories.map((category: Category) => (
                 <TableRow key={category.id}>
@@ -273,7 +253,7 @@ const CategoriesPage = () => {
                         category.image
                           ? category.image.startsWith('http')
                             ? category.image
-                            : `http://192.168.1.2:5000/uploads/categories/${category.image}`
+                            : `https://eurl-server.onrender.com/uploads/categories/${category.image}`
                           : '/images/placeholder.png'
                       }
                       alt={category.name}
@@ -324,7 +304,6 @@ const CategoriesPage = () => {
         </Table>
       </TableContainer>
       
-      {/* Diálogo de categoría */}
       <Dialog container={document.getElementById("root")} open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
         <DialogTitle>
           {selectedCategory ? t('admin.editCategory') : t('admin.addCategory')}
@@ -400,7 +379,6 @@ const CategoriesPage = () => {
         </DialogActions>
       </Dialog>
       
-      {/* Diálogo de eliminación */}
       <Dialog open={deleteDialogOpen} onClose={handleCloseDeleteDialog}>
         <DialogTitle>{t('admin.deleteCategory')}</DialogTitle>
         <DialogContent>

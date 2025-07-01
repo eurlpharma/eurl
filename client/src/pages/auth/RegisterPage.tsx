@@ -107,7 +107,7 @@ const RegisterPage = () => {
       // Navigation will happen in the useEffect above
     } catch (err) {
       // Error is handled by the auth slice and displayed below
-      console.error('Registration error:', err);
+      return null;
     }
   };
   

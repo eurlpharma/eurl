@@ -1,6 +1,4 @@
-// sliceReducers.ts - ملف لتجميع المخفضات بطريقة تتجنب الاعتمادات الدائرية
 
-// استخدام dynamic imports لتجنب الاعتمادات الدائرية
 export const getReducers = async () => {
   const authModule = await import('./slices/authSlice');
   const productModule = await import('./slices/productSlice');

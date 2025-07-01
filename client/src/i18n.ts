@@ -12,11 +12,11 @@ i18n
   .use(initReactI18next)
   // Initialize i18next
   .init({
-    fallbackLng: 'en', // Default language is English
+    fallbackLng: 'en',
     supportedLngs: ['en', 'fr', 'ar'],
-    debug: false, // تعطيل وضع التصحيح لمنع رسائل المفاتيح المفقودة
+    debug: false, //
     interpolation: {
-      escapeValue: false, // React already escapes values
+      escapeValue: false, 
     },
     detection: {
       order: ['localStorage', 'navigator'],
@@ -29,9 +29,9 @@ i18n
       useSuspense: true,
     },
     saveMissing: false,
-    missingKeyHandler: () => {}, // تجاهل المفاتيح المفقودة
-    returnNull: false, // استخدام المفتاح بدلاً من null عند عدم وجود ترجمة
-    returnEmptyString: false, // استخدام المفتاح بدلاً من سلسلة فارغة عند عدم وجود ترجمة
+    missingKeyHandler: () => {}, 
+    returnNull: false,
+    returnEmptyString: false,
   });
 
 export default i18n;

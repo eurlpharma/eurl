@@ -1,14 +1,11 @@
-// ملف متجر Redux الرئيسي
+
 import { createAppStore } from './createStore';
 import { combineReducers, Reducer, AnyAction } from 'redux';
 
-// تعريف نوع للمخفضات
 type ReducersMapObject = { [key: string]: Reducer<any, AnyAction> };
 
-// إنشاء مخفضات فارغة للبدء
 const dummyReducer = (state = {}) => state;
 
-// تعريف هيكل المخفضات
 const initialReducers: ReducersMapObject = {
   auth: dummyReducer,
   products: dummyReducer,
@@ -20,20 +17,14 @@ const initialReducers: ReducersMapObject = {
   settings: dummyReducer
 };
 
-// إنشاء المتجر بمخفض فارغ في البداية
 export const store = createAppStore(initialReducers);
 
-// تعريف الأنواع
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-// استيراد المخفضات الحقيقية بعد إنشاء المتجر
-// هذا يتجنب مشكلة الاعتمادات الدائرية
 
-// استيراد المخفضات الحقيقية بعد إنشاء المتجر
 const importReducers = async () => {
   try {
-    // استيراد المخفضات بشكل ديناميكي
     const authReducer = (await import('./slices/authSlice')).default;
     const currentReducers: ReducersMapObject = { ...initialReducers, auth: authReducer };
     store.replaceReducer(combineReducers(currentReducers));
@@ -66,14 +57,12 @@ const importReducers = async () => {
     const withSettings: ReducersMapObject = { ...withUI, settings: settingsReducer };
     store.replaceReducer(combineReducers(withSettings));
 
-    // تم تحميل جميع المخفضات بنجاح
+
   } catch (error) {
-    console.error('Error loading reducers:', error);
+    return null;
   }
 };
 
-// تنفيذ استيراد المخفضات
 importReducers();
 
-// تصدير المتجر كقيمة افتراضية
 export default store;

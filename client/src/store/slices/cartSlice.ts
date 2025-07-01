@@ -56,18 +56,13 @@ export const addToCart = createAsyncThunk(
   async ({ productId, quantity }: { productId: string; quantity: number }, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/api/products/${productId}`);
-      console.log('[addToCart] API response:', response.data);
-      // التحقق من هيكل الاستجابة واستخراج المنتج بشكل صحيح
       const productData = response.data.success && response.data.product 
         ? response.data.product 
         : response.data;
-      console.log('[addToCart] productData:', productData);
       if (!productData || !productData.id) {
-        console.log('[addToCart] Invalid product data received from server');
         return rejectWithValue('Invalid product data received from server');
       }
       if (productData.countInStock < quantity) {
-        console.log('[addToCart] Not enough stock available');
         return rejectWithValue('Not enough stock available');
       }
       const item: CartItem = {
@@ -80,14 +75,12 @@ export const addToCart = createAsyncThunk(
         price: productData.price,
         quantity,
       };
-      console.log('[addToCart] item to add:', item);
       return item;
     } catch (error: any) {
       const message = 
         error.response?.data?.message || 
         error.message || 
         'Failed to add item to cart';
-      console.log('[addToCart] Error:', message, error);
       return rejectWithValue(message);
     }
   }
@@ -165,11 +158,10 @@ const cartSlice = createSlice({
       .addCase(addToCart.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        console.log('[addToCart.fulfilled] action.payload:', action.payload);
+
         const item = action.payload;
         if (!item || typeof item !== 'object' || !item.id) {
           state.error = 'Invalid item data';
-          console.log('[addToCart.fulfilled] Invalid item data:', item);
           return;
         }
         const existingItem = state.items.find((x) => x.id === item.id);

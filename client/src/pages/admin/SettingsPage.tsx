@@ -19,7 +19,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSettings, updateSettings } from '@/store/slices/settingsSlice';
 import { RootState } from '@/store/storeConfig';
 import { AppDispatch } from '@/store';
-const API_URL = import.meta.env.VITE_API_URL || `http://192.168.1.2:5000`;
+
+const API_URL = import.meta.env.VITE_API_URL || `https://eurl-server.onrender.com`;
 import AIButton from '@/components/buttons/AIButton';
 
 const SettingsPage = () => {

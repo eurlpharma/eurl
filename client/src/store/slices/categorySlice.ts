@@ -28,7 +28,7 @@ export const getCategories = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get('/api/categories', {
-        baseURL: 'http://192.168.1.2:5000',
+        baseURL: 'https://eurl-server.onrender.com',
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export const createCategory = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post('/api/categories', categoryData, {
-        baseURL: 'http://192.168.1.2:5000',
+        baseURL: 'https://eurl-server.onrender.com',
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ export const updateCategory = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(`/api/categories/${id}`, categoryData, {
-        baseURL: 'http://192.168.1.2:5000',
+        baseURL: 'https://eurl-server.onrender.com',
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -105,8 +105,8 @@ export const deleteCategory = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`/api/categories/${id}`, {
-        baseURL: 'http://192.168.1.2:5000',
+      await axios.delete(`/api/categories/${id}`, {
+        baseURL: 'https://eurl-server.onrender.com',
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,

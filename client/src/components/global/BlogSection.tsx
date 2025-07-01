@@ -70,8 +70,6 @@ const BlogSection: FC<BlogSectionProps> = () => {
                   <div
                     key={index}
                     className="blog"
-                    // onMouseEnter={() => console.log("mouse enter")}
-                    // onMouseLeave={() => console.log("mouse leave")}
                     data-aos="fade-up"
                     data-aos-duration={`${(index + 1) * 300}`}
                   >
