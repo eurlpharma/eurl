@@ -1,0 +1,68 @@
+/* تخصيص معرض الصور */
+.product-image-gallery {
+  margin-bottom: 20px;
+}
+
+/* تحسين أزرار التنقل */
+.image-gallery-left-nav, .image-gallery-right-nav {
+  padding: 10px 15px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.image-gallery-left-nav:hover, .image-gallery-right-nav:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* تحسين زر التكبير */
+.image-gallery-fullscreen-button {
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.image-gallery-fullscreen-button:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* تحسين الصور المصغرة */
+.image-gallery-thumbnail {
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.image-gallery-thumbnail.active {
+  border: 2px solid #1976d2; /* لون الحدود للصورة المصغرة النشطة */
+}
+
+.image-gallery-thumbnail:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* تحسين الصورة الرئيسية */
+.image-gallery-image {
+  border-radius: 8px;
+  cursor: zoom-in;
+}
+
+/* تحسين وضع ملء الشاشة */
+.fullscreen .image-gallery-image {
+  border-radius: 0;
+  cursor: zoom-out;
+}
+
+/* تحسين التنقل في الهاتف المحمول */
+@media (max-width: 768px) {
+  .image-gallery-left-nav, .image-gallery-right-nav {
+    padding: 5px 10px;
+  }
+  
+  .image-gallery-thumbnail {
+    margin-right: 5px;
+    width: 60px;
+  }
+}

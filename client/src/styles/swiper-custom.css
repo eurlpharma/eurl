@@ -1,0 +1,119 @@
+/* تخصيص Swiper للمنتجات */
+.product-swiper-container {
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* الصورة الرئيسية */
+.product-swiper {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 10px;
+}
+
+.product-swiper .swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.product-swiper .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+/* الصور المصغرة */
+.product-thumbs {
+  height: 80px;
+  box-sizing: border-box;
+  padding: 5px 0;
+}
+
+.product-thumbs .swiper-slide {
+  width: 80px;
+  height: 80px;
+  opacity: 0.6;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.product-thumbs .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-thumbs .swiper-slide-thumb-active {
+  opacity: 1;
+  border-color: #1976d2;
+}
+
+.product-thumbs .swiper-slide:hover {
+  opacity: 0.8;
+}
+
+/* أزرار التنقل */
+.product-swiper .swiper-button-next,
+.product-swiper .swiper-button-prev {
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #333;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.product-swiper .swiper-button-next:hover,
+.product-swiper .swiper-button-prev:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.product-swiper .swiper-button-next:after,
+.product-swiper .swiper-button-prev:after {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* نقاط التنقل */
+.product-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0.5;
+}
+
+.product-swiper .swiper-pagination-bullet-active {
+  background-color: #1976d2;
+  opacity: 1;
+}
+
+/* تكبير الصورة */
+.swiper-zoom-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* تحسينات للهاتف المحمول */
+@media (max-width: 768px) {
+  .product-swiper {
+    height: 300px;
+  }
+  
+  .product-thumbs {
+    height: 60px;
+  }
+  
+  .product-thumbs .swiper-slide {
+    width: 60px;
+    height: 60px;
+  }
+}
