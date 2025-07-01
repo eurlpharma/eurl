@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#ffe6e6"/>
+  <path d="M120,80 C100,120 100,180 120,220 L180,220 C200,180 200,120 180,80 Z" fill="#ffb3b3" stroke="#cc0000" stroke-width="2"/>
+  <text x="150" y="150" font-family="Arial" font-size="14" text-anchor="middle" fill="#800000">Hot Water</text>
+  <text x="150" y="170" font-family="Arial" font-size="14" text-anchor="middle" fill="#800000">Bottle</text>
+</svg>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" fill="#f0f0f0"/>
+  <path d="M120,90 L180,90 L190,190 L110,190 Z" fill="#d9d9d9" stroke="#808080" stroke-width="2"/>
+  <rect x="140" y="70" width="20" height="20" fill="#d9d9d9" stroke="#808080" stroke-width="2"/>
+  <text x="150" y="150" font-family="Arial" font-size="14" text-anchor="middle" fill="#4d4d4d">Digital</text>
+  <text x="150" y="170" font-family="Arial" font-size="14" text-anchor="middle" fill="#4d4d4d">Stethoscope</text>
+</svg>

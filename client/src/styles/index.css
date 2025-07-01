@@ -1,0 +1,650 @@
+@import "@flaticon/flaticon-uicons/css/all/all.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #2196f3;
+  --secondary-color: #e91e63;
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --light-blue: #bbdefb;
+  --dark-blue: #1565c0;
+}
+
+@layer base {
+  html {
+    direction: ltr;
+    scroll-behavior: smooth;
+  }
+
+  html[dir="rtl"] {
+    direction: rtl;
+  }
+
+  body {
+    @apply bg-white text-gray-800 font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-medium;
+  }
+
+  a {
+    @apply text-primary-600 hover:text-primary-800 transition-colors;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4;
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-500 text-white hover:bg-secondary-600 focus:ring-secondary-500;
+  }
+
+  .btn-outline {
+    @apply border border-primary-500 text-primary-500 hover:bg-primary-50 focus:ring-primary-500;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-card hover:shadow-card-hover transition-shadow p-4;
+  }
+
+  .form-control {
+    @apply w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .form-error {
+    @apply text-red-600 text-sm mt-1;
+  }
+
+  .page-container {
+    @apply min-h-[calc(100vh-160px)] py-8;
+  }
+
+  .section {
+    @apply my-8;
+  }
+}
+
+/* RTL specific styles */
+html[dir="rtl"] .ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+html[dir="rtl"] .mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container-custom {
+    @apply px-2;
+  }
+
+  .page-container {
+    @apply py-4;
+  }
+}
+
+main {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  @apply max-w-full;
+}
+
+/* Preloader start */
+@keyframes loadingEffect {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Float Leaf */
+@keyframes floatLeaf {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-30px, -200px) rotate(180deg);
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(50px, 100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.leaf {
+  animation: floatLeaf 8s ease-in-out infinite;
+}
+
+.animate-loading-effect {
+  background-image: linear-gradient(
+    to right,
+    #ee2d7a 10%,
+    #232323 50%,
+    #ed1b6f 60%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: loadingEffect 6s linear infinite;
+}
+
+/* custom classess start */
+.overlay {
+  @apply bg-black/70 w-full h-full absolute top-0 left-0 z-10;
+}
+/* custom classess end */
+
+#root .py-8 {
+  @apply px-1 md:px-2 lg:px-3;
+}
+
+/* Global Section Start */
+.top-cats {
+  @apply py-14 bg-girl-white font-josefin;
+}
+
+.top-cats .content {
+  @apply space-y-10;
+}
+
+.top-cats .content .header {
+  @apply select-none flex flex-col items-center justify-center gap-4;
+}
+
+.top-cats .content .header .title {
+  @apply text-4xl capitalize text-[#232323];
+}
+
+.top-cats .content .header .barline {
+  @apply w-20 h-1 rounded-lg bg-girl-primary relative 
+  before:w-8 before:h-0.5 before:bg-girl-white before:contents before:absolute
+  before:left-1/2 before:-translate-x-1/2 before:top-1/2 before:-translate-y-1/2;
+}
+
+.top-cats .content .cats {
+  @apply w-full;
+}
+
+.top-cats .content .cats .box {
+  @apply flex flex-col items-center justify-center gap-6 cursor-pointer;
+}
+
+.top-cats .content .cats .box .icon {
+  @apply transition-all w-20 h-20 bg-white flex items-center
+    justify-center rounded-full shadow-lg shadow-transparent;
+}
+
+.top-cats .content .cats .box .icon img {
+  @apply w-10 h-10;
+}
+
+.top-cats .content .cats .box .name {
+  @apply capitalize transition-colors text-xl text-[#313131];
+}
+
+.top-cats .content .cats .box:hover .icon {
+  @apply shadow-girl-secondary/5;
+}
+
+.top-cats .content .cats .box:hover .icon,
+.top-cats .content .cats .box:hover .name {
+  @apply text-girl-secondary;
+}
+/* Global Section End */
+
+/* Product Card Start */
+.product {
+  @apply w-[98%] border border-solid border-transparent 
+    transition-all hover:border-girl-secondary overflow-hidden;
+}
+
+.product .thumbs {
+  @apply relative overflow-hidden;
+}
+
+.product .thumbs .image {
+  @apply w-full h-72 object-cover bg-[#fbf7f8];
+}
+.product .thumbs .over-mode {
+  @apply absolute top-0 left-0 w-full h-full bg-transparent opacity-0 z-10 transition
+}
+
+.product:hover .thumbs .over-mode {
+  @apply bg-[#ffffff80] opacity-100
+}
+
+.product .thumbs .over {
+  @apply absolute top-0 z-10 font-montserat uppercase text-tiny 
+  h-6 min-w-8 flex items-center justify-center;
+}
+
+.product .thumbs .over.sale {
+  @apply right-0 bg-girl-vividGreenCyan text-girl-white px-2;
+}
+
+.product .thumbs .over.pink {
+  @apply left-0 bg-girl-secondary text-girl-white flex items-center
+  justify-center;
+}
+
+.product .thumbs .over.pink::before {
+  content: "";
+  @apply absolute z-10 top-0
+  -right-4 border-solid border-girl-secondary border-[12px]
+  border-r-transparent
+}
+
+.product .thumbs .in-cart {
+  @apply absolute -bottom-10 transition opacity-0 duration-1000
+}
+
+.product:hover .thumbs .in-cart {
+  @apply bottom-2 right-2 z-10 opacity-100
+}
+
+.product .info {
+  @apply py-6 px-3 flex flex-col items-center justify-center gap-2
+}
+
+.product .info .price {
+  @apply flex items-center gap-1 font-poppins text-lg
+}
+
+.product .info .price .rem-price {
+  @apply text-[#777] line-through
+}
+
+.product .info .price .new-price {
+  @apply text-[#1e1e1e]
+}
+
+.product .info .name {
+  @apply capitalize text-lg text-[#1e1e1e] line-clamp-1
+}
+/* Product Card End */
+
+/* Stretch section start */
+.stretch {
+  @apply py-20 bg-girl-primary/5 relative overflow-hidden
+}
+
+.stretch .back-over {
+  @apply absolute top-0 left-0 w-full h-full object-cover opacity-[0.05]
+}
+
+.stretch .back-over img {
+  @apply w-full h-full object-contain
+}
+
+.stretch .content {
+  @apply flex flex-col lg:flex-row gap-10 min-h-[24rem]
+}
+
+.stretch .content .side.left {
+  @apply min-w-[33%] min-h-[24rem] relative
+}
+
+.stretch .content .side.left img {
+  @apply absolute w-full h-full object-cover
+}
+
+.stretch .content .side.right {
+  @apply w-full h-full relative
+}
+
+.stretch .content .side.right .items {
+  @apply grid grid-cols-2 gap-y-7 lg:gap-y-14
+}
+
+.stretch .content .side.right .items .item {
+  @apply flex items-start gap-2 lg:gap-5 w-full left-0 lg:left-auto
+}
+
+.stretch .content .side.right .items .item .icon img {
+  @apply w-20
+}
+
+.stretch .content .side.right .items .item .info {
+  @apply space-y-4
+}
+
+.stretch .content .side.right .items .item .info .name {
+  @apply lg:text-xl capitalize transition-colors
+}
+
+.stretch .content .side.right .items .item .info .name.active {
+  @apply text-girl-secondary
+}
+
+.stretch .content .side.right .items .item:hover .info .name.active {
+  @apply text-girl-black
+}
+
+
+.stretch .content .side.right .items .item .info .text {
+  @apply text-sm lg:text-medium font-poppins text-[#848484] w-full
+}
+/* Stretch section end */
+
+/* services start */
+.services {
+  @apply relative py-20;
+}
+
+.services .title {
+  @apply relative text-center font-opensans uppercase text-2xl 
+  font-semibold before:w-20 before:h-[3px] before:bg-room-900 
+  before:absolute before:left-1/2 before:-translate-x-1/2 
+  before:-bottom-3 before:rounded-full text-[#4b4b4b];
+}
+
+/* services end */
+
+/* box services start */
+.box-services {
+  @apply flex items-start gap-6;
+}
+
+.box-services .icon {
+  @apply bg-room-900 rounded-full min-w-16 h-16 flex 
+  items-center justify-center transition-all
+  border-solid border-2 border-room-900;
+}
+
+.box-services .icon .svg {
+  @apply text-white w-8 h-8 transition-all;
+}
+
+.box-services:hover .icon {
+  @apply bg-white;
+}
+
+.box-services:hover .icon .svg {
+  @apply text-room-900;
+}
+
+.box-services .info {
+  @apply space-y-3;
+}
+
+.box-services .info h2 {
+  @apply font-montserat text-[#4b4b4b];
+}
+
+.box-services .info p {
+  @apply text-sm text-[#777] font-opensans;
+}
+/* box services end */
+
+/* featured start */
+.featured .i-parallax img {
+  @apply object-cover;
+}
+
+.featured .content {
+  @apply py-16 space-y-10 relative z-20;
+}
+
+.featured .content .top-bar {
+  @apply flex items-center justify-between gap-3;
+}
+
+.featured .content .top-bar h2 {
+  @apply text-2xl text-white font-montserat uppercase relative
+  before:w-32 before:h-1 before:bg-room-900 before:absolute
+  before:rounded-full before:-bottom-2;
+}
+
+.featured .content .top-bar .ctrls {
+  @apply flex items-center gap-3;
+}
+
+.featured .content .top-bar .ctrls .icon {
+  @apply w-8 h-8 border-1 hover:border-room-900 border-solid 
+  cursor-pointer hover:text-room-900 flex items-center justify-center
+  transition-all border-[#777] text-[#777];
+}
+
+.featured .content .top-bar .ctrls .icon .svg {
+  @apply w-6 h-6;
+}
+
+.feature-box {
+  @apply relative select-none cursor-pointer;
+}
+
+.feature-box .overlay {
+  @apply opacity-0 transition-all;
+}
+
+.feature-box:hover .overlay {
+  @apply opacity-100 bg-black/80 z-10;
+}
+
+.feature-box img {
+  @apply w-full h-80 object-cover;
+}
+
+.feature-box .info {
+  @apply absolute left-1/2 -translate-x-1/2 z-50 -bottom-16 text-center 
+  transition-all opacity-0 p-3 select-auto;
+}
+
+.feature-box:hover .info {
+  @apply bottom-6 opacity-100 w-full;
+}
+
+.feature-box .info .title {
+  @apply text-white uppercase text-lg underline line-clamp-1 font-chakra;
+}
+
+.feature-box .info .category {
+  @apply capitalize text-room-900;
+}
+/* featured end */
+
+/* AppBar Start */
+.ui-navbar header {
+  @apply bg-black lg:bg-black/40 fixed top-0 left-0 w-full shadow-none;
+}
+
+.ui-navbar .top {
+  @apply border-b-1 border-solid border-white/20;
+}
+
+.ui-navbar .btm {
+  @apply h-20
+}
+
+.ui-navbar .btm .content {
+  @apply h-20 justify-between
+}
+
+/* AppBar End */
+
+/* Quick about start */
+.q-about {
+  @apply py-10 md:py-16 lg:py-20;
+}
+
+.q-about .top {
+  @apply pb-6;
+}
+
+.q-about .top .title {
+  @apply text-lg uppercase relative before:absolute before:-bottom-1 before:w-20 
+  before:bg-room-900 before:h-0.5;
+}
+
+.q-about .main {
+  @apply flex items-start gap-10 flex-col lg:flex-row;
+}
+
+.q-about .main section {
+  @apply w-full lg:w-1/2;
+}
+
+.q-about .css-13ldasq-MuiPaper-root-MuiAccordion-root::before {
+  display: none;
+}
+/* Quick about end */
+
+/* products page start */
+.products-filter > div.flex {
+  margin-bottom: 0px !important;
+}
+
+.product-card {
+  /* background: none !important; */
+}
+/* products page end */
+
+/* hacker-fields start */
+.hacker-input .css-w8xu18-MuiInputBase-root-MuiInput-root::after {
+  @apply border-girl-secondary
+}
+
+.hacker-input .css-1kgtf8q-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+  @apply text-girl-secondary
+}
+
+.hacker-input .css-jid95t-MuiFormLabel-root-MuiInputLabel-root {
+  @apply font-josefin text-lg
+}
+/* hacker-fields end */
+
+/* about start */
+.about {
+  @apply relative
+}
+
+.about .cover {
+  @apply fixed top-0 left-0 w-screen h-screen object-cover z-0 opacity-10
+}
+
+.about .content {
+  @apply bg-girl-secondary/10 py-20
+}
+
+.about .content .toolbar {
+  @apply flex flex-col items-center justify-center gap-4
+}
+
+.about .content .toolbar p {
+  @apply text-girl-secondary capitalize
+}
+
+.about .content .toolbar h2 {
+  @apply capitalize font-josefin text-5xl pb-10
+}
+
+.about .details {
+
+}
+
+.about .details .side {
+  @apply relative
+}
+
+.about .details .side.start {
+  @apply w-full bg-girl-white
+}
+
+.about .details .side.end {
+  @apply w-3/4
+}
+
+.about .details .side iframe {
+  @apply w-full h-[42rem] shadow-lg rounded-lg
+}
+
+.about .details .side .social-box {
+  @apply bg-girl-yellow absolute z-10 top-1/2 -translate-y-1/2 -left-10 p-3
+}
+
+.about .details .side .social-box .social {
+  @apply border-dashed border-girl-black/50 border-2 py-20 px-20 space-y-8
+}
+
+.about .details .side .social-box h2 {
+  @apply font-josefin text-xl capitalize
+}
+
+.about .details .side .social-box p {
+
+}
+
+.about .details .side .social-box .items {
+  @apply space-y-6
+}
+
+.about .details .side .social-box .items .item {
+  @apply flex items-center gap-3
+}
+
+.about .details .side .social-box .items .item .icon {
+
+}
+
+.about .details .side .social-box .items .item .info {
+
+}
+
+
+.about .ab-sect {
+  @apply relative py-20
+}
+
+.about .ab-sect .cover-sect {
+  @apply absolute top-0 left-0 w-full h-full object-cover z-10 hidden
+}
+
+.about .ab-sect .semi-title {
+  @apply text-girl-secondary
+}
+
+.about .ab-sect .extra-title {
+  @apply text-6xl font-semibold font-josefin
+}
+
+.about .ab-sect .text {
+  @apply max-w-7xl px-52 text-center
+}
+/* about end */
