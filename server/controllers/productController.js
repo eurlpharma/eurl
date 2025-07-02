@@ -222,7 +222,7 @@ const createProduct = asyncHandler(async (req, res) => {
       const productFolder = req.body.productFolder;
       productData.imagesFolder = productFolder;
       productData.images = req.files.map(file => 
-        `${process.env.API_URL || 'http://localhost:5000'}/uploads/products/${productFolder}/${file.filename}`
+        `${process.env.API_URL || 'https://eurl-server.onrender.com'}/uploads/products/${productFolder}/${file.filename}`
       );
     }
 
@@ -310,7 +310,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       const productFolder = req.body.productFolder;
       updateData.imagesFolder = productFolder;
       updateData.images = req.files.map(file => 
-        `${process.env.API_URL || 'http://localhost:5000'}/uploads/products/${productFolder}/${file.filename}`
+        `${process.env.API_URL || 'https://eurl-server.onrender.com'}/uploads/products/${productFolder}/${file.filename}`
       );
     }
 

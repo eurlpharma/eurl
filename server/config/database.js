@@ -14,7 +14,7 @@ export const jwtConfig = {
 export const serverConfig = {
   port: process.env.PORT || 5000,
   nodeEnv: process.env.NODE_ENV || "development",
-  apiUrl: process.env.API_URL || "http://localhost:5000",
+  apiUrl: process.env.API_URL || "https://eurl-server.onrender.com",
 };
 
 // File upload configuration

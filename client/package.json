@@ -88,5 +88,5 @@
     "vite": "^4.4.0",
     "vite-tsconfig-paths": "^4.2.0"
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "https://eurl-server.onrender.com"
 }

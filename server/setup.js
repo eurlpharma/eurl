@@ -46,7 +46,7 @@ async function setup() {
 
     // Server configuration
     const port = await question('Server port (default: 5000): ') || '5000';
-    const apiUrl = await question('API URL (default: http://localhost:5000): ') || 'http://localhost:5000';
+    const apiUrl = await question('API URL (default: https://eurl-server.onrender.com): ') || 'https://eurl-server.onrender.com';
 
     // Email configuration (optional)
     const emailHost = await question('Email host (optional, default: smtp.gmail.com): ') || 'smtp.gmail.com';

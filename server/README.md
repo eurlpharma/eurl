@@ -68,7 +68,7 @@ Backend API for Healthy medical products e-commerce platform built with Node.js,
    EMAIL_PASS=your_email_password
 
    # API Configuration
-   API_URL=http://localhost:5000
+   API_URL=https://eurl-server.onrender.com
 
    # File Upload Configuration
    UPLOAD_PATH=./uploads
