@@ -197,7 +197,7 @@ const ProductFormPage = () => {
           const formData = new FormData();
           formData.append('image', file);
           formData.append('productId', productIdShort);
-          const res = await fetch('/api/upload/product-image', {
+          const res = await fetch('https://eurl-server.onrender.com/api/upload/product-image', {
             method: 'POST',
             headers: token ? { 'Authorization': `Bearer ${token}` } : {},
             body: formData,
