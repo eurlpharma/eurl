@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '@/store';
 import { logout } from '@/store/slices/authSlice';
 
-const API_URL = import.meta.env.VITE_API_URL || `https://eurl-server.onrender.com`;
+const API_URL = `https://eurl-server.onrender.com`;
 
 
 const instance = axios.create({
