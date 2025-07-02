@@ -20,8 +20,6 @@ const ForgotPasswordPage = lazy(
   () => import("@/pages/auth/ForgotPasswordPage")
 );
 const ResetPasswordPage = lazy(() => import("@/pages/auth/ResetPasswordPage"));
-const ProfilePage = lazy(() => import("@/pages/user/ProfilePage"));
-const OrdersPage = lazy(() => import("@/pages/user/OrdersPage"));
 const OrderDetailPage = lazy(() => import("@/pages/admin/OrderDetailPage"));
 
 // Admin pages
@@ -97,23 +95,7 @@ const App = () => {
             }
           />
 
-          {/* User protected routes */}
-          <Route
-            path="profile"
-            element={
-              <ProtectedRoute>
-                <ProfilePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="orders"
-            element={
-              <ProtectedRoute>
-                <OrdersPage />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="orders/:id"
             element={

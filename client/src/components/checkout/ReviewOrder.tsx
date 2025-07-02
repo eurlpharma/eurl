@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { ShippingAddress } from '@/store/slices/cartSlice';
-import { algeriaWilayas } from '@/data/algeriaData';
 import willayatData from '@/data/willayat.json';
 import i18n from '@/i18n';
 import {
@@ -40,14 +39,6 @@ const ReviewOrder = ({ shippingData, cartItems }: ReviewOrderProps) => {
     return i18n.language && i18n.language.startsWith('ar') ? wilaya.ar_name : wilaya.name;
   };
   
-  const getDairaName = (wilayaId: string | number, dairaId: string | number) => {
-    const wId = typeof wilayaId === 'string' ? parseInt(wilayaId) : wilayaId;
-    const dId = typeof dairaId === 'string' ? parseInt(dairaId) : dairaId;
-    const wilaya = algeriaWilayas.find(w => w.id === wId);
-    if (!wilaya) return dairaId;
-    const daira = wilaya.dairas.find(d => d.id === dId);
-    return daira ? daira.name : dairaId;
-  };
 
   const getDairaNameFromJson = (dairaId: string | number) => {
     const daira = willayatData.find((item: any) => item.id == dairaId);

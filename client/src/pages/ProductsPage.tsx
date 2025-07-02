@@ -31,6 +31,7 @@ import { ProductData } from "@/types/product";
 import ProductCardList from "@/components/products/ProductCardList";
 import Breadcrumb from "@/components/global/Breadcrumb";
 import AIButton from "@/components/buttons/AIButton";
+import { CategoryData } from "@/types/category";
 
 const ProductsPage = () => {
   const { t } = useTranslation();
@@ -262,15 +263,16 @@ const ProductsPage = () => {
         <Box className="space-y-2">
           {categories &&
             categories.length > 0 &&
-            categories.map((cat: any) => {
+            categories.map((cat: CategoryData) => {
+              const catId = cat._id || "";
               return (
                 <Box
-                  key={cat._id}
-                  onClick={() => handleCategoryChange(cat._id)}
+                  key={catId}
+                  onClick={() => handleCategoryChange(catId)}
                   className={`
                     font-josefin text-lg capitalize py-2  rounded-lg cursor-pointer transition-all duration-200
                     ${
-                      selectedCategories.includes(cat._id)
+                      selectedCategories.includes(catId)
                         ? " text-girl-secondary"
                         : " text-gray-700"
                     }
@@ -338,7 +340,6 @@ const ProductsPage = () => {
           )}
 
           <Grid item xs={12} md={9} lg={10} key="products-section">
-            {/* Toolbar */}
             <Box className="flex flex-wrap justify-between items-center mb-6">
               <div className="products-filter">
                 <Box className="flex items-center mb-4 md:mb-0">
@@ -385,7 +386,6 @@ const ProductsPage = () => {
               </FormControl>
             </Box>
 
-            {/* Active filters */}
             {activeFilters.length > 0 && (
               <Box className="flex flex-wrap gap-2 mb-4">
                 {activeFilters.map((filter) => (
@@ -432,9 +432,8 @@ const ProductsPage = () => {
             )}
 
 
-            <Grid container spacing={2} key="products-grid">
+            {<Grid container spacing={2} key="products-grid">
               {loading ? (
-                // Loading placeholders
                 Array.from(new Array(limit)).map((_, index) => (
                   <Grid item xs={6} sm={6} md={4} lg={3} key={index}>
                     <ProductCard product={{} as any} loading />
@@ -466,9 +465,8 @@ const ProductsPage = () => {
                   </Box>
                 </Grid>
               )}
-            </Grid>
+            </Grid>}
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <Box className="flex justify-center mt-8">
                 <Pagination
@@ -483,7 +481,6 @@ const ProductsPage = () => {
           </Grid>
         </Grid>
 
-        {/* Mobile filters drawer */}
         {isMobile && (
           <Drawer
             container={document.getElementById("root")}

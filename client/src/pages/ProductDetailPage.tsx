@@ -17,6 +17,7 @@ import {
   Tab,
   IconButton,
   Skeleton,
+  Button,
 } from "@mui/material";
 import {
   ShoppingCartIcon,
@@ -76,7 +77,7 @@ const ProductDetailPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { success, error } = useNotification();
 
-  const { product, featuredProducts, loading } = useSelector(
+  const { product, featuredProducts, loading, error: apiError } = useSelector(
     (state: RootState) => state.products
   );
 
@@ -109,6 +110,19 @@ const ProductDetailPage = () => {
         <Typography variant="h5" className="text-center py-16">
           {t("products.productNotFound")}
         </Typography>
+      </Container>
+    );
+  }
+
+  if (apiError) {
+    return (
+      <Container maxWidth="lg" className="py-8">
+        <Typography color="error" align="center" className="mb-4">
+          {t('common.errorOccurred')}
+        </Typography>
+        <Button variant="contained" color="primary" onClick={() => dispatch(getProductDetails(id!))}>
+          {t('common.retry')}
+        </Button>
       </Container>
     );
   }
@@ -179,7 +193,7 @@ const ProductDetailPage = () => {
       : []
     : [];
 
-  if (loading || !product) {
+  if (loading && !product) {
     return (
       <Container maxWidth="lg" className="py-8 pt-28 lg:pt-48">
         <Box className="mb-4">
@@ -213,6 +227,7 @@ const ProductDetailPage = () => {
       </Container>
     );
   }
+
 
   return (
     <div>

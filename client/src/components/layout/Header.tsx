@@ -124,24 +124,7 @@ const Header = () => {
     >
       {isAuthenticated ? (
         <>
-          <MenuItem
-            onClick={() => {
-              handleMenuClose();
-              navigate("/profile");
-            }}
-          >
-            <UserIcon className="w-5 h-5 mr-2" />
-            {t("header.profile")}
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              handleMenuClose();
-              navigate("/orders");
-            }}
-          >
-            <ShoppingBagIcon className="w-5 h-5 mr-2" />
-            {t("header.orders")}
-          </MenuItem>
+
           {user?.role?.toLowerCase() === "admin" && (
             <MenuItem
               onClick={() => {
@@ -544,7 +527,7 @@ const Header = () => {
                     color="inherit"
                   >
                     <Avatar
-                      className="w-8 h-8"
+                      className="w-6 h-6"
                       alt={user?.name}
                       sx={{ bgcolor: "primary.main" }}
                     >
@@ -553,21 +536,11 @@ const Header = () => {
                   </IconButton>
                 )}
 
-                {!isAuthenticated && !loading && (
-                  <IconButton
-                    edge="end"
-                    aria-label="login"
-                    onClick={() => navigate("/auth/login")}
-                    color="inherit"
-                  >
-                    <UserIcon className="w-6 h-6" />
-                  </IconButton>
-                )}
 
                 {loading && (
                   <IconButton
                     edge="end"
-                    color="inherit"
+                    color="secondary"
                     disabled
                   >
                     <CircularProgress size={24} />
