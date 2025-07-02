@@ -92,7 +92,6 @@ const ProductDetailPage = () => {
       dispatch(getFeaturedProducts(4));
     }
 
-    // Reset state when component unmounts or product changes
     return () => {
       setQuantity(1);
       setActiveTab(0);
@@ -101,7 +100,6 @@ const ProductDetailPage = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    // Reset active image when product changes
     setActiveImage(0);
   }, [product]);
 
@@ -116,6 +114,7 @@ const ProductDetailPage = () => {
   }
 
   const handleAddToCart = async () => {
+
     if (!product) return;
 
     try {
@@ -128,13 +127,13 @@ const ProductDetailPage = () => {
         error(t("products.failedToAddToCart"));
       }
     } catch (err) {
+      console.log(err)
       error(t("common.errorOccurred"));
     }
   };
 
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
-    // Here you could implement logic to add/remove from favorites in the backend
     if (!isFavorite) {
       success(t("products.addedToFavorites"));
     } else {
@@ -155,21 +154,17 @@ const ProductDetailPage = () => {
       return imagePath;
     }
 
-    // إزالة undefined من المسار
     let cleanPath = imagePath.replace("undefined/", "");
 
-    // إزالة أي تكرار لـ /uploads/ في بداية المسار
     while (cleanPath.startsWith("/uploads/uploads/")) {
       cleanPath = cleanPath.replace("/uploads/uploads/", "/uploads/");
     }
 
-    // إذا كان المسار يبدأ بـ /uploads، نضيف فقط API_URL
     if (cleanPath.startsWith("/uploads")) {
       const finalUrl = `${API_URL}${cleanPath}`;
       return finalUrl;
     }
 
-    // إذا كان المسار لا يبدأ بـ /uploads، نضيف /uploads/
     const finalUrl = `${API_URL}/uploads/${cleanPath}`;
     return finalUrl;
   };
@@ -184,7 +179,6 @@ const ProductDetailPage = () => {
       : []
     : [];
 
-  // Loading skeleton
   if (loading || !product) {
     return (
       <Container maxWidth="lg" className="py-8 pt-28 lg:pt-48">
@@ -225,7 +219,6 @@ const ProductDetailPage = () => {
       <Breadcrumb pageName="Product Details" />
       <Container maxWidth="lg" className="py-8">
         <Grid container spacing={4}>
-          {/* Product Images */}
           <Grid item xs={12} md={6}>
             <Box className="relative product-swiper-container">
               {product.isFeatured && (
@@ -239,7 +232,6 @@ const ProductDetailPage = () => {
 
               {productImages.length > 0 ? (
                 <PhotoProvider>
-                  {/* الصور الرئيسية */}
                   <Swiper
                     modules={[Thumbs, Zoom]}
                     spaceBetween={10}
@@ -294,7 +286,6 @@ const ProductDetailPage = () => {
                             src={image}
                             alt={`${product.name} - thumbnail ${index + 1}`}
                             onError={(e) => {
-                              // في حالة فشل تحميل الصورة المصغرة، استخدم صورة بديلة
                               (e.target as HTMLImageElement).src =
                                 "/images/product-placeholder.svg";
                             }}

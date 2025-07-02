@@ -31,6 +31,9 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
   }
 
   const handleAddToCart = async () => {
+
+    console.log("add to cart")
+
     try {
       if (product && product.id) {
         const result = await dispatch(
