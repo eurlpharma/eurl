@@ -1,1 +1,0 @@
-import{G as r,r as a,b2 as f,bf as e}from"./index-d1e9d783.js";const l=()=>{const i=r(),t=a.useCallback((s,o="info",c=5e3)=>{i(f({message:s,type:o})),c>0&&setTimeout(()=>{i(e())},c)},[i]),n=a.useCallback(()=>{i(e())},[i]);return{success:(s,o)=>t(s,"success",o),error:(s,o)=>t(s,"error",o),info:(s,o)=>t(s,"info",o),warning:(s,o)=>t(s,"warning",o),close:n}};export{l as u};
