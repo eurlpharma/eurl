@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { ShippingAddress } from '@/store/slices/cartSlice';
 import { algeriaWilayas } from '@/data/algeriaData';
+import willayatData from '@/data/willayat.json';
+import i18n from '@/i18n';
 import {
   Box,
   Typography,
@@ -32,17 +34,25 @@ const ReviewOrder = ({ shippingData, cartItems }: ReviewOrderProps) => {
     (itemsPrice + shippingPrice).toFixed(2)
   );
   
-  const getWilayaName = (wilayaId: string) => {
-    const wilaya = algeriaWilayas.find(w => w.id === parseInt(wilayaId));
-    return wilaya ? wilaya.name : wilayaId;
+  const getWilayaName = (wilayaId: string | number) => {
+    const wilaya = willayatData.find((item: any) => item.wilaya_id == wilayaId);
+    if (!wilaya) return wilayaId;
+    return i18n.language && i18n.language.startsWith('ar') ? wilaya.ar_name : wilaya.name;
   };
   
-  const getDairaName = (wilayaId: string, dairaId: string) => {
-    const wilaya = algeriaWilayas.find(w => w.id === parseInt(wilayaId));
+  const getDairaName = (wilayaId: string | number, dairaId: string | number) => {
+    const wId = typeof wilayaId === 'string' ? parseInt(wilayaId) : wilayaId;
+    const dId = typeof dairaId === 'string' ? parseInt(dairaId) : dairaId;
+    const wilaya = algeriaWilayas.find(w => w.id === wId);
     if (!wilaya) return dairaId;
-    
-    const daira = wilaya.dairas.find(d => d.id === parseInt(dairaId));
+    const daira = wilaya.dairas.find(d => d.id === dId);
     return daira ? daira.name : dairaId;
+  };
+
+  const getDairaNameFromJson = (dairaId: string | number) => {
+    const daira = willayatData.find((item: any) => item.id == dairaId);
+    if (!daira) return dairaId;
+    return i18n.language && i18n.language.startsWith('ar') ? daira.ar_name : daira.name;
   };
 
   return (
@@ -60,7 +70,7 @@ const ReviewOrder = ({ shippingData, cartItems }: ReviewOrderProps) => {
             <Typography gutterBottom>{shippingData.fullName}</Typography>
             <Typography gutterBottom>{shippingData.phone}</Typography>
             <Typography gutterBottom>
-              {getWilayaName(shippingData.wilaya)}, {getDairaName(shippingData.wilaya, shippingData.daira)}
+              {getWilayaName(shippingData.wilaya)}, {getDairaNameFromJson(shippingData.daira)}
             </Typography>
             <Typography gutterBottom>
               {t('checkout.deliveryType')}: {shippingData.deliveryType === 'home' ? t('checkout.deliveryHome') : t('checkout.deliveryOffice')}
@@ -98,7 +108,7 @@ const ReviewOrder = ({ shippingData, cartItems }: ReviewOrderProps) => {
                   </Box>
                   <ListItemText
                     primary={item.name}
-                    secondary={`${t('product.quantity')}: ${item.quantity}`}
+                    secondary={`${t('products.quantity')}: ${item.quantity}`}
                   />
                   <Typography variant="body2">
                     DA {(item.price * item.quantity).toFixed(2)}

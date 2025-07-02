@@ -1,5 +1,8 @@
 {
   "header": {
+    "adminPanel": "Tableau de Bord",
+    "about": "À propos",
+    "contact": "Contact",
     "home": "Accueil",
     "products": "Produits",
     "login": "Connexion",
@@ -8,12 +11,20 @@
     "orders": "Commandes",
     "logout": "Déconnexion"
   },
+  "navigation": {
+    "home": "Accueil",
+    "products": "Produits",
+    "categories": "Catégories",
+    "cart": "Panier",
+    "checkout": "Paiement",
+    "account": "Compte"
+  },
   "footer": {
     "companyDescription": "Healthy est votre source de confiance pour des produits de santé premium. Nous proposons une large gamme de vitamines, de compléments alimentaires et d'équipements médicaux pour soutenir votre parcours de bien-être.",
     "quickLinks": "Liens Rapides",
     "home": "Accueil",
     "products": "Produits",
-    "about": "À Propos",
+    "about": "À propos",
     "contact": "Contact",
     "categories": "Catégories",
     "customerService": "Service Client",
@@ -28,10 +39,15 @@
     "cookies": "Politique des Cookies"
   },
   "categories": {
+    "name": "Nom",
+    "description": "Description",
+    "status": "Statut",
     "vitamins": "Vitamines",
     "supplements": "Compléments",
     "equipment": "Équipement Médical",
-    "devices": "Appareils de Santé"
+    "devices": "Appareils de Santé",
+    "image": "Image",
+    "uploadImage": "Télécharger l'image"
   },
   "home": {
     "heroTitle": "Votre Santé, Notre Priorité",

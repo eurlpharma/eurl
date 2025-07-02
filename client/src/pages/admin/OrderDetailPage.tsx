@@ -506,6 +506,8 @@ const OrderDetailPage = () => {
                       const orderId = order.id ?? order._id;
                       if (!orderId) return;
                       setLoading(true);
+                      // حفظ الحالة الأصلية قبل الدفع
+                      const originalStatus = order.status;
                       try {
                         if (order.isPaid) {
                           // تراجع عن الدفع
@@ -524,6 +526,11 @@ const OrderDetailPage = () => {
                                 quantity: item.quantity ?? item.qty,
                               }))
                             : [],
+                          // إذا أعاد السيرفر status = 'processing' بعد الدفع، احتفظ بالحالة الأصلية
+                          status:
+                            updatedOrder.status === 'processing' && originalStatus !== 'processing'
+                              ? originalStatus
+                              : updatedOrder.status,
                         };
                         setOrder(normalizedOrder);
                         success(

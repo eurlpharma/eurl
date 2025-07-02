@@ -224,12 +224,14 @@ const orderSlice = createSlice({
           state.order = action.payload;
         }
         // Update order in orders list
-        const index = state.orders.findIndex(
+        const orders = Array.isArray(state.orders) ? state.orders : [];
+        const index = orders.findIndex(
           (order: OrderType) => order._id === action.payload._id
         );
         if (index !== -1) {
-          state.orders[index] = action.payload;
+          orders[index] = action.payload;
         }
+        state.orders = orders;
         
         // Update current order if it's the same
         if (state.order && state.order._id === action.payload._id) {
@@ -249,12 +251,14 @@ const orderSlice = createSlice({
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         state.loading = false;
         // Update order in orders list
-        const index = state.orders.findIndex(
+        const orders = Array.isArray(state.orders) ? state.orders : [];
+        const index = orders.findIndex(
           (order: OrderType) => order._id === action.payload._id
         );
         if (index !== -1) {
-          state.orders[index] = action.payload;
+          orders[index] = action.payload;
         }
+        state.orders = orders;
         
         // Update current order if it's the same
         if (state.order && state.order._id === action.payload._id) {

@@ -1,4 +1,3 @@
-
 import { createAppStore } from './createStore';
 import { combineReducers, Reducer, AnyAction } from 'redux';
 
@@ -40,6 +39,14 @@ const importReducers = async () => {
     const cartReducer = (await import('./slices/cartSlice')).default;
     const withCart: ReducersMapObject = { ...withCategories, cart: cartReducer };
     store.replaceReducer(combineReducers(withCart));
+
+    // إعادة تهيئة السلة من localStorage إذا كانت فارغة
+    try {
+      const items = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems') || '[]') : [];
+      if (Array.isArray(items) && items.length > 0) {
+        store.dispatch({ type: 'cart/resetFromStorage', payload: items });
+      }
+    } catch {}
 
     const orderReducer = (await import('./slices/orderSlice')).default;
     const withOrders: ReducersMapObject = { ...withCart, orders: orderReducer };

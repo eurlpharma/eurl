@@ -110,6 +110,7 @@ const Header = () => {
   const menuId = "primary-account-menu";
   const langMenuId = "language-menu";
 
+  
   const renderMenu = (
     <Menu
       container={document.getElementById("root")}
@@ -141,7 +142,7 @@ const Header = () => {
             <ShoppingBagIcon className="w-5 h-5 mr-2" />
             {t("header.orders")}
           </MenuItem>
-          {user?.role === "admin" && (
+          {user?.role?.toLowerCase() === "admin" && (
             <MenuItem
               onClick={() => {
                 handleMenuClose();

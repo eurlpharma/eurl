@@ -50,6 +50,18 @@ const initialState: CartState = {
   paymentMethod: localStorage.getItem('paymentMethod') || null,
 };
 
+const getCartItemsFromStorage = () => {
+  try {
+    const items = localStorage.getItem('cartItems')
+      ? JSON.parse(localStorage.getItem('cartItems') || '[]')
+      : [];
+    return Array.isArray(items) ? items : [];
+  } catch {
+    localStorage.removeItem('cartItems');
+    return [];
+  }
+};
+
 // Add item to cart
 export const addToCart = createAsyncThunk(
   'cart/addToCart',
@@ -92,6 +104,9 @@ const cartSlice = createSlice({
   reducers: {
     // Add or update item in cart (local)
     addCartItem: (state, action: PayloadAction<CartItem>) => {
+      if (!Array.isArray(state.items)) {
+        state.items = getCartItemsFromStorage();
+      }
       const item = action.payload;
       const items = Array.isArray(state.items) ? state.items : [];
       const existingItem = items.find((x) => x.id === item.id);
@@ -109,6 +124,9 @@ const cartSlice = createSlice({
     
     // Update cart item quantity
     updateCartQuantity: (state, action: PayloadAction<{ id: string; quantity: number }>) => {
+      if (!Array.isArray(state.items)) {
+        state.items = getCartItemsFromStorage();
+      }
       const { id, quantity } = action.payload;
       const items = Array.isArray(state.items) ? state.items : [];
       const item = items.find((x) => x.id === id);
@@ -121,6 +139,9 @@ const cartSlice = createSlice({
     
     // Remove item from cart
     removeFromCart: (state, action: PayloadAction<string>) => {
+      if (!Array.isArray(state.items)) {
+        state.items = getCartItemsFromStorage();
+      }
       const items = Array.isArray(state.items) ? state.items : [];
       state.items = items.filter((x) => x.id !== action.payload);
       localStorage.setItem('cartItems', JSON.stringify(state.items));
@@ -151,6 +172,11 @@ const cartSlice = createSlice({
       localStorage.removeItem('shippingAddress');
       localStorage.removeItem('paymentMethod');
     },
+    
+    // Reset cart from storage
+    resetFromStorage: (state, action: PayloadAction<CartItem[]>) => {
+      state.items = Array.isArray(action.payload) ? action.payload : [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -159,6 +185,9 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(addToCart.fulfilled, (state, action) => {
+        if (!Array.isArray(state.items)) {
+          state.items = getCartItemsFromStorage();
+        }
         state.loading = false;
         state.error = null;
 
@@ -196,6 +225,7 @@ export const {
   saveShippingAddress,
   savePaymentMethod,
   clearShippingAndPayment,
+  resetFromStorage,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
