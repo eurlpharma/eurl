@@ -15,7 +15,6 @@ const ProductDetailPage = lazy(() => import("@/pages/ProductDetailPage"));
 const CartPage = lazy(() => import("@/pages/CartPage"));
 const CheckoutPage = lazy(() => import("@/pages/CheckoutPage"));
 const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
-const RegisterPage = lazy(() => import("@/pages/auth/RegisterPage"));
 const ForgotPasswordPage = lazy(
   () => import("@/pages/auth/ForgotPasswordPage")
 );
@@ -75,21 +74,18 @@ const App = () => {
           <Route path="checkout" element={<CheckoutPage />} />
           {/* Auth routes */}
           <Route
-            path="auth/login"
+            path="/auth-login"
             element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />}
           />
+
           <Route
-            path="auth/register"
-            element={!isAuthenticated ? <RegisterPage /> : <Navigate to="/" />}
-          />
-          <Route
-            path="auth/forgot-password"
+            path="/auth-forgot-password"
             element={
               !isAuthenticated ? <ForgotPasswordPage /> : <Navigate to="/" />
             }
           />
           <Route
-            path="auth/reset-password/:token"
+            path="/auth-reset-password/:token"
             element={
               !isAuthenticated ? <ResetPasswordPage /> : <Navigate to="/" />
             }

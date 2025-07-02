@@ -8,7 +8,6 @@ import {
   TextField,
   Paper,
   Link,
-  Divider,
   InputAdornment,
   IconButton,
   Container,
@@ -40,11 +39,9 @@ const LoginPage = () => {
     (state: RootState) => state.auth
   );
 
-  // Get redirect path from URL query params
   const searchParams = new URLSearchParams(location.search);
   const redirect = searchParams.get("redirect") || "/";
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate(redirect);
@@ -73,9 +70,7 @@ const LoginPage = () => {
     try {
       const result = await dispatch(login(data)).unwrap();
 
-      // إضافة إعادة توجيه مباشر بعد تسجيل الدخول بنجاح
       if (result && result.token) {
-        // إضافة تأخير قصير قبل إعادة التوجيه
         setTimeout(() => {
           navigate(redirect);
         }, 100);
@@ -150,7 +145,7 @@ const LoginPage = () => {
           <Box className="flex justify-end">
             <Link
               component={RouterLink}
-              to="/auth/forgot-password"
+              to="/auth-forgot-password"
               variant="body2"
               underline="hover"
             >
@@ -172,26 +167,7 @@ const LoginPage = () => {
           </AIButton>
         </form>
 
-        <Divider className="my-6">
-          <Typography variant="body2" color="textSecondary">
-            {t("auth.or")}
-          </Typography>
-        </Divider>
-
-        <Box className="text-center">
-          <Typography variant="body2">
-            {t("auth.noAccount")}{" "}
-            <Link
-              component={RouterLink}
-              to={`/auth/register${
-                redirect !== "/" ? `?redirect=${redirect}` : ""
-              }`}
-              underline="hover"
-            >
-              {t("auth.register")}
-            </Link>
-          </Typography>
-        </Box>
+ 
       </Paper>
     </Container>
   );
