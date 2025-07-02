@@ -37,7 +37,7 @@
     "i18next": "^23.2.3",
     "i18next-browser-languagedetector": "^7.1.0",
     "i18next-http-backend": "^2.2.1",
-    "immutable": "^5.1.2",
+    "immutable": "4.3.7",
     "jwt-decode": "^3.1.2",
     "lucide-react": "^0.513.0",
     "moment": "^2.30.1",
