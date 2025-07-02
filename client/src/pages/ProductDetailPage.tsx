@@ -69,7 +69,8 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
-const API_URL = import.meta.env.VITE_API_URL || `https://eurl-server.onrender.com`;
+const API_URL =
+  import.meta.env.VITE_API_URL || `https://eurl-server.onrender.com`;
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -77,9 +78,12 @@ const ProductDetailPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { success, error } = useNotification();
 
-  const { product, featuredProducts, loading, error: apiError } = useSelector(
-    (state: RootState) => state.products
-  );
+  const {
+    product,
+    featuredProducts,
+    loading,
+    error: apiError,
+  } = useSelector((state: RootState) => state.products);
 
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
@@ -118,17 +122,20 @@ const ProductDetailPage = () => {
     return (
       <Container maxWidth="lg" className="py-8">
         <Typography color="error" align="center" className="mb-4">
-          {t('common.errorOccurred')}
+          {t("common.errorOccurred")}
         </Typography>
-        <Button variant="contained" color="primary" onClick={() => dispatch(getProductDetails(id!))}>
-          {t('common.retry')}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => dispatch(getProductDetails(id!))}
+        >
+          {t("common.retry")}
         </Button>
       </Container>
     );
   }
 
   const handleAddToCart = async () => {
-
     if (!product) return;
 
     try {
@@ -141,7 +148,7 @@ const ProductDetailPage = () => {
         error(t("products.failedToAddToCart"));
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       error(t("common.errorOccurred"));
     }
   };
@@ -227,7 +234,6 @@ const ProductDetailPage = () => {
       </Container>
     );
   }
-
 
   return (
     <div>
@@ -346,8 +352,12 @@ const ProductDetailPage = () => {
               {product?.price !== undefined ? product.price.toFixed(2) : "0.00"}
             </Typography>
 
-
-            <Typography variant="body1" className="mb-6" dir="auto" style={{ whiteSpace: 'pre' }}>
+            <Typography
+              variant="body1"
+              className="mb-6"
+              dir="auto"
+              style={{ whiteSpace: "pre-wrap" }}
+            >
               {product?.description || t("products.noDescription")}
             </Typography>
 
@@ -401,7 +411,7 @@ const ProductDetailPage = () => {
             )}
 
             {/* Action Buttons */}
-            <Box className="flex flex-col sm:flex-row gap-3">
+            <Box className="flex gap-3">
               <AIButton
                 variant="solid"
                 startContent={<ShoppingCartIcon className="w-5 h-5" />}
@@ -442,7 +452,7 @@ const ProductDetailPage = () => {
 
           <TabPanel value={activeTab} index={0}>
             <div
-              className="prose max-w-none dark:prose-invert whitespace-pre"
+              className="prose max-w-none dark:prose-invert whitespace-pre-wrap"
               dangerouslySetInnerHTML={{
                 __html: product?.richDescription || product?.description || "",
               }}

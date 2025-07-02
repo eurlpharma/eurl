@@ -33,6 +33,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useNotification } from '@/hooks/useNotification';
 import ImageIcon from '@mui/icons-material/Image';
+import AIButton from '@/components/buttons/AIButton';
 
 interface Category {
   id: string;
@@ -208,14 +209,14 @@ const CategoriesPage = () => {
         <Typography variant="h4" component="h1" className="font-josefin">
           {t('admin.categories')}
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<PlusIcon className="w-5 h-5" />}
+        <AIButton
+          variant="solid"
+          radius="full"
+          startContent={<PlusIcon className="w-5 h-5" />}
           onClick={() => handleOpenDialog()}
         >
           {t('admin.addCategory')}
-        </Button>
+        </AIButton>
       </Box>
       
       <TableContainer component={Paper}>

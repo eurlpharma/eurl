@@ -272,9 +272,7 @@ const ProductFormPage = () => {
         if (response.success) {
           toast.success(t("notifications.productCreated"));
           await dispatch(getProducts({ page: 1, limit: 10 }));
-          setTimeout(() => {
-            navigate("/admin/products", { replace: true });
-          }, 1000);
+          navigate("/admin/products", { replace: true });
         } else {
           throw new Error(response.message || "Failed to create product");
         }
@@ -625,7 +623,8 @@ const ProductFormPage = () => {
             <Grid item xs={12}>
               <AIButton
                 type="submit"
-                variant="outlined"
+                variant="solid"
+                radius="full"
                 isDisabled={isSubmitting}
                 className="mt-4"
                 fullWidth

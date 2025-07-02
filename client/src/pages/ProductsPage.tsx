@@ -330,7 +330,7 @@ const ProductsPage = () => {
     <div className="bg-girl-white">
       <Breadcrumb pageName="Products" />
 
-      <Container maxWidth="xl" className="py-16">
+      <Container maxWidth="xl" className="py-16 px-1 md:px-2 lg:px-3">
 
         <Grid container spacing={4} key="main-container">
           {!isMobile && (

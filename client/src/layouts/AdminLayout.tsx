@@ -282,9 +282,9 @@ const AdminLayout = () => {
       >
         <Toolbar className="h-16">
           <IconButton
+            edge="start"
             color="inherit"
             aria-label="open drawer"
-            edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: "none" } }}
           >

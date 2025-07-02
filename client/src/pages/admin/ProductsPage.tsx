@@ -130,7 +130,8 @@ const ProductsPage = () => {
 
         <AIButton
           onClick={() => navigate("/admin/products/add")}
-          variant="outlined"
+          variant="solid"
+          radius="full"
           color="primary"
           startContent={<PlusIcon className="w-5 h-5" />}
         >

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { CircularProgress } from '@mui/material';
+import Preloader from '../global/Preloader';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -14,9 +14,7 @@ const ProtectedRoute = ({ children, isAdminRoute = false }: ProtectedRouteProps)
   // Show loading spinner while checking authentication
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <CircularProgress color="primary" />
-      </div>
+      <Preloader />
     );
   }
   
