@@ -2,8 +2,6 @@ import { ProductCartType } from "@/types/product";
 import { IconButton } from "@mui/material";
 import { ShoppingCartIcon } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
-import { EffectFlip } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { addToCart } from "@/store/slices/cartSlice";
 import { useNotification } from "@/hooks/useNotification";
 import { useDispatch } from "react-redux";
@@ -12,7 +10,6 @@ import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/utils/facebookPixel";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
-import "swiper/css";
 
 interface ProductCardListProps extends HTMLAttributes<HTMLElement> {
   product: ProductCartType | null;
@@ -62,14 +59,6 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
     }
   };
 
-  // === استخلاص رابط أول صورة بصيغة مناسبة للتحميل المبكر ===
-  const firstImage = product.images[0];
-  const firstImageUrl = firstImage
-    ? firstImage.startsWith("http")
-      ? firstImage.replace("/upload/", "/upload/f_auto,q_auto,w_600/")
-      : `https://eurl-server.onrender.com${firstImage.startsWith("/") ? "" : "/"}${firstImage}`
-    : "";
-
   return (
     <div
       className="product"
@@ -78,47 +67,14 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
       {...props}
     >
       <div className="thumbs relative">
-
-        {/* === صورة رئيسية خارج Swiper لتحسين LCP === */}
-        {firstImageUrl && (
-          <img
-            src={firstImageUrl}
-            className="image absolute inset-0 w-full h-full object-cover z-10"
-            decoding="async"
-            loading="eager"
-            alt={product.name || "Eurl Pharma Product"}
-            {...{ fetchpriority: "high" }}
-          />
-        )}
-
-        {/* === Swiper للصور الأخرى === */}
-        <Swiper
-          loop={false}
-          speed={600}
-          effect="flip"
-          slidesPerView={1}
-          spaceBetween={10}
-          modules={[EffectFlip]}
-          className="z-0"
-        >
-          {product.images.slice(1, 3).map((src, idx) => {
-            const imageUrl = src.startsWith("http")
-              ? src.replace("/upload/", "/upload/f_auto,q_auto,w_600/")
-              : `https://eurl-server.onrender.com${src.startsWith("/") ? "" : "/"}${src}`;
-            return (
-              <SwiperSlide key={`${product.id}-image-${idx}`}>
-                <img
-                  src={imageUrl}
-                  className="image"
-                  decoding="async"
-                  loading="lazy"
-                  alt={`${product.name} - ${idx + 1}`}
-                />
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
-
+        <img
+          loading="lazy"
+          decoding="async"
+          className="image"
+          src={product.images[0]}
+          alt={`${product.name}`}
+          {...{ fetchpriority: "high" }}
+        />
         <div className="over-mode"></div>
 
         {product.isFeatured && <div className="over sale">{"Featured"}</div>}
