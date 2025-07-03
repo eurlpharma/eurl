@@ -139,7 +139,7 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
 
           {isMobile && product.countInStock > 0 && (
             <div onClick={handleAddToCart}>
-              {ProductSaved?.includes(product.id) ? (
+              {ProductSaved?.some((item) => item.product === product.id) ? (
                 <IconCartBold className="text-girl-secondary" />
               ) : (
                 <IconCart className="text-girl-secondary" />
