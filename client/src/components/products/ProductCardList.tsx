@@ -1,5 +1,5 @@
 import { ProductCartType } from "@/types/product";
-import { IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { IconButton, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import { FC, HTMLAttributes, useEffect, useState } from "react";
 import { addToCart } from "@/store/slices/cartSlice";
 import { useNotification } from "@/hooks/useNotification";
@@ -15,6 +15,7 @@ interface ProductCardListProps extends HTMLAttributes<HTMLElement> {
   product: ProductCartType | null;
   isSale?: boolean;
   place?: "top" | "bottom";
+  isLoading?: boolean
 }
 
 interface ProductOnCart {
@@ -26,7 +27,7 @@ interface ProductOnCart {
   quantity: number;
 }
 
-const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
+const ProductCardList: FC<ProductCardListProps> = ({ product, isLoading=false, ...props }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -37,8 +38,14 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
     null
   );
 
-  if (!product) {
-    return <div>Wait...</div>;
+  if (!product || isLoading) {
+    return (
+      <div>
+        <Skeleton variant="rectangular" className="rounded-lg h-44 lg:h-72 pb-3" />
+        <Skeleton variant="text" className="w-2/3" />
+        <Skeleton variant="text" className="w-1/2" />
+      </div>
+    );
   }
 
   const handleAddToCart = async () => {

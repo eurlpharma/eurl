@@ -21,7 +21,6 @@ import AIButton from "@/components/buttons/AIButton";
 import Breadcrumb from "@/components/global/Breadcrumb";
 import { getProducts } from "@/store/slices/productSlice";
 import { setProductFilters } from "@/store/slices/uiSlice";
-import ProductCard from "@/components/products/ProductCard";
 import NotFoundProduct from "../assets/undraw/not_found.svg";
 import PriceRangeFilter from "@/components/PriceRangeFilter";
 import { getCategories } from "@/store/slices/categorySlice";
@@ -319,7 +318,7 @@ const ProductsPage = () => {
             {isMobile && (
               <Box className="flex items-center justify-between w-full mb-4 md:mb-0">
                 <div>
-                  <p className="capitalize font-josefin text-xl text-gray-800">
+                  <p className="capitalize font-poppins text-xl text-gray-800">
                     Products
                   </p>
                   <p className="text-tiny text-gray-600">
@@ -349,7 +348,7 @@ const ProductsPage = () => {
                 {loading ? (
                   Array.from(new Array(limit)).map((_, index) => (
                     <Grid item xs={6} sm={6} md={4} lg={3} key={index}>
-                      <ProductCard product={{} as any} loading />
+                      <ProductCardList product={null} isLoading={true} />
                     </Grid>
                   ))
                 ) : products && products.length > 0 ? (
