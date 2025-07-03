@@ -8,30 +8,26 @@ import {
   Grid,
   Container,
   Pagination,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   TextField,
-  Button,
   Drawer,
   IconButton,
   useMediaQuery,
   useTheme,
-  Chip,
 } from "@mui/material";
-import { FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { ProductData } from "@/types/product";
+import { CategoryData } from "@/types/category";
 import { AppDispatch, RootState } from "@/store";
+import AIButton from "@/components/buttons/AIButton";
+import Breadcrumb from "@/components/global/Breadcrumb";
 import { getProducts } from "@/store/slices/productSlice";
-import { getCategories } from "@/store/slices/categorySlice";
 import { setProductFilters } from "@/store/slices/uiSlice";
 import ProductCard from "@/components/products/ProductCard";
+import NotFoundProduct from "../assets/undraw/not_found.svg";
 import PriceRangeFilter from "@/components/PriceRangeFilter";
-import { ProductData } from "@/types/product";
+import { getCategories } from "@/store/slices/categorySlice";
 import ProductCardList from "@/components/products/ProductCardList";
-import Breadcrumb from "@/components/global/Breadcrumb";
-import AIButton from "@/components/buttons/AIButton";
-import { CategoryData } from "@/types/category";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { IconSearch } from "@/components/Iconify";
 
 const ProductsPage = () => {
   const { t } = useTranslation();
@@ -136,37 +132,32 @@ const ProductsPage = () => {
     }
   }, [products]);
 
-  // Handle filter changes
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Update search state with current form values
     setSearchState({
       keyword: keywordInput,
       selectedCategories,
       priceRange,
       sortBy,
-      page: 1, // Reset to first page on new search
+      page: 1,
     });
   };
 
   const handleCategoryChange = (cat: string) => {
     let newSelectedCategories: string[] = [];
     if (selectedCategories[0] === cat) {
-      // إذا ضغطت على نفس التصنيف، ألغِ التحديد
       newSelectedCategories = [];
     } else {
-      // إذا ضغطت على تصنيف جديد، حدده فقط
       newSelectedCategories = [cat];
     }
 
     setSelectedCategories(newSelectedCategories);
 
-    // تطبيق البحث تلقائياً عند تغيير التصنيف
     setSearchState((prev) => ({
       ...prev,
       selectedCategories: newSelectedCategories,
-      page: 1, // إعادة تعيين الصفحة إلى 1
+      page: 1,
     }));
   };
 
@@ -175,7 +166,6 @@ const ProductsPage = () => {
   };
 
   const handlePriceChangeCommitted = () => {
-    // تحديث حالة البحث عند الانتهاء من تغيير السعر
     setSearchState((prev) => ({
       ...prev,
       priceRange: [priceRange[0], priceRange[1]],
@@ -183,21 +173,9 @@ const ProductsPage = () => {
     }));
   };
 
-  const handleSortChange = (e: any) => {
-    setSortBy(e.target.value);
-
-    // Update search state immediately for sort changes
-    setSearchState((prev) => ({
-      ...prev,
-      sortBy: e.target.value,
-      page: 1,
-    }));
-  };
-
   const handlePageChange = (_: any, newPage: number) => {
     setPage(newPage);
 
-    // Update search state immediately for pagination
     setSearchState((prev) => ({
       ...prev,
       page: newPage,
@@ -207,14 +185,12 @@ const ProductsPage = () => {
   };
 
   const handleClearFilters = () => {
-    // Reset form values
     setKeywordInput("");
     setSelectedCategories([]);
     setPriceRange([0, 0]);
     setSortBy("createdAt");
     setPage(1);
 
-    // Update search state immediately
     setSearchState({
       keyword: "",
       selectedCategories: [],
@@ -228,12 +204,10 @@ const ProductsPage = () => {
     setFiltersOpen(!filtersOpen);
   };
 
-  // Calculate pagination
   const totalPages = Math.ceil(totalProducts / limit);
 
-  // Filter drawer/sidebar content
   const filtersContent = (
-    <Box className="">
+    <Box className="px-3 pt-8">
       <form onSubmit={handleSearch} className="mb-4">
         <TextField
           classes={{
@@ -298,6 +272,7 @@ const ProductsPage = () => {
       <Box className="flex space-x-2 mt-2">
         <AIButton
           variant="solid"
+          radius="full"
           onClick={handleSearch}
           className="flex-1"
           startContent={<MagnifyingGlassIcon className="w-5 h-5" />}
@@ -308,7 +283,6 @@ const ProductsPage = () => {
     </Box>
   );
 
-  // Active filters display based on search state
   const activeFilters = [];
   if (searchState.keyword)
     activeFilters.push({ label: searchState.keyword, key: "keyword" });
@@ -328,10 +302,12 @@ const ProductsPage = () => {
 
   return (
     <div className="bg-girl-white">
-      <Breadcrumb pageName="Products" />
+      {!isMobile && <Breadcrumb pageName="Products" />}
 
-      <Container maxWidth="xl" className="py-16 px-1 md:px-2 lg:px-3">
-
+      <Container
+        maxWidth="xl"
+        className="py-1 md:py-2 lg:py-16 px-1 md:px-2 lg:px-3"
+      >
         <Grid container spacing={4} key="main-container">
           {!isMobile && (
             <Grid item xs={12} md={3} lg={2} key="filters-desktop">
@@ -340,132 +316,67 @@ const ProductsPage = () => {
           )}
 
           <Grid item xs={12} md={9} lg={10} key="products-section">
-            <Box className="flex flex-wrap justify-between items-center mb-6">
-              <div className="products-filter">
-                <Box className="flex items-center mb-4 md:mb-0">
-                  {isMobile && (
-                    <AIButton
-                      radius="full"
-                      variant="solid"
-                      startContent={<FunnelIcon className="w-5 h-5" />}
-                      onClick={toggleFilters}
-                    >
-                      {t("products.filters")}
-                    </AIButton>
-                  )}
-                </Box>
+            <Box className="flex items-center justify-between w-full mb-4 md:mb-0">
+              <div>
+                <p className="capitalize font-josefin text-xl text-gray-800">Products</p>
+                <p className="text-tiny text-gray-600">Find your best products</p>
               </div>
 
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="min-w-[200px] rounded-full"
-                color="error"
+              <AIButton
+                radius="full"
+                variant="liner"
+                className="py-1"
+                onClick={toggleFilters}
+                startContent={<IconSearch className="w-5 h-5" />}
               >
-                <InputLabel>{t("products.sortBy")}</InputLabel>
-                <Select
-                  value={sortBy}
-                  onChange={handleSortChange}
-                  label={t("products.sortBy")}
-                >
-                  <MenuItem value="createdAt">
-                    {t("products.sortNewest")}
-                  </MenuItem>
-                  <MenuItem value="price">
-                    {t("products.sortPriceLow")}
-                  </MenuItem>
-                  <MenuItem value="-price">
-                    {t("products.sortPriceHigh")}
-                  </MenuItem>
-                  <MenuItem value="-rating">
-                    {t("products.sortRating")}
-                  </MenuItem>
-                  <MenuItem value="name">{t("products.sortNameAZ")}</MenuItem>
-                  <MenuItem value="-name">{t("products.sortNameZA")}</MenuItem>
-                </Select>
-              </FormControl>
+                {t("products.search")}
+              </AIButton>
             </Box>
 
-            {activeFilters.length > 0 && (
-              <Box className="flex flex-wrap gap-2 mb-4">
-                {activeFilters.map((filter) => (
-                  <Chip
-                    key={filter.key}
-                    label={filter.label}
-                    onDelete={() => {
-                      if (filter.key === "keyword") {
-                        setKeywordInput("");
-                        setSearchState((prev) => ({ ...prev, keyword: "" }));
-                      }
-                      if (filter.key.startsWith("category-")) {
-                        const catId = filter.key.replace("category-", "");
-                        const newCategories =
-                          searchState.selectedCategories.filter(
-                            (id) => id !== catId
-                          );
-                        setSelectedCategories(newCategories);
-                        setSearchState((prev) => ({
-                          ...prev,
-                          selectedCategories: newCategories,
-                        }));
-                      }
-                      if (filter.key === "price") {
-                        setPriceRange([0, 0]);
-                        setSearchState((prev) => ({
-                          ...prev,
-                          priceRange: [0, 0],
-                        }));
-                      }
-                    }}
-                    size="small"
-                  />
-                ))}
-                {activeFilters.length > 1 && (
-                  <Chip
-                    label={t("products.clearAll")}
-                    onClick={handleClearFilters}
-                    size="small"
-                    color="primary"
-                  />
-                )}
-              </Box>
-            )}
-
-
-            {<Grid container spacing={2} key="products-grid">
-              {loading ? (
-                Array.from(new Array(limit)).map((_, index) => (
-                  <Grid item xs={6} sm={6} md={4} lg={3} key={index}>
-                    <ProductCard product={{} as any} loading />
-                  </Grid>
-                ))
-              ) : products && products.length > 0 ? (
-
-                products.map((product: any, index: number) => (
-                  <Grid item xs={6} sm={6} md={4} lg={3} key={product._id || `product-${index}`}>
-                    <ProductCardList product={product} />
-                  </Grid>
-                ))
-              ) : (
-                <Grid item xs={12}>
-                  <Box className="text-center py-16">
-                    <Typography variant="h6" className="mb-2">
-                      {t("products.noProductsFound")}
-                    </Typography>
-                    <Typography variant="body2" className="text-gray-600 mb-4">
-                      {t("products.tryDifferentFilters")}
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleClearFilters}
+            {
+              <Grid container spacing={2} key="products-grid">
+                {loading ? (
+                  Array.from(new Array(limit)).map((_, index) => (
+                    <Grid item xs={6} sm={6} md={4} lg={3} key={index}>
+                      <ProductCard product={{} as any} loading />
+                    </Grid>
+                  ))
+                ) : products && products.length > 0 ? (
+                  products.map((product: any, index: number) => (
+                    <Grid
+                      item
+                      xs={6}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      key={product._id || `product-${index}`}
                     >
-                      {t("products.clearFilters")}
-                    </Button>
-                  </Box>
-                </Grid>
-              )}
-            </Grid>}
+                      <ProductCardList product={product} />
+                    </Grid>
+                  ))
+                ) : (
+                  <Grid item xs={12}>
+                    <Box className="text-center py-3 md:py-6 lg:py-16 space-y-3">
+                      <img src={NotFoundProduct} />
+                      <Typography
+                        variant="h6"
+                        className="mb-2 font-paris text-3xl font-semibold text-girl-secondary capitalize"
+                      >
+                        {t("products.noProductsFound")}
+                      </Typography>
+                      <AIButton
+                        radius="full"
+                        variant="solid"
+                        className="mx-auto"
+                        onClick={handleClearFilters}
+                      >
+                        {t("products.clearFilters")}
+                      </AIButton>
+                    </Box>
+                  </Grid>
+                )}
+              </Grid>
+            }
 
             {totalPages > 1 && (
               <Box className="flex justify-center mt-8">
@@ -488,7 +399,7 @@ const ProductsPage = () => {
             open={filtersOpen}
             onClose={toggleFilters}
             PaperProps={{
-              className: "backdrop-blur-lg bg-girl-white/60",
+              className: "backdrop-blur-lg bg-girl-white/90",
               sx: { width: 300 },
             }}
           >
