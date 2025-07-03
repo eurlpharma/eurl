@@ -390,8 +390,6 @@ const ProductFormPage = () => {
       const { success, data } = res;
       if (success) {
 
-        console.log(data)
-
         const raw = data.candidates[0].content.parts[0].text;
         const cleaned = raw.replace(/```json|```/g, "").trim();
         const result = JSON.parse(cleaned);
