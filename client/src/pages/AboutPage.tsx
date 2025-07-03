@@ -1,14 +1,14 @@
-import Breadcrumb from "@/components/global/Breadcrumb";
-import { Container } from "@mui/material";
 import {
   IconEmailLine,
   IconMapLine,
   IconPhoneLine,
 } from "@/components/Iconify";
-import girlLinear from "@/assets/images/icons/icon-girl-linear.png";
-import AIButton from "@/components/buttons/AIButton";
-import imageAboutSection from "@/assets/images/about/about-section.png";
+import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import AIButton from "@/components/buttons/AIButton";
+import Breadcrumb from "@/components/global/Breadcrumb";
+import girlLinear from "@/assets/images/icons/icon-girl-linear.png";
+import imageAboutSection from "@/assets/images/about/about-section.png";
 
 const contactItems = [
   {
@@ -33,7 +33,6 @@ const AboutPage = () => {
 
   return (
     <div className="about">
-      {/* <img src={coverImage} className="cover" /> */}
       <Breadcrumb pageName="About" />
 
       {/* about section */}
@@ -77,7 +76,7 @@ const AboutPage = () => {
             <h2>get in touch</h2>
           </div>
 
-          <div className="details flex relative z-20">
+          <div className="details">
             <div className="side start">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12787.660185080798!2d2.876540930308276!3d36.74861018529617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fbb2def044d51%3A0xcde2ad68272e29aa!2sStaoueli!5e0!3m2!1sen!2sdz!4v1750767278879!5m2!1sen!2sdz"

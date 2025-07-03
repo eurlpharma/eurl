@@ -20,7 +20,6 @@ import {
   TrashIcon,
   MinusIcon,
   PlusIcon,
-  ShoppingBagIcon,
   ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
 import { AppDispatch, RootState } from "@/store";
@@ -30,7 +29,11 @@ import {
   clearCart,
 } from "@/store/slices/cartSlice";
 import Breadcrumb from "@/components/global/Breadcrumb";
+
+import EmptyCartDraw from "../assets/undraw/empty_cart.svg"
+
 import clsx from "clsx";
+import AIButton from "@/components/buttons/AIButton";
 
 const CartPage = () => {
   const { t } = useTranslation();
@@ -102,26 +105,22 @@ const CartPage = () => {
     return (
       <div className="bg-girl-white">
         <Breadcrumb pageName="Shopping Cart" />
-        <Container maxWidth="lg" className="py-12">
-          <Box className="text-center py-12">
-            <ShoppingBagIcon className="w-20 h-20 mx-auto text-gray-400 mb-4" />
-            <Typography variant="h5" className="mb-4">
+        <Container maxWidth="lg" className="py-4 md:py-6 lg:px-10">
+          <Box className="text-center py-12 space-y-8">
+            <img src={EmptyCartDraw} className="w-full lg:w-[50%] mx-auto" />
+
+            <Typography variant="h5" className="mb-4 font-paris text-3xl font-semibold text-girl-secondary">
               {t("cart.emptyCart")}
             </Typography>
-            <Typography variant="body1" className="text-gray-600 mb-6">
-              {t("cart.emptyCartMessage")}
-            </Typography>
-            <RouterLink
-              to="/products"
-              className={clsx(
-                "text-girl-secondary flex items-center gap-2",
-                "border-1 border-solid border-girl-secondary",
-                "w-fit px-3 py-2 hover:bg-girl-secondary hover:text-girl-white"
-              )}
-            >
-              <ArrowLeftIcon className="w-5 h-5" />
-              <p>{t("cart.continueShopping")}</p>
-            </RouterLink>
+
+
+            <AIButton
+              variant="outlined"
+              radius="full"
+              className="mx-auto font-josefin"
+              startContent={<ArrowLeftIcon className="w-5 h-5" />}
+              onClick={() => navigate("/products")}
+            >{t("cart.continueShopping")}</AIButton>
           </Box>
         </Container>
       </div>

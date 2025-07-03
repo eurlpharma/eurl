@@ -84,15 +84,15 @@ export default {
         tiny: "12px",
       },
       fontFamily: {
-        sans: ["Roboto", "sans-serif"],
-        heading: ["Poppins", "sans-serif"],
+        sans: ["Roboto", "Cairo", "Tajawal", "sans-serif"],
+        heading: ["Poppins", "Cairo", "Tajawal", "sans-serif"],
         poppins: [
           "Poppins",
+          "Cairo",
+          "Tajawal",
           "Open Sans",
           "Montserrat",
           "Chakra Petch",
-          "Cairo",
-          "Tajawal",
           "Orbitron",
           "sans-serif",
         ],
@@ -119,10 +119,10 @@ export default {
         cairo: [
           "Cairo",
           "Tajawal",
-          "Chakra Petch",
-          "Open Sans",
           "Poppins",
+          "Open Sans",
           "Orbitron",
+          "Chakra Petch",
           "sans-serif",
         ],
         tawjal: [
@@ -134,8 +134,8 @@ export default {
           "Orbitron",
           "sans-serif",
         ],
-        montserat: ["Montserrat", "Open sans", "Poppins"],
-        josefin: ["Josefin Sans", "Open Sans", "Poppins", "sans-serif"],
+        montserat: ["Montserrat", "Open sans", "Poppins", "Cairo", "Tajawal"],
+        josefin: ["Josefin Sans", "Open Sans", "Poppins", "Cairo", "Tajawal", "sans-serif"],
         paris: [
           "Parisienne",
           "Poppins",

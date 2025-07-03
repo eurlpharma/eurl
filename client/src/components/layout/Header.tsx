@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Link as RouterLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
-import { useTheme } from "@/hooks/useTheme";
+// import { useTheme } from "@/hooks/useTheme";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
@@ -18,7 +18,6 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Divider,
   Avatar,
@@ -32,12 +31,10 @@ import {
 // Icons
 import {
   ShoppingCartIcon,
-  UserIcon,
   Bars3Icon,
   XMarkIcon,
-  SunIcon,
-  MoonIcon,
-  ShoppingBagIcon,
+  // SunIcon,
+  // MoonIcon,
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   LanguageIcon,
@@ -45,6 +42,9 @@ import {
 import {
   IconEmail,
   IconFacebook,
+  IconFlagDZ,
+  IconFlagFR,
+  IconFlagUS,
   IconInstagram,
   IconPhone,
   IconTime,
@@ -54,7 +54,7 @@ import {
 const Header = () => {
   const { t, i18n } = useTranslation();
   const { isAuthenticated, user, logout, loading } = useAuth();
-  const { mode, toggleTheme } = useTheme();
+  // const { mode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("md"));
@@ -107,10 +107,29 @@ const Header = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const langsMobile = [
+    {
+      key: "en",
+      label: "english",
+      icon: IconFlagUS,
+    },
+
+    {
+      key: "fr",
+      label: "français",
+      icon: IconFlagFR,
+    },
+
+    {
+      key: "ar",
+      label: "arabic",
+      icon: IconFlagDZ,
+    },
+  ];
+
   const menuId = "primary-account-menu";
   const langMenuId = "language-menu";
 
-  
   const renderMenu = (
     <Menu
       container={document.getElementById("root")}
@@ -124,7 +143,6 @@ const Header = () => {
     >
       {isAuthenticated ? (
         <>
-
           {user?.role?.toLowerCase() === "admin" && (
             <MenuItem
               onClick={() => {
@@ -191,7 +209,7 @@ const Header = () => {
         onClick={() => handleLanguageChange("ar")}
         selected={i18n.language === "ar"}
       >
-        العربية
+        Arabic
       </MenuItem>
     </Menu>
   );
@@ -210,7 +228,7 @@ const Header = () => {
     {
       href: "/about",
       label: "about",
-    }
+    },
   ];
 
   const mobileMenu = (
@@ -220,123 +238,46 @@ const Header = () => {
       onClose={toggleMobileMenu}
       container={document.getElementById("root")}
       PaperProps={{
-       className: "backdrop-blur-sm bg-white/60",
+        className: "backdrop-blur-sm bg-white/90",
         sx: { width: 280 },
       }}
     >
       <Box className="flex justify-between items-center h-20 px-3">
-        <div className="text-xl">
-          Healthy
-        </div>
+        <div className="text-2xl font-paris text-girl-secondary capitalize font-semibold">new logo</div>
         <IconButton onClick={toggleMobileMenu}>
           <XMarkIcon className="w-6 h-6" />
         </IconButton>
       </Box>
-      
+
       <Divider />
       <List>
-        <ListItem
-          button
-          component={RouterLink}
-          to="/"
-          onClick={toggleMobileMenu}
-        >
+        <ListItem component={RouterLink} to="/" onClick={toggleMobileMenu}>
           <ListItemText primary={t("header.home")} />
         </ListItem>
         <ListItem
-          button
           component={RouterLink}
           to="/products"
           onClick={toggleMobileMenu}
         >
           <ListItemText primary={t("header.products")} />
         </ListItem>
-        {isAuthenticated ? (
-          <>
-            <ListItem
-              button
-              component={RouterLink}
-              to="/profile"
-              onClick={toggleMobileMenu}
-            >
-              <ListItemIcon>
-                <UserIcon className="w-5 h-5" />
-              </ListItemIcon>
-              <ListItemText primary={t("header.profile")} />
-            </ListItem>
-            <ListItem
-              button
-              component={RouterLink}
-              to="/orders"
-              onClick={toggleMobileMenu}
-            >
-              <ListItemIcon>
-                <ShoppingBagIcon className="w-5 h-5" />
-              </ListItemIcon>
-              <ListItemText primary={t("header.orders")} />
-            </ListItem>
-            {user?.role === "admin" && (
-              <ListItem
-                button
-                component={RouterLink}
-                to="/admin"
-                onClick={toggleMobileMenu}
-              >
-                <ListItemIcon>
-                  <Cog6ToothIcon className="w-5 h-5" />
-                </ListItemIcon>
-                <ListItemText primary={t("header.adminPanel")} />
-              </ListItem>
-            )}
-            <ListItem button onClick={handleLogout}>
-              <ListItemIcon>
-                <ArrowRightOnRectangleIcon className="w-5 h-5" />
-              </ListItemIcon>
-              <ListItemText primary={t("header.logout")} />
-            </ListItem>
-          </>
-        ) : (
-          <>
-            <ListItem
-              button
-              component={RouterLink}
-              to="/login"
-              onClick={toggleMobileMenu}
-            >
-              <ListItemText primary={t("header.login")} />
-            </ListItem>
-            <ListItem
-              button
-              component={RouterLink}
-              to="/register"
-              onClick={toggleMobileMenu}
-            >
-              <ListItemText primary={t("header.register")} />
-            </ListItem>
-          </>
-        )}
+        <ListItem component={RouterLink} to="/about" onClick={toggleMobileMenu}>
+          <ListItemText primary={t("header.about_us")} />
+        </ListItem>
       </List>
       <Divider />
-      <List>
-        <ListItem button onClick={() => handleLanguageChange("fr")}>
-          <ListItemIcon>
-            <LanguageIcon className="w-5 h-5" />
-          </ListItemIcon>
-          <ListItemText primary="Français" />
-        </ListItem>
-        <ListItem button onClick={() => handleLanguageChange("en")}>
-          <ListItemIcon>
-            <LanguageIcon className="w-5 h-5" />
-          </ListItemIcon>
-          <ListItemText primary="English" />
-        </ListItem>
-        <ListItem button onClick={() => handleLanguageChange("ar")}>
-          <ListItemIcon>
-            <LanguageIcon className="w-5 h-5" />
-          </ListItemIcon>
-          <ListItemText primary="العربية" />
-        </ListItem>
-      </List>
+      <div className="p-3 pt-6 space-y-4">
+        {langsMobile.map((lang) => (
+          <div
+            key={lang.key}
+            onClick={() => handleLanguageChange(lang.key)}
+            className="flex items-center gap-3"
+          >
+            <lang.icon className="w-5 h-5" />
+            <p className="capitalize">{lang.label}</p>
+          </div>
+        ))}
+      </div>
     </Drawer>
   );
 
@@ -485,13 +426,13 @@ const Header = () => {
 
               {/* Actions */}
               <Box className="flex items-center space-x-2 text-girl-black">
-                <IconButton onClick={toggleTheme} color="inherit">
+                {/* <IconButton onClick={toggleTheme} color="inherit">
                   {mode === "dark" ? (
                     <SunIcon className="w-5 h-5" />
                   ) : (
                     <MoonIcon className="w-5 h-5" />
                   )}
-                </IconButton>
+                </IconButton> */}
 
                 {!isMobile && (
                   <IconButton
@@ -536,13 +477,8 @@ const Header = () => {
                   </IconButton>
                 )}
 
-
                 {loading && (
-                  <IconButton
-                    edge="end"
-                    color="secondary"
-                    disabled
-                  >
+                  <IconButton edge="end" color="secondary" disabled>
                     <CircularProgress size={24} />
                   </IconButton>
                 )}

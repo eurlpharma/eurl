@@ -43,7 +43,6 @@ import "swiper/css/zoom";
 import "swiper/css/free-mode";
 import "@/styles/swiper-custom.css";
 import "react-photo-view/dist/react-photo-view.css";
-import Breadcrumb from "@/components/global/Breadcrumb";
 import ProductCardList from "@/components/products/ProductCardList";
 import AIButton from "@/components/buttons/AIButton";
 
@@ -237,7 +236,7 @@ const ProductDetailPage = () => {
 
   return (
     <div>
-      <Breadcrumb pageName="Product Details" />
+      {/* {<Breadcrumb pageName="Product Details" />} */}
       <Container maxWidth="lg" className="py-8">
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
@@ -354,9 +353,8 @@ const ProductDetailPage = () => {
 
             <Typography
               variant="body1"
-              className="mb-6"
+              className="mb-6 font-cairo"
               dir="auto"
-              style={{ whiteSpace: "pre-wrap" }}
             >
               {product?.description || t("products.noDescription")}
             </Typography>
@@ -452,7 +450,8 @@ const ProductDetailPage = () => {
 
           <TabPanel value={activeTab} index={0}>
             <div
-              className="prose max-w-none dark:prose-invert whitespace-pre-wrap"
+              dir="auto"
+              className="prose max-w-none dark:prose-invert whitespace-pre-wrap font-cairo"
               dangerouslySetInnerHTML={{
                 __html: product?.richDescription || product?.description || "",
               }}

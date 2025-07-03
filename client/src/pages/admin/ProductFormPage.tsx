@@ -373,8 +373,8 @@ const ProductFormPage = () => {
         {
           "brand": "The most likely brand or manufacturer name for this product",
           "price": "Only the numeric value of the estimated average or official price in Algerian Dinar (DA), without currency symbols or text. Example: 850",
-          "shortDescription": "A concise, professional product description (6 to 10 lines), written using real newlines (\\n or actual line breaks), without emojis or styling",
-          "richDescription": "A persuasive, SEO-optimized, emoji-rich, and well-formatted product description (16 to 28 lines), written using actual newlines (line breaks) for each bullet point or paragraph. No Markdown formatting or HTML. It must appear line by line, ready to be pasted into a plain text draft input."
+          "shortDescription": "A concise, professional product description (6 to 10 lines), written using real newlines (\\n or actual line breaks), without emojis or styling [Arabic algerian]",
+          "richDescription": "A persuasive, SEO-optimized, emoji-rich, and well-formatted product description (16 to 28 lines), written using actual newlines (line breaks) for each bullet point or paragraph. No Markdown formatting or HTML. It must appear line by line, ready to be pasted into a plain text draft input. [arabic algerien]"
         }
 
         Product Name: ${watch("name")}
