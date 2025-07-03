@@ -1,6 +1,6 @@
 import { ProductCartType } from "@/types/product";
-import { IconButton } from "@mui/material";
-import { FC, HTMLAttributes } from "react";
+import { IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { FC, HTMLAttributes, useEffect, useState } from "react";
 import { addToCart } from "@/store/slices/cartSlice";
 import { useNotification } from "@/hooks/useNotification";
 import { useDispatch } from "react-redux";
@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/utils/facebookPixel";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
-import { IconCart } from "../Iconify";
+import { IconCart, IconCartBold } from "../Iconify";
 
 interface ProductCardListProps extends HTMLAttributes<HTMLElement> {
   product: ProductCartType | null;
@@ -17,11 +17,25 @@ interface ProductCardListProps extends HTMLAttributes<HTMLElement> {
   place?: "top" | "bottom";
 }
 
+interface ProductOnCart {
+  id: string;
+  image: string;
+  name: string;
+  price: Number;
+  product: string;
+  quantity: number;
+}
+
 const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { success, error } = useNotification();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [ProductSaved, setProductSaved] = useState<null | ProductOnCart[]>(
+    null
+  );
 
   if (!product) {
     return <div>Wait...</div>;
@@ -59,9 +73,21 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
     }
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("cartItems")) {
+      const localItemSaved: null | any = localStorage.getItem("cartItems");
+      setProductSaved(localItemSaved);
+    } else {
+      setProductSaved(null);
+    }
+  }, [localStorage, dispatch]);
+
   return (
     <div className="product" data-aos="fade-up" {...props}>
-      <div className="thumbs relative">
+      <div
+        className="thumbs relative"
+        onClick={() => navigate(`/products/${product.id}`)}
+      >
         <img
           loading="eager"
           decoding="async"
@@ -70,19 +96,21 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
           alt={`${product.name}`}
           {...{ fetchpriority: "high" }}
         />
-        <div className="over-mode"></div>
+        {!isMobile && <div className="over-mode"></div>}
 
         {product.isFeatured && <div className="over sale">{"Featured"}</div>}
 
-        <div className="in-cart">
-          <IconButton
-            onClick={handleAddToCart}
-            disabled={product.countInStock === 0}
-            className="text-girl-secondary"
-          >
-            <IconCart className="w-7 h-7" />
-          </IconButton>
-        </div>
+        {!isMobile && (
+          <div className="in-cart">
+            <IconButton
+              onClick={handleAddToCart}
+              disabled={product.countInStock === 0}
+              className="text-girl-secondary"
+            >
+              <IconCart className="w-7 h-7" />
+            </IconButton>
+          </div>
+        )}
 
         {product.countInStock > 0 && (
           <div className="over pink">
@@ -108,7 +136,16 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
               <span>DA {product.price}</span>
             )}
           </div>
-          <IconCart className="text-girl-secondary" />
+
+          {isMobile && product.countInStock > 0 && (
+            <div onClick={handleAddToCart}>
+              {ProductSaved?.includes(product.id) ? (
+                <IconCartBold className="text-girl-secondary" />
+              ) : (
+                <IconCart className="text-girl-secondary" />
+              )}
+            </div>
+          )}
         </div>
 
         <div

@@ -232,7 +232,7 @@ main {
 /* Product Card Start */
 .product {
   @apply w-[98%] border border-solid border-transparent rounded-lg
-    transition-all hover:border-girl-secondary overflow-hidden
+    transition-all lg:hover:border-girl-secondary overflow-hidden
 }
 
 .product .thumbs {
@@ -248,7 +248,7 @@ main {
 }
 
 .product:hover .thumbs .over-mode {
-  @apply bg-[#ffffff80] opacity-100;
+  @apply lg:bg-[#ffffff80] lg:opacity-100;
 }
 
 .product .thumbs .over {
