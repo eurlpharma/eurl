@@ -99,7 +99,7 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
               }
               return (
                 <SwiperSlide key={`${product.id}-image-${idx}`}>
-                  <img src={imageUrl} className="image" />
+                  <img src={imageUrl} className="image" alt={product.name || `Eurl Pharma Product ${idx}`} />
                 </SwiperSlide>
               );
             })}

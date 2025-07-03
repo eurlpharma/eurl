@@ -357,7 +357,7 @@ const ProductsPage = () => {
                 ) : (
                   <Grid item xs={12}>
                     <Box className="text-center py-3 md:py-6 lg:py-16 space-y-3">
-                      <img src={NotFoundProduct} />
+                      <img src={NotFoundProduct} alt="Not Found Product" />
                       <Typography
                         variant="h6"
                         className="mb-2 font-paris text-3xl font-semibold text-girl-secondary capitalize"
