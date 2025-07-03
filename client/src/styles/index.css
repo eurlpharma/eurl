@@ -236,22 +236,39 @@ main {
 }
 
 .product .thumbs {
-  @apply relative overflow-hidden;
+  @apply relative overflow-hidden h-44 lg:h-72;
 }
 
 .product .thumbs .image {
-  @apply w-full h-44 lg:h-72 object-cover bg-[#fbf7f8];
+  @apply w-full h-full object-cover bg-[#fbf7f8] transition duration-300 ease-in-out;
 }
+
+.product .thumbs img.image:first-child {
+  @apply absolute inset-0 z-20;
+}
+
+.product .thumbs .swiper {
+  @apply relative z-10 h-full;
+}
+
+.product .thumbs .swiper-slide {
+  @apply h-full;
+}
+
+.product .thumbs .swiper-slide img {
+  @apply w-full h-full object-cover;
+}
+
 .product .thumbs .over-mode {
-  @apply absolute top-0 left-0 w-full h-full bg-transparent opacity-0 z-10 transition
+  @apply absolute top-0 left-0 w-full h-full bg-transparent opacity-0 z-30 transition;
 }
 
 .product:hover .thumbs .over-mode {
-  @apply bg-[#ffffff80] opacity-100
+  @apply bg-[#ffffff80] opacity-100;
 }
 
 .product .thumbs .over {
-  @apply absolute top-0 z-10 font-montserat uppercase text-tiny 
+  @apply absolute top-0 z-30 font-montserat uppercase text-tiny 
   h-6 min-w-8 flex items-center justify-center;
 }
 
@@ -260,44 +277,42 @@ main {
 }
 
 .product .thumbs .over.pink {
-  @apply left-0 bg-girl-secondary text-girl-white flex items-center
-  justify-center;
+  @apply left-0 bg-girl-secondary text-girl-white flex items-center justify-center;
 }
 
 .product .thumbs .over.pink::before {
   content: "";
-  @apply absolute z-10 top-0
-  -right-4 border-solid border-girl-secondary border-[12px]
-  border-r-transparent
+  @apply absolute z-30 top-0 -right-4 border-solid border-girl-secondary border-[12px] border-r-transparent;
 }
 
 .product .thumbs .in-cart {
-  @apply absolute -bottom-10 transition opacity-0 duration-1000
+  @apply absolute -bottom-10 transition-opacity opacity-0 duration-700 z-30 right-2;
 }
 
 .product:hover .thumbs .in-cart {
-  @apply bottom-2 right-2 z-10 opacity-100
+  @apply bottom-2 opacity-100;
 }
 
 .product .info {
-  @apply py-6 px-3 flex flex-col items-center justify-center gap-2
+  @apply py-6 px-3 flex flex-col items-center justify-center gap-2;
 }
 
 .product .info .price {
-  @apply flex items-center gap-1 font-poppins lg:text-lg
+  @apply flex items-center gap-1 font-poppins lg:text-lg;
 }
 
 .product .info .price .rem-price {
-  @apply text-[#777] line-through
+  @apply text-[#777] line-through;
 }
 
 .product .info .price .new-price {
-  @apply text-[#1e1e1e]
+  @apply text-[#1e1e1e];
 }
 
 .product .info .name {
-  @apply capitalize lg:text-lg text-[#1e1e1e] line-clamp-1
+  @apply capitalize lg:text-lg text-[#1e1e1e] line-clamp-1;
 }
+
 /* Product Card End */
 
 /* Stretch section start */

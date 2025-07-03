@@ -84,10 +84,10 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
           <img
             src={firstImageUrl}
             className="image absolute inset-0 w-full h-full object-cover z-10"
-            fetchPriority="high"
             decoding="async"
             loading="eager"
             alt={product.name || "Eurl Pharma Product"}
+            {...{ fetchpriority: "high" }}
           />
         )}
 
