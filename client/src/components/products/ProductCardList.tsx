@@ -31,8 +31,6 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
   }
 
   const handleAddToCart = async () => {
-    console.log("add to cart");
-
     try {
       if (product && product.id) {
         const result = await dispatch(
@@ -64,6 +62,14 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
     }
   };
 
+  // === استخلاص رابط أول صورة بصيغة مناسبة للتحميل المبكر ===
+  const firstImage = product.images[0];
+  const firstImageUrl = firstImage
+    ? firstImage.startsWith("http")
+      ? firstImage.replace("/upload/", "/upload/f_auto,q_auto,w_600/")
+      : `https://eurl-server.onrender.com${firstImage.startsWith("/") ? "" : "/"}${firstImage}`
+    : "";
+
   return (
     <div
       className="product"
@@ -71,7 +77,21 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
       onClick={() => navigate(`/products/${product.id}`)}
       {...props}
     >
-      <div className="thumbs">
+      <div className="thumbs relative">
+
+        {/* === صورة رئيسية خارج Swiper لتحسين LCP === */}
+        {firstImageUrl && (
+          <img
+            src={firstImageUrl}
+            className="image absolute inset-0 w-full h-full object-cover z-10"
+            fetchPriority="high"
+            decoding="async"
+            loading="eager"
+            alt={product.name || "Eurl Pharma Product"}
+          />
+        )}
+
+        {/* === Swiper للصور الأخرى === */}
         <Swiper
           loop={false}
           speed={600}
@@ -79,38 +99,30 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
           slidesPerView={1}
           spaceBetween={10}
           modules={[EffectFlip]}
+          className="z-0"
         >
-          {product &&
-            product.images.slice(0, 2).map((src, idx) => {
-              let imageUrl = src;
-              if (
-                src &&
-                (src.startsWith("/uploads") || src.startsWith("uploads/"))
-              ) {
-                imageUrl = `https://eurl-server.onrender.com${
-                  src.startsWith("/") ? "" : "/"
-                }${src}`;
-              } else if (
-                src &&
-                (src.startsWith("http://") || src.startsWith("https://"))
-              ) {
-                imageUrl = src;
-              }
-              return (
-                <SwiperSlide key={`${product.id}-image-${idx}`}>
-                  <img
-                    src={imageUrl}
-                    className="image"
-                    fetchPriority="high"
-                    decoding="async"
-                    alt={product.name || `Eurl Pharma Product ${idx}`}
-                  />
-                </SwiperSlide>
-              );
-            })}
+          {product.images.slice(1, 3).map((src, idx) => {
+            const imageUrl = src.startsWith("http")
+              ? src.replace("/upload/", "/upload/f_auto,q_auto,w_600/")
+              : `https://eurl-server.onrender.com${src.startsWith("/") ? "" : "/"}${src}`;
+            return (
+              <SwiperSlide key={`${product.id}-image-${idx}`}>
+                <img
+                  src={imageUrl}
+                  className="image"
+                  decoding="async"
+                  loading="lazy"
+                  alt={`${product.name} - ${idx + 1}`}
+                />
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
+
         <div className="over-mode"></div>
+
         {product.isFeatured && <div className="over sale">{"Featured"}</div>}
+
         <div className="in-cart">
           <IconButton
             onClick={handleAddToCart}
