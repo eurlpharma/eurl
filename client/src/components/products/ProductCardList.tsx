@@ -1,6 +1,5 @@
 import { ProductCartType } from "@/types/product";
 import { IconButton } from "@mui/material";
-import { ShoppingCartIcon } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
 import { addToCart } from "@/store/slices/cartSlice";
 import { useNotification } from "@/hooks/useNotification";
@@ -10,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/utils/facebookPixel";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
+import { IconCart } from "../Iconify";
 
 interface ProductCardListProps extends HTMLAttributes<HTMLElement> {
   product: ProductCartType | null;
@@ -60,12 +60,7 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
   };
 
   return (
-    <div
-      className="product"
-      data-aos="fade-up"
-      onClick={() => navigate(`/products/${product.id}`)}
-      {...props}
-    >
+    <div className="product" data-aos="fade-up" {...props}>
       <div className="thumbs relative">
         <img
           loading="eager"
@@ -85,7 +80,7 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
             disabled={product.countInStock === 0}
             className="text-girl-secondary"
           >
-            <ShoppingCartIcon className="w-7 h-7" />
+            <IconCart className="w-7 h-7" />
           </IconButton>
         </div>
 
@@ -97,19 +92,31 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
       </div>
 
       <div className={clsx("info", "flex flex-col-reverse items-start")}>
-        <div className="price ">
-          {product.oldPrice && product.oldPrice > product.price ? (
-            <div className="space-x-2">
-              <span className="text-girl-secondary">DA {product.price}</span>
-              <span className="line-through text-sm text-gray-600">
-                DA {product.oldPrice}
-              </span>
-            </div>
-          ) : (
-            <span>DA {product.price}</span>
-          )}
+        <div className="flex items-end justify-between gap-2 w-full">
+          <div
+            className="price "
+            onClick={() => navigate(`/products/${product.id}`)}
+          >
+            {product.oldPrice && product.oldPrice > product.price ? (
+              <div className="space-x-2">
+                <span className="text-girl-secondary">DA {product.price}</span>
+                <span className="line-through text-sm text-gray-600">
+                  DA {product.oldPrice}
+                </span>
+              </div>
+            ) : (
+              <span>DA {product.price}</span>
+            )}
+          </div>
+          <IconCart className="text-girl-secondary" />
         </div>
-        <div className="name">{product.name}</div>
+
+        <div
+          className="name"
+          onClick={() => navigate(`/products/${product.id}`)}
+        >
+          {product.name}
+        </div>
       </div>
     </div>
   );

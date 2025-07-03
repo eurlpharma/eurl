@@ -231,32 +231,16 @@ main {
 
 /* Product Card Start */
 .product {
-  @apply w-[98%] border border-solid border-transparent 
-    transition-all hover:border-girl-secondary overflow-hidden;
+  @apply w-[98%] border border-solid border-transparent rounded-lg
+    transition-all hover:border-girl-secondary overflow-hidden
 }
 
 .product .thumbs {
-  @apply relative overflow-hidden h-44 lg:h-72;
+  @apply relative overflow-hidden rounded-lg h-44 lg:h-72;
 }
 
 .product .thumbs .image {
-  @apply w-full h-full object-cover bg-[#fbf7f8] transition duration-300 ease-in-out;
-}
-
-.product .thumbs img.image:first-child {
-  @apply absolute inset-0 z-20;
-}
-
-.product .thumbs .swiper {
-  @apply relative z-10 h-full;
-}
-
-.product .thumbs .swiper-slide {
-  @apply h-full;
-}
-
-.product .thumbs .swiper-slide img {
-  @apply w-full h-full object-cover;
+  @apply w-full h-full rounded-lg object-cover bg-[#fbf7f8] transition duration-300 ease-in-out;
 }
 
 .product .thumbs .over-mode {
@@ -294,7 +278,7 @@ main {
 }
 
 .product .info {
-  @apply py-6 px-3 flex flex-col items-center justify-center gap-2;
+  @apply pt-2 md:pt-4 lg:pt-6 ps-0 md:ps-2 lg:ps-3 flex flex-col items-center justify-center gap-2;
 }
 
 .product .info .price {

@@ -306,7 +306,7 @@ const ProductsPage = () => {
 
       <Container
         maxWidth="xl"
-        className="py-1 md:py-2 lg:py-16 px-1 md:px-2 lg:px-3"
+        className="py-1 pb-6 md:py-2 lg:py-16 px-1 md:px-2 lg:px-3"
       >
         <Grid container spacing={4} key="main-container">
           {!isMobile && (
@@ -316,25 +316,36 @@ const ProductsPage = () => {
           )}
 
           <Grid item xs={12} md={9} lg={10} key="products-section">
-            <Box className="flex items-center justify-between w-full mb-4 md:mb-0">
-              <div>
-                <p className="capitalize font-josefin text-xl text-gray-800">Products</p>
-                <p className="text-tiny text-gray-600">Find your best products</p>
-              </div>
+            {isMobile && (
+              <Box className="flex items-center justify-between w-full mb-4 md:mb-0">
+                <div>
+                  <p className="capitalize font-josefin text-xl text-gray-800">
+                    Products
+                  </p>
+                  <p className="text-tiny text-gray-600">
+                    Find your best products
+                  </p>
+                </div>
 
-              <AIButton
-                radius="full"
-                variant="liner"
-                className="py-1"
-                onClick={toggleFilters}
-                startContent={<IconSearch className="w-5 h-5" />}
-              >
-                {t("products.search")}
-              </AIButton>
-            </Box>
+                <AIButton
+                  radius="full"
+                  variant="liner"
+                  className="py-1"
+                  onClick={toggleFilters}
+                  startContent={<IconSearch className="w-5 h-5" />}
+                >
+                  {t("products.search")}
+                </AIButton>
+              </Box>
+            )}
 
             {
-              <Grid container spacing={2} key="products-grid">
+              <Grid
+                container
+                rowSpacing={2}
+                columnSpacing={1}
+                key="products-grid"
+              >
                 {loading ? (
                   Array.from(new Array(limit)).map((_, index) => (
                     <Grid item xs={6} sm={6} md={4} lg={3} key={index}>
