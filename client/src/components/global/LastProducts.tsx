@@ -1,6 +1,6 @@
 import { Container, IconButton } from "@mui/material";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectFlip } from "swiper/modules";
+const { EffectFlip } = await import("swiper/modules");
+const  { Swiper, SwiperSlide } = await import("swiper/react");
 
 import "swiper/css";
 import "swiper/css/effect-flip";

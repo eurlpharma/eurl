@@ -33,8 +33,8 @@ import {
 } from "@/store/slices/productSlice";
 import { addToCart } from "@/store/slices/cartSlice";
 import { useNotification } from "@/hooks/useNotification";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Thumbs, Zoom, FreeMode } from "swiper/modules";
+const  { Swiper, SwiperSlide } = await import("swiper/react");
+const  { Thumbs, Zoom, FreeMode } = await import("swiper/modules");
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";

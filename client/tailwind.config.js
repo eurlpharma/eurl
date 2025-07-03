@@ -1,7 +1,7 @@
-import { heroui } from "@heroui/react";
+const { heroui } = require("@heroui/react");
 
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -121,7 +121,6 @@ export default {
           "Tajawal",
           "Poppins",
           "Open Sans",
-          "Orbitron",
           "Chakra Petch",
           "sans-serif",
         ],
@@ -160,5 +159,5 @@ export default {
   corePlugins: {
     preflight: true,
   },
-  important: "#root", // Ensures Tailwind styles override MUI styles when needed
+  important: "#root",
 };

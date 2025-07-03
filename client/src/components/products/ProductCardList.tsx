@@ -68,7 +68,7 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
     >
       <div className="thumbs relative">
         <img
-          loading="lazy"
+          loading="eager"
           decoding="async"
           className="image"
           src={product.images[0]}

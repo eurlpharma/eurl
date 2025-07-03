@@ -1,8 +1,8 @@
 import { Box, Container } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Parallax } from "react-parallax";
-import { Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+const { Navigation } = await import("swiper/modules");
+const { Swiper, SwiperSlide } = await import("swiper/react");
 import imageParallax from "@/assets/images/banner/feature_01.jpg";
 import "swiper/css";
 import "swiper/css/effect-fade";

@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import { FC, HTMLAttributes } from "react";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+const { Autoplay } = await import("swiper/modules");
+const  { Swiper, SwiperSlide } = await import("swiper/react");
 
 import imageBlog1 from "../../assets/images/blogs/blog_01.jpg";
 import imageBlog2 from "../../assets/images/blogs/blog_02.jpg";
