@@ -236,11 +236,13 @@ main {
 }
 
 .product .thumbs {
-  @apply relative overflow-hidden rounded-lg h-44 lg:h-72;
+  @apply relative overflow-hidden rounded-lg h-fit ;
 }
 
 .product .thumbs .image {
-  @apply w-full h-full rounded-lg object-cover bg-[#fbf7f8] transition duration-300 ease-in-out;
+  /* background: linear-gradient(to bottom, #e0e0e0, #c0c0c0, #a8a8a8); to bottom */
+  background: radial-gradient(circle, #ffffff 0%, #cecece 60%, #b2b2b2 100%);
+  @apply w-full rounded-lg h-[14rem] py-2.5 lg:h-72 object-contain transition duration-300 ease-in-out;
 }
 
 .product .thumbs .over-mode {

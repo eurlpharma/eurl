@@ -41,7 +41,7 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, isLoading=false, .
   if (!product || isLoading) {
     return (
       <div>
-        <Skeleton variant="rectangular" className="rounded-lg h-44 lg:h-72 pb-3" />
+        <Skeleton variant="rectangular" className="rounded-lg h-[14rem] lg:h-72 pb-3" />
         <Skeleton variant="text" className="w-2/3" />
         <Skeleton variant="text" className="w-1/2" />
       </div>
