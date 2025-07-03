@@ -31,8 +31,7 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
   }
 
   const handleAddToCart = async () => {
-
-    console.log("add to cart")
+    console.log("add to cart");
 
     try {
       if (product && product.id) {
@@ -99,7 +98,13 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
               }
               return (
                 <SwiperSlide key={`${product.id}-image-${idx}`}>
-                  <img src={imageUrl} className="image" alt={product.name || `Eurl Pharma Product ${idx}`} />
+                  <img
+                    src={imageUrl}
+                    className="image"
+                    fetchPriority="high"
+                    decoding="async"
+                    alt={product.name || `Eurl Pharma Product ${idx}`}
+                  />
                 </SwiperSlide>
               );
             })}
