@@ -75,6 +75,7 @@
     "subscribe": "Subscribe"
   },
   "products": {
+    "removedFromCart": "Removed from cart",
     "maxAvailable": "Max available",
     "minAvailable": "Min available",
     "minPrice": "Min Price",

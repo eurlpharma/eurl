@@ -42,45 +42,80 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
   }
 
   const handleAddToCart = async () => {
+    if (!product || !product.id) return;
+
+    const isInCart = ProductSaved?.some((item) => item.product === product.id);
+
     try {
-      if (product && product.id) {
+      if (isInCart) {
+        const updatedCart =
+          ProductSaved?.filter((item) => item.product !== product.id) || [];
+
+        setProductSaved(updatedCart);
+        localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+
+        success(t("products.removedFromCart"));
+      } else {
         const result = await dispatch(
           addToCart({ productId: product.id, quantity: 1 })
         );
+
         if (addToCart.fulfilled.match(result)) {
+          const newItem: ProductOnCart = {
+            id: product.id,
+            image: product.images[0],
+            name: product.name,
+            price: product.price,
+            product: product.id,
+            quantity: 1,
+          };
+
+          const updated = ProductSaved ? [...ProductSaved, newItem] : [newItem];
+          setProductSaved(updated);
+          localStorage.setItem("cartItems", JSON.stringify(updated));
+
           success(t("products.addedToCart"));
+
+          trackEvent("AddToCart", {
+            Product: product.name,
+            Price: product.price,
+            Quantity: 1,
+          });
         } else {
           if (result.payload === "Not enough stock available") {
             error(t("products.notEnoughStock"));
-          } else if (
-            result.payload === "Invalid product data received from server"
-          ) {
-            error(t("products.invalidProduct"));
-          } else if (typeof result.payload === "string") {
-            error(result.payload);
           } else {
-            error(t("common.errorOccurred"));
+            error(
+              typeof result.payload === "string"
+                ? result.payload
+                : t("common.errorOccurred")
+            );
           }
         }
       }
-      trackEvent("AddToCart", {
-        Product: product.name,
-        Price: product.price,
-        Quantity: 1,
-      });
     } catch (err) {
       error(t("common.errorOccurred"));
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem("cartItems")) {
-      const localItemSaved: null | any = localStorage.getItem("cartItems");
-      setProductSaved(localItemSaved);
-    } else {
-      setProductSaved(null);
+    try {
+      const localItem = localStorage.getItem("cartItems");
+      if (localItem) {
+        const parsed = JSON.parse(localItem);
+        if (Array.isArray(parsed)) {
+          setProductSaved(parsed);
+        } else {
+          setProductSaved([]);
+        }
+      } else {
+        setProductSaved([]);
+      }
+    } catch (e) {
+      error("Invalid cart items data");
+      setProductSaved([]);
     }
-  }, [localStorage, dispatch]);
+  }, [localStorage]);
 
   return (
     <div className="product" data-aos="fade-up" {...props}>
@@ -139,7 +174,8 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, ...props }) => {
 
           {isMobile && product.countInStock > 0 && (
             <div onClick={handleAddToCart}>
-              {ProductSaved?.some((item) => item.product === product.id) ? (
+              {ProductSaved &&
+              ProductSaved?.some((item) => item.product === product.id) ? (
                 <IconCartBold className="text-girl-secondary" />
               ) : (
                 <IconCart className="text-girl-secondary" />
