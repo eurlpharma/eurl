@@ -83,19 +83,15 @@ module.exports = {
       fontSize: {
         tiny: "12px",
       },
+
+      latin: ['Poppins', 'Open Sans', 'sans-serif'],
+      arabic: ['Cairo', 'Tajawal', 'sans-serif'],
+
       fontFamily: {
         sans: ["Roboto", "Cairo", "Tajawal", "sans-serif"],
         heading: ["Poppins", "Cairo", "Tajawal", "sans-serif"],
-        poppins: [
-          "Poppins",
-          "Cairo",
-          "Tajawal",
-          "Open Sans",
-          "Montserrat",
-          "Chakra Petch",
-          "Orbitron",
-          "sans-serif",
-        ],
+ 
+        poppins: ['Poppins', 'Cairo', 'Tajawal', 'sans-serif'],
         opensans: [
           "Open Sans",
           "Poppins",

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, Link as RouterLink, useNavigate } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  Link as RouterLink,
+  useNavigate,
+} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 // import { useTheme } from "@/hooks/useTheme";
@@ -45,6 +50,7 @@ import {
   IconFlagDZ,
   IconFlagFR,
   IconFlagUS,
+  IconHome,
   IconInstagram,
   IconPhone,
   IconTime,
@@ -94,7 +100,15 @@ const Header = () => {
 
   const handleLanguageChange = (lang: string) => {
     i18n.changeLanguage(lang);
+
+    if (lang === "ar") {
+      document.documentElement.dir = "rtl";
+    } else {
+      document.documentElement.dir = "ltr";
+    }
+
     handleLangMenuClose();
+    window.location.reload()
   };
 
   const handleLogout = () => {
@@ -106,26 +120,6 @@ const Header = () => {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
-
-  const langsMobile = [
-    {
-      key: "en",
-      label: "english",
-      icon: IconFlagUS,
-    },
-
-    {
-      key: "fr",
-      label: "français",
-      icon: IconFlagFR,
-    },
-
-    {
-      key: "ar",
-      label: "arabic",
-      icon: IconFlagDZ,
-    },
-  ];
 
   const menuId = "primary-account-menu";
   const langMenuId = "language-menu";
@@ -231,9 +225,49 @@ const Header = () => {
     },
   ];
 
+  const langsMobile = [
+    {
+      key: "en",
+      label: "english",
+      icon: IconFlagUS,
+    },
+
+    {
+      key: "fr",
+      label: "français",
+      icon: IconFlagFR,
+    },
+
+    {
+      key: "ar",
+      label: "arabic",
+      icon: IconFlagDZ,
+    },
+  ];
+
+  const linksMobile = [
+    {
+      key: "/home",
+      label: "home",
+      icon: IconHome,
+    },
+
+    {
+      key: "/products",
+      label: "products",
+      icon: IconHome,
+    },
+
+    {
+      key: "/about",
+      label: "about_us",
+      icon: IconHome,
+    },
+  ];
+
   const mobileMenu = (
     <Drawer
-      // anchor="right"
+      anchor="right"
       open={mobileMenuOpen}
       onClose={toggleMobileMenu}
       container={document.getElementById("root")}
@@ -243,28 +277,31 @@ const Header = () => {
       }}
     >
       <Box className="flex justify-between items-center h-20 px-3">
-        <div className="text-2xl font-paris text-girl-secondary capitalize font-semibold">new logo</div>
+        <div className="text-2xl font-paris text-girl-secondary capitalize font-semibold">
+          new logo
+        </div>
         <IconButton onClick={toggleMobileMenu}>
           <XMarkIcon className="w-6 h-6" />
         </IconButton>
       </Box>
 
       <Divider />
-      <List>
-        <ListItem component={RouterLink} to="/" onClick={toggleMobileMenu}>
-          <ListItemText primary={t("header.home")} />
-        </ListItem>
-        <ListItem
-          component={RouterLink}
-          to="/products"
-          onClick={toggleMobileMenu}
-        >
-          <ListItemText primary={t("header.products")} />
-        </ListItem>
-        <ListItem component={RouterLink} to="/about" onClick={toggleMobileMenu}>
-          <ListItemText primary={t("header.about_us")} />
-        </ListItem>
-      </List>
+      <div className="p-3 pt-6 space-y-4">
+        {linksMobile.map((link) => (
+          <NavLink
+            to={link.key}
+            key={link.key}
+            onClick={() => handleLanguageChange(link.key)}
+            className="flex items-center gap-3"
+          >
+            <link.icon />
+            <p className="capitalize font-poppins">
+              {t(`header.${link.label}`)}
+            </p>
+          </NavLink>
+        ))}
+      </div>
+
       <Divider />
       <div className="p-3 pt-6 space-y-4">
         {langsMobile.map((lang) => (
