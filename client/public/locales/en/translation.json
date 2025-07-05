@@ -1,4 +1,9 @@
 {
+  "lang": {
+    "english": "English",
+    "french": "French",
+    "arabic": "Arabic"
+  },
   "header": {
     "about_us": "About US",
     "adminPanel": "Dashboard",
@@ -48,7 +53,10 @@
     "equipment": "Medical Equipment",
     "devices": "Health Devices",
     "image": "Image",
-    "uploadImage": "Upload Image"
+    "uploadImage": "Upload Image",
+    "nameAr": "Arabic Name",
+    "nameEn": "English Name",
+    "nameFr": "French Name"
   },
   "home": {
     "heroTitle": "Your Health, Our Priority",

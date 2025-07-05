@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 async function testLogin() {
   try {
-    const response = await fetch('https://eurl-server.onrender.com/api/users/login', {
+    const response = await fetch('http://192.168.1.11:5000/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ async function testLogin() {
     if (data.success && data.token) {
       console.log('\nTesting admin dashboard with token...');
       
-      const dashboardResponse = await fetch('https://eurl-server.onrender.com/api/admin/dashboard', {
+      const dashboardResponse = await fetch('http://192.168.1.11:5000/api/admin/dashboard', {
         headers: {
           'Authorization': `Bearer ${data.token}`,
           'Content-Type': 'application/json',

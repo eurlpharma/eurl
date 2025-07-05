@@ -3,10 +3,16 @@ import axios from 'axios';
 
 interface Category {
   id: string;
-  name: string;
+  _id?: string;
+  nameAr: string;
+  nameEn: string;
+  nameFr: string;
+  slug: string;
   description?: string;
   image?: string;
   isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface CategoryState {
@@ -28,7 +34,7 @@ export const getCategories = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get('/api/categories', {
-        baseURL: 'https://eurl-server.onrender.com',
+        baseURL: 'http://192.168.1.11:5000',
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +72,7 @@ export const createCategory = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post('/api/categories', categoryData, {
-        baseURL: 'https://eurl-server.onrender.com',
+        baseURL: 'http://192.168.1.11:5000',
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,7 +92,7 @@ export const updateCategory = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(`/api/categories/${id}`, categoryData, {
-        baseURL: 'https://eurl-server.onrender.com',
+        baseURL: 'http://192.168.1.11:5000',
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,7 +112,7 @@ export const deleteCategory = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`/api/categories/${id}`, {
-        baseURL: 'https://eurl-server.onrender.com',
+        baseURL: 'http://192.168.1.11:5000',
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,

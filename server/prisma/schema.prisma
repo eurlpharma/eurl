@@ -39,7 +39,9 @@ model User {
 
 model Category {
   id          String    @id @default(cuid())
-  name        String
+  nameAr      String   // Arabic name
+  nameEn      String   // English name  
+  nameFr      String   // French name
   slug        String    @unique
   description String?
   image       String?

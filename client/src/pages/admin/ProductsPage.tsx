@@ -34,9 +34,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProducts, deleteProduct } from '@/store/slices/productSlice';
 import AIButton from '@/components/buttons/AIButton';
 import { AppDispatch } from '@/store';
+import { useLocalizedCategory } from '@/hooks/useLocalizedCategory';
+import { getLocalizedCategoryName } from '@/utils/formatters';
+import i18n from '@/i18n';
 
 
-const API_URL = import.meta.env.VITE_API_URL || `https://eurl-server.onrender.com`;
+const API_URL = import.meta.env.VITE_API_URL || `http://192.168.1.11:5000`;
 
 const ProductsPage = () => {
   const { t } = useTranslation();
@@ -214,7 +217,9 @@ const ProductsPage = () => {
                   </TableCell>
                   <TableCell>{product.name}</TableCell>
                   <TableCell>{product.price} DA</TableCell>
-                  <TableCell>{product.category?.name || product.category}</TableCell>
+                  <TableCell>
+                    {product.category ? getLocalizedCategoryName(product.category, i18n.language) : '-'}
+                  </TableCell>
                   <TableCell>{product.countInStock}</TableCell>
                   <TableCell>
                     {product.isFeatured ? (

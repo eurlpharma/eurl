@@ -17,4 +17,26 @@ export const formatPrice = (price: number) => {
   if (lang.startsWith('ar')) symbol = 'دج';
   else if (lang.startsWith('fr') || lang.startsWith('en')) symbol = 'DA';
   return `${price.toLocaleString(lang)} ${symbol}`;
+};
+
+/**
+ * Get localized category name based on current language
+ * @param category - Category object with multilingual names
+ * @param currentLanguage - Current language code (ar, en, fr)
+ * @returns Localized category name
+ */
+export const getLocalizedCategoryName = (category: any, currentLanguage: string): string => {
+  if (!category) return '';
+  
+  // Return the appropriate name based on language
+  switch (currentLanguage) {
+    case 'ar':
+      return category.nameAr || '';
+    case 'en':
+      return category.nameEn || '';
+    case 'fr':
+      return category.nameFr || '';
+    default:
+      return category.nameAr || category.nameEn || category.nameFr || '';
+  }
 }; 

@@ -1,5 +1,12 @@
 {
+
+  "lang": {
+    "english": "Anglais",
+    "french": "Français",
+    "arabic": "arabe"
+  },
   "header": {
+    "about_us": "À propos",
     "adminPanel": "Tableau de Bord",
     "about": "À propos",
     "contact": "Contact",
@@ -47,7 +54,10 @@
     "equipment": "Équipement Médical",
     "devices": "Appareils de Santé",
     "image": "Image",
-    "uploadImage": "Télécharger l'image"
+    "uploadImage": "Télécharger l'image",
+    "nameAr": "Nom en arabe",
+    "nameEn": "Nom en anglais",
+    "nameFr": "Nom en français"
   },
   "home": {
     "heroTitle": "Votre Santé, Notre Priorité",

@@ -52,14 +52,18 @@ const getDashboardStats = asyncHandler(async (req, res) => {
   const recentProducts = await prisma.product.findMany({
     select: {
       id: true,
-      name: true,
+      nameAr: true,
+      nameEn: true,
+      nameFr: true,
       price: true,
       countInStock: true,
       images: true,
       category: {
         select: {
           id: true,
-          name: true
+          nameAr: true,
+          nameEn: true,
+          nameFr: true
         }
       }
     },
@@ -109,12 +113,16 @@ const getDashboardStats = asyncHandler(async (req, res) => {
       user: {
         select: {
           id: true,
-          name: true
+          nameAr: true,
+          nameEn: true,
+          nameFr: true
         }
       },
       orderItems: {
         select: {
-          name: true,
+          nameAr: true,
+          nameEn: true,
+          nameFr: true,
           qty: true,
           product: {
             select: {
@@ -284,6 +292,7 @@ const getSalesStats = asyncHandler(async (req, res) => {
 // @route   GET /api/admin/stats/products
 // @access  Private/Admin
 const getProductStats = asyncHandler(async (req, res) => {
+  try {
   const { period = '30days' } = req.query;
   const today = new Date();
   let startDate;
@@ -320,6 +329,51 @@ const getProductStats = asyncHandler(async (req, res) => {
   });
   const paidOrderIds = paidOrders.map(o => o.id);
 
+  // إذا لم تكن هناك طلبات مدفوعة، إرجاع إحصائيات فارغة
+  if (paidOrderIds.length === 0) {
+    const totalProducts = await prisma.product.count();
+    const activeProducts = await prisma.product.count({
+      where: { isVisible: true }
+    });
+    const featuredProducts = await prisma.product.count({
+      where: { isFeatured: true }
+    });
+    const outOfStockProducts = await prisma.product.count({
+      where: { countInStock: 0 }
+    });
+    const lowStockProducts = await prisma.product.count({
+      where: {
+        countInStock: {
+          gt: 0,
+          lte: 5
+        }
+      }
+    });
+    const inStockProducts = await prisma.product.count({
+      where: {
+        countInStock: { gt: 5 }
+      }
+    });
+
+    return res.json({
+      success: true,
+      productStats: {
+        totalProducts,
+        activeProducts,
+        featuredProducts,
+        outOfStockProducts,
+        lowStockProducts,
+        stockStatus: {
+          inStock: inStockProducts,
+          lowStock: lowStockProducts,
+          outOfStock: outOfStockProducts
+        },
+        topSellingProducts: [],
+        categoryDistribution: []
+      }
+    });
+  }
+
   const orderItems = await prisma.orderItem.findMany({
     where: { orderId: { in: paidOrderIds } },
     select: { productId: true }
@@ -334,21 +388,25 @@ const getProductStats = asyncHandler(async (req, res) => {
 
   // جلب الفئات المرتبطة
   const categories = await prisma.category.findMany({
-    select: { id: true, name: true }
+    select: { id: true, nameAr: true, nameEn: true, nameFr: true }
   });
 
   // حساب توزيع الفئات
   const categoryCountMap = {};
   for (const prod of products) {
-    if (!categoryCountMap[prod.categoryId]) categoryCountMap[prod.categoryId] = 0;
-    categoryCountMap[prod.categoryId]++;
+    if (prod.categoryId && !categoryCountMap[prod.categoryId]) {
+      categoryCountMap[prod.categoryId] = 0;
+    }
+    if (prod.categoryId) {
+      categoryCountMap[prod.categoryId]++;
+    }
   }
   const totalCat = products.length;
   const categoryDistribution = categories.map(cat => ({
-    category: cat.name,
+    category: cat.nameAr || cat.nameEn || cat.nameFr || 'Unknown',
     count: categoryCountMap[cat.id] || 0,
     percentage: totalCat > 0 ? Math.round(((categoryCountMap[cat.id] || 0) / totalCat) * 100) : 0
-  })).filter(c => c.count > 0); // فقط الفئات التي لها مبيعات
+  })).filter(c => c.count > 0 && c.category !== 'Unknown'); // فقط الفئات التي لها مبيعات
 
   // إجمالي المنتجات
   const totalProducts = await prisma.product.count();
@@ -402,7 +460,7 @@ const getProductStats = asyncHandler(async (req, res) => {
       sales: item._sum.qty || 0,
       revenue: (item._sum.qty || 0) * (item._sum.price || 0)
     };
-  });
+  }).filter(item => item.name !== 'Unknown'); // إزالة المنتجات غير المعروفة
 
   res.json({
     success: true,
@@ -425,6 +483,14 @@ const getProductStats = asyncHandler(async (req, res) => {
         : []
     }
   });
+  } catch (error) {
+    console.error('Error in getProductStats:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Internal server error while fetching product statistics',
+      error: error.message 
+    });
+  }
 });
 
 export {

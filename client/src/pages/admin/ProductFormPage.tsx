@@ -22,6 +22,7 @@ import ImageUpload from "@/components/form/ImageUpload";
 import AIButton from "@/components/buttons/AIButton";
 import { IconAI, IconAIBold, IconTrashBold } from "@/components/Iconify";
 import { GeminiAI } from "@/utils/gemini";
+import { getLocalizedCategoryName } from "@/utils/formatters";
 
 interface ProductFormData {
   name: string;
@@ -74,7 +75,7 @@ const productSchema = yup.object().shape({
 const ProductFormPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const isEditMode = Boolean(id);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -91,7 +92,7 @@ const ProductFormPage = () => {
   const { product, loading } = useAppSelector(
     (state: RootState) => state.products
   );
-  const { categories } = useAppSelector((state: RootState) => state.categories);
+  const { categories, loading: categoriesLoading, error: categoriesError } = useAppSelector((state: RootState) => state.categories);
 
   const form = useForm<ProductFormData>({
     resolver: yupResolver(productSchema),
@@ -110,8 +111,14 @@ const ProductFormPage = () => {
   const { setValue, watch } = form;
 
   useEffect(() => {
+    // Always fetch categories to ensure they're up to date
     dispatch(getCategories());
   }, [dispatch]);
+
+  // Debug: Log categories state
+  useEffect(() => {
+    console.log('Categories state:', { categories, categoriesLoading, categoriesError });
+  }, [categories, categoriesLoading, categoriesError]);
 
   useEffect(() => {
     if (isEditMode && id) {
@@ -143,7 +150,7 @@ const ProductFormPage = () => {
         oldPrice: oldPriceValue,
         category:
           typeof product.category === "object"
-            ? product.category.id
+            ? product.category.id || product.category._id
             : product.category,
         specifications: product.specifications || [],
         stock: product.countInStock || 0,
@@ -197,7 +204,7 @@ const ProductFormPage = () => {
           const formData = new FormData();
           formData.append('image', file);
           formData.append('productId', productIdShort);
-          const res = await fetch('https://eurl-server.onrender.com/api/upload/product-image', {
+          const res = await fetch('http://192.168.1.11:5000/api/upload/product-image', {
             method: 'POST',
             headers: token ? { 'Authorization': `Bearer ${token}` } : {},
             body: formData,
@@ -492,11 +499,14 @@ const ProductFormPage = () => {
                 type="select"
                 error={form.formState.errors.category}
                 required
+                disabled={categoriesLoading}
                 options={
-                  categories?.map((category: any) => ({
-                    value: category.id,
-                    label: category.name,
-                  })) || []
+                  categoriesLoading || !categories || categories.length === 0
+                    ? [{ value: '', label: categoriesLoading ? t('common.loading') : (categoriesError ? t('common.errorLoadingCategories') : t('common.noCategories')) }]
+                    : categories.map((category: any) => ({
+                        value: category.id || category._id,
+                        label: getLocalizedCategoryName(category, i18n.language) || `${category.nameAr || category.nameEn || category.nameFr || 'Unnamed Category'}`,
+                      }))
                 }
               />
             </Grid>

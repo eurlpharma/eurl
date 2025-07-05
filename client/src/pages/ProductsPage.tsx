@@ -27,9 +27,10 @@ import { getCategories } from "@/store/slices/categorySlice";
 import ProductCardList from "@/components/products/ProductCardList";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { IconSearch } from "@/components/Iconify";
+import { getLocalizedCategoryName } from "@/utils/formatters";
 
 const ProductsPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -236,8 +237,8 @@ const ProductsPage = () => {
         <Box className="space-y-2">
           {categories &&
             categories.length > 0 &&
-            categories.map((cat: CategoryData) => {
-              const catId = cat._id || "";
+            categories.map((cat: CategoryData, index: number) => {
+              const catId = cat._id || `category-${index}`;
               return (
                 <Box
                   key={catId}
@@ -251,7 +252,7 @@ const ProductsPage = () => {
                     }
                   `}
                 >
-                  {cat.name}
+                  {getLocalizedCategoryName(cat, i18n.language)}
                 </Box>
               );
             })}
@@ -287,8 +288,8 @@ const ProductsPage = () => {
     activeFilters.push({ label: searchState.keyword, key: "keyword" });
   if (searchState.selectedCategories.length > 0) {
     searchState.selectedCategories.forEach((catId) => {
-      const categoryName =
-        categories.find((c: any) => c._id === catId)?.name || catId;
+      const category = categories.find((c: any) => c._id === catId || c.id === catId);
+      const categoryName = category ? getLocalizedCategoryName(category, i18n.language) : catId;
       activeFilters.push({ label: categoryName, key: `category-${catId}` });
     });
   }
@@ -359,7 +360,7 @@ const ProductsPage = () => {
                       sm={6}
                       md={4}
                       lg={3}
-                      key={product._id || `product-${index}`}
+                      key={product.id || product._id || `product-${index}`}
                     >
                       <ProductCardList product={product} />
                     </Grid>

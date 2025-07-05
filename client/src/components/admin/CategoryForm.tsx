@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { createCategory, updateCategory } from '../../store/slices/categorySlice';
 import { AppDispatch, RootState } from '../../store';
 import { toast } from 'react-toastify';
 
 interface CategoryFormData {
-  name: string;
+  nameAr: string;
+  nameEn: string;
+  nameFr: string;
   description: string;
   isActive: boolean;
   image: File | null;
 }
 
 const CategoryForm: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error, categories } = useSelector((state: RootState) => state.categories);
 
   const [formData, setFormData] = useState<CategoryFormData>({
-    name: '',
+    nameAr: '',
+    nameEn: '',
+    nameFr: '',
     description: '',
     isActive: true,
     image: null,
@@ -29,10 +35,12 @@ const CategoryForm: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      const category = categories.find((c: { _id: string; name: string; description?: string; isActive: boolean; image?: string }) => c._id === id);
+      const category = categories.find((c: { _id: string; name: string; nameAr?: string; nameEn?: string; nameFr?: string; description?: string; isActive: boolean; image?: string }) => c._id === id);
       if (category) {
         setFormData({
-          name: category.name,
+          nameAr: category.nameAr || '',
+          nameEn: category.nameEn || '',
+          nameFr: category.nameFr || '',
           description: category.description || '',
           isActive: category.isActive,
           image: null,
@@ -71,7 +79,9 @@ const CategoryForm: React.FC = () => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('name', formData.name);
+      formDataToSend.append('nameAr', formData.nameAr);
+      formDataToSend.append('nameEn', formData.nameEn);
+      formDataToSend.append('nameFr', formData.nameFr);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('isActive', formData.isActive.toString());
       if (formData.image) {
@@ -96,13 +106,34 @@ const CategoryForm: React.FC = () => {
       <h2 className="text-2xl font-bold mb-4">{id ? 'تعديل تصنيف' : 'إضافة تصنيف جديد'}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">اسم التصنيف</label>
+          <label className="block text-sm font-medium text-gray-700">{t('categories.nameAr')}</label>
           <input
             type="text"
-            name="name"
-            value={formData.name}
+            name="nameAr"
+            value={formData.nameAr}
             onChange={handleChange}
-            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">{t('categories.nameEn')}</label>
+          <input
+            type="text"
+            name="nameEn"
+            value={formData.nameEn}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">{t('categories.nameFr')}</label>
+          <input
+            type="text"
+            name="nameFr"
+            value={formData.nameFr}
+            onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
         </div>

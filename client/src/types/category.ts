@@ -2,7 +2,9 @@
 
 export interface CategoryData {
   _id?: string;
-  name: string;
+  nameAr: string;
+  nameEn: string;
+  nameFr: string;
   slug: string;
   description?: string;
   icon?: string;
@@ -29,7 +31,9 @@ export interface CategoriesResponse {
 }
 
 export interface CategoryFormData {
-  name: string;
+  nameAr: string;
+  nameEn: string;
+  nameFr: string;
   description?: string;
   icon?: string;
   color?: string;

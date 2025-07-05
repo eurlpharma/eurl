@@ -10,7 +10,7 @@ import cloudinary from '../utils/cloudinary.js';
 // @access  Public
 const getCategories = asyncHandler(async (req, res) => {
   const categories = await prisma.category.findMany({
-    orderBy: { name: 'asc' }
+    orderBy: { nameAr: 'asc' }
   });
   res.json({ success: true, categories });
 });
@@ -35,10 +35,29 @@ const getCategoryById = asyncHandler(async (req, res) => {
 // @route   POST /api/categories
 // @access  Private/Admin
 const createCategory = asyncHandler(async (req, res) => {
-  const { name, description, isActive } = req.body;
+  const { nameAr, nameEn, nameFr, description, isActive } = req.body;
 
+  // Log the request body to debug
+  console.log('createCategory - Request body:', req.body);
+  console.log('createCategory - Extracted fields:', { nameAr, nameEn, nameFr, description, isActive });
+
+  // Check if at least one name is provided
+  if (!nameAr && !nameEn && !nameFr) {
+    res.status(400);
+    throw new Error('At least one name is required');
+  }
+
+  // Use Arabic name as primary for slug generation (you can change this logic)
+  const primaryName = nameAr || nameEn || nameFr;
+  
   const categoryExists = await prisma.category.findFirst({
-    where: { name }
+    where: { 
+      OR: [
+        { nameAr },
+        { nameEn },
+        { nameFr }
+      ]
+    }
   });
 
   if (categoryExists) {
@@ -48,7 +67,7 @@ const createCategory = asyncHandler(async (req, res) => {
 
   let image = '';
   if (req.file) {
-    const slug = slugify(name, { lower: true });
+    const slug = slugify(primaryName, { lower: true });
     // رفع الصورة إلى Cloudinary من buffer
     const uploadResult = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
@@ -67,16 +86,23 @@ const createCategory = asyncHandler(async (req, res) => {
   }
 
   // Generate slug
-  const slug = slugify(name, { lower: true });
+  const slug = slugify(primaryName, { lower: true });
+
+  // Create the data object explicitly without 'name' field
+  const categoryData = {
+    nameAr: nameAr || primaryName,
+    nameEn: nameEn || primaryName,
+    nameFr: nameFr || primaryName,
+    slug,
+    description,
+    image,
+    isActive: isActive === 'true',
+  };
+
+  console.log('createCategory - Data to be sent to Prisma:', categoryData);
 
   const category = await prisma.category.create({
-    data: {
-      name,
-      slug,
-      description,
-      image,
-      isActive: isActive === 'true',
-    }
+    data: categoryData
   });
 
   res.status(201).json({ success: true, category });
@@ -86,17 +112,27 @@ const createCategory = asyncHandler(async (req, res) => {
 // @route   PUT /api/categories/:id
 // @access  Private/Admin
 const updateCategory = asyncHandler(async (req, res) => {
-  const { name, description, isActive } = req.body;
+  const { nameAr, nameEn, nameFr, description, isActive } = req.body;
 
   const category = await prisma.category.findUnique({
     where: { id: req.params.id }
   });
 
   if (category) {
+    // Use Arabic name as primary for slug generation (you can change this logic)
+    const primaryName = nameAr || nameEn || nameFr || category.nameAr;
+    
     // التحقق من عدم تكرار الاسم
-    if (name && name !== category.name) {
+    if (primaryName) {
       const categoryExists = await prisma.category.findFirst({
-        where: { name }
+        where: { 
+          OR: [
+            { nameAr: primaryName },
+            { nameEn: primaryName },
+            { nameFr: primaryName }
+          ],
+          NOT: { id: req.params.id }
+        }
       });
       if (categoryExists) {
         res.status(400);
@@ -105,14 +141,16 @@ const updateCategory = asyncHandler(async (req, res) => {
     }
 
     const updateData = {
-      name: name || category.name,
+      nameAr: nameAr !== undefined ? nameAr : category.nameAr,
+      nameEn: nameEn !== undefined ? nameEn : category.nameEn,
+      nameFr: nameFr !== undefined ? nameFr : category.nameFr,
       description: description || category.description,
       isActive: isActive !== undefined ? isActive === 'true' : category.isActive,
     };
 
-    // Generate new slug if name changed
-    if (name && name !== category.name) {
-      updateData.slug = slugify(name, { lower: true });
+    // Generate new slug if any name changed
+    if (primaryName && primaryName !== category.nameAr) {
+      updateData.slug = slugify(primaryName, { lower: true });
     }
 
     if (req.file) {
@@ -194,7 +232,7 @@ const getCategoryBySlug = asyncHandler(async (req, res) => {
 const getActiveCategories = asyncHandler(async (req, res) => {
   const categories = await prisma.category.findMany({
     where: { isActive: true },
-    orderBy: { name: 'asc' }
+    orderBy: { nameAr: 'asc' }
   });
 
   res.json({ success: true, categories });

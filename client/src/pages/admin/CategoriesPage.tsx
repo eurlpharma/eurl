@@ -32,12 +32,15 @@ import {
   PlusIcon
 } from '@heroicons/react/24/outline';
 import { useNotification } from '@/hooks/useNotification';
+import { useLocalizedCategories } from '@/hooks/useLocalizedCategory';
 import ImageIcon from '@mui/icons-material/Image';
 import AIButton from '@/components/buttons/AIButton';
 
 interface Category {
   id: string;
-  name: string;
+  nameAr: string;
+  nameEn: string;
+  nameFr: string;
   description?: string;
   isActive: boolean;
   image?: string;
@@ -49,6 +52,7 @@ const CategoriesPage = () => {
   
   const dispatch = useDispatch();
   const { categories, loading, error: categoriesError } = useSelector((state: RootState) => state.categories);
+  const localizedCategories = useLocalizedCategories(categories || []);
 
   useEffect(() => {
     dispatch(getCategories() as any);
@@ -60,7 +64,9 @@ const CategoriesPage = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   
   const [formData, setFormData] = useState({
-    name: '',
+    nameAr: '',
+    nameEn: '',
+    nameFr: '',
     description: '',
     isActive: true,
     image: null as File | null
@@ -71,7 +77,9 @@ const CategoriesPage = () => {
   const handleOpenDialog = (category: Category | null = null) => {
     if (category) {
       setFormData({
-        name: category.name,
+        nameAr: category.nameAr,
+        nameEn: category.nameEn,
+        nameFr: category.nameFr,
         description: category.description || '',
         isActive: category.isActive,
         image: null
@@ -81,15 +89,16 @@ const CategoriesPage = () => {
         setPreviewImage(
           category.image.startsWith('http')
             ? category.image
-
-            : `https://eurl-server.onrender.com/uploads/categories/${category.image}`
+            : `http://192.168.1.11:5000/uploads/categories/${category.image}`
         );
       } else {
         setPreviewImage('');
       }
     } else {
       setFormData({
-        name: '',
+        nameAr: '',
+        nameEn: '',
+        nameFr: '',
         description: '',
         isActive: true,
         image: null
@@ -135,8 +144,14 @@ const CategoriesPage = () => {
   
   const validateForm = () => {
     const errors: Record<string, string> = {};
-    if (!formData.name.trim()) {
-      errors.name = t('validation.required');
+    if (!formData.nameAr.trim()) {
+      errors.nameAr = t('validation.required');
+    }
+    if (!formData.nameEn.trim()) {
+      errors.nameEn = t('validation.required');
+    }
+    if (!formData.nameFr.trim()) {
+      errors.nameFr = t('validation.required');
     }
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -146,7 +161,9 @@ const CategoriesPage = () => {
     if (!validateForm()) return;
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('name', formData.name);
+      formDataToSend.append('nameAr', formData.nameAr);
+      formDataToSend.append('nameEn', formData.nameEn);
+      formDataToSend.append('nameFr', formData.nameFr);
       formDataToSend.append('description', formData.description);
       formDataToSend.append('isActive', formData.isActive.toString());
       
@@ -164,7 +181,7 @@ const CategoriesPage = () => {
           setPreviewImage(
             result.image.startsWith('http')
               ? result.image
-              : `https://eurl-server.onrender.com/uploads/categories/${result.image}`
+              : `http://192.168.1.11:5000/uploads/categories/${result.image}`
           );
         }
         
@@ -176,7 +193,7 @@ const CategoriesPage = () => {
           setPreviewImage(
             result.image.startsWith('http')
               ? result.image
-              : `https://eurl-server.onrender.com/uploads/categories/${result.image}`
+              : `http://192.168.1.11:5000/uploads/categories/${result.image}`
           );
         }
         
@@ -245,8 +262,8 @@ const CategoriesPage = () => {
                 </TableCell>
               </TableRow>
             )}
-            {!loading && !categoriesError && categories && categories.length > 0 ? (
-              categories.map((category: Category) => (
+            {!loading && !categoriesError && localizedCategories && localizedCategories.length > 0 ? (
+              localizedCategories.map((category: Category & { localizedName: string }) => (
                 <TableRow key={category.id}>
                   <TableCell>
                     <img
@@ -254,14 +271,14 @@ const CategoriesPage = () => {
                         category.image
                           ? category.image.startsWith('http')
                             ? category.image
-                            : `https://eurl-server.onrender.com/uploads/categories/${category.image}`
+                            : `http://192.168.1.11:5000/uploads/categories/${category.image}`
                           : '/images/placeholder.png'
                       }
-                      alt={category.name}
+                      alt={category.localizedName}
                       className="w-10 h-10 object-cover rounded-full"
                     />
                   </TableCell>
-                  <TableCell>{category.name}</TableCell>
+                  <TableCell>{category.localizedName}</TableCell>
                   <TableCell>{category.description || '-'}</TableCell>
                   <TableCell>
                     <span
@@ -313,12 +330,30 @@ const CategoriesPage = () => {
           <Box className="space-y-4 mt-4">
             <TextField
               fullWidth
-              label={t('categories.name')}
-              name="name"
-              value={formData.name}
+              label={t('categories.nameAr')}
+              name="nameAr"
+              value={formData.nameAr}
               onChange={handleChange}
-              error={!!formErrors.name}
-              helperText={formErrors.name}
+              error={!!formErrors.nameAr}
+              helperText={formErrors.nameAr}
+            />
+            <TextField
+              fullWidth
+              label={t('categories.nameEn')}
+              name="nameEn"
+              value={formData.nameEn}
+              onChange={handleChange}
+              error={!!formErrors.nameEn}
+              helperText={formErrors.nameEn}
+            />
+            <TextField
+              fullWidth
+              label={t('categories.nameFr')}
+              name="nameFr"
+              value={formData.nameFr}
+              onChange={handleChange}
+              error={!!formErrors.nameFr}
+              helperText={formErrors.nameFr}
             />
             <TextField
               fullWidth

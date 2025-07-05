@@ -48,7 +48,9 @@ const getProducts = asyncHandler(async (req, res) => {
       category: {
         select: {
           id: true,
-          name: true
+          nameAr: true,
+          nameEn: true,
+          nameFr: true
         }
       }
     },
@@ -63,7 +65,7 @@ const getProducts = asyncHandler(async (req, res) => {
   console.log('Sample product categories:', products.slice(0, 3).map(p => ({ 
     productId: p.id, 
     categoryId: p.category?.id, 
-    categoryName: p.category?.name 
+    categoryName: p.category?.nameAr || p.category?.nameEn || p.category?.nameFr 
   })));
 
   const productsWithFullImagePaths = products.map(product => {
@@ -105,7 +107,9 @@ const getProductById = asyncHandler(async (req, res) => {
       category: {
         select: {
           id: true,
-          name: true
+          nameAr: true,
+          nameEn: true,
+          nameFr: true
         }
       },
       user: {
@@ -222,7 +226,7 @@ const createProduct = asyncHandler(async (req, res) => {
       const productFolder = req.body.productFolder;
       productData.imagesFolder = productFolder;
       productData.images = req.files.map(file => 
-        `${process.env.API_URL || 'https://eurl-server.onrender.com'}/uploads/products/${productFolder}/${file.filename}`
+        `${process.env.API_URL || 'http://192.168.1.11:5000'}/uploads/products/${productFolder}/${file.filename}`
       );
     }
 
@@ -233,7 +237,9 @@ const createProduct = asyncHandler(async (req, res) => {
         category: {
           select: {
             id: true,
-            name: true
+            nameAr: true,
+            nameEn: true,
+            nameFr: true
           }
         }
       }
@@ -310,7 +316,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       const productFolder = req.body.productFolder;
       updateData.imagesFolder = productFolder;
       updateData.images = req.files.map(file => 
-        `${process.env.API_URL || 'https://eurl-server.onrender.com'}/uploads/products/${productFolder}/${file.filename}`
+        `${process.env.API_URL || 'http://192.168.1.11:5000'}/uploads/products/${productFolder}/${file.filename}`
       );
     }
 
@@ -321,7 +327,9 @@ const updateProduct = asyncHandler(async (req, res) => {
         category: {
           select: {
             id: true,
-            name: true
+            nameAr: true,
+            nameEn: true,
+            nameFr: true
           }
         }
       }
@@ -427,7 +435,9 @@ const getTopProducts = asyncHandler(async (req, res) => {
       category: {
         select: {
           id: true,
-          name: true
+          nameAr: true,
+          nameEn: true,
+          nameFr: true
         }
       }
     },
@@ -451,7 +461,9 @@ const getFeaturedProducts = asyncHandler(async (req, res) => {
       category: {
         select: {
           id: true,
-          name: true
+          nameAr: true,
+          nameEn: true,
+          nameFr: true
         }
       }
     },
@@ -489,7 +501,9 @@ const updateProductVisibility = asyncHandler(async (req, res) => {
       category: {
         select: {
           id: true,
-          name: true
+          nameAr: true,
+          nameEn: true,
+          nameFr: true
         }
       }
     }

@@ -27,7 +27,7 @@ const ProductCard = ({ product, loading = false }: ProductCardProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { success, error } = useNotification();
-  const SERVER_URL = `https://eurl-server.onrender.com`;
+  const SERVER_URL = `http://192.168.1.11:5000`;
   const formatImageUrl = (imagePath: string, productId?: string) => {
     if (!imagePath) return "/images/product-placeholder.svg";
 

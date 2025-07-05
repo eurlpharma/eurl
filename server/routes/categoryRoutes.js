@@ -9,6 +9,7 @@ import {
   getActiveCategories,
 } from '../controllers/categoryController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
+import { removeNameField } from '../middleware/categoryMiddleware.js';
 import multer from 'multer';
 import path from 'path';
 import slugify from 'slugify';
@@ -41,10 +42,10 @@ router.route('/slug/:slug').get(getCategoryBySlug);
 router
   .route('/:id')
   .get(getCategoryById)
-  .put(protect, admin, upload.single('image'), updateCategory)
+  .put(protect, admin, upload.single('image'), removeNameField, updateCategory)
   .delete(protect, admin, deleteCategory);
 
 // Admin routes
-router.post('/', protect, admin, upload.single('image'), createCategory);
+router.post('/', protect, admin, upload.single('image'), removeNameField, createCategory);
 
 export default router;

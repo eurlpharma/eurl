@@ -48,8 +48,10 @@ import {
   IconFlagFR,
   IconFlagUS,
   IconHome,
+  IconInfo,
   IconInstagram,
   IconPhone,
+  IconStore,
   IconTime,
   IconWhatsapp,
 } from "../Iconify";
@@ -224,19 +226,19 @@ const Header = () => {
 
   const langsMobile = [
     {
-      key: "en",
+      key: "english",
       label: "english",
       icon: IconFlagUS,
     },
 
     {
-      key: "fr",
+      key: "french",
       label: "français",
       icon: IconFlagFR,
     },
 
     {
-      key: "ar",
+      key: "arabic",
       label: "arabic",
       icon: IconFlagDZ,
     },
@@ -244,7 +246,7 @@ const Header = () => {
 
   const linksMobile = [
     {
-      key: "/home",
+      key: "/",
       label: "home",
       icon: IconHome,
     },
@@ -252,13 +254,13 @@ const Header = () => {
     {
       key: "/products",
       label: "products",
-      icon: IconHome,
+      icon: IconStore,
     },
 
     {
       key: "/about",
       label: "about_us",
-      icon: IconHome,
+      icon: IconInfo,
     },
   ];
 
@@ -308,7 +310,7 @@ const Header = () => {
             className="flex items-center gap-3"
           >
             <lang.icon className="w-5 h-5" />
-            <p className="capitalize">{lang.label}</p>
+            <p className="capitalize">{t(`lang.${lang.key}`)}</p>
           </div>
         ))}
       </div>
