@@ -42,7 +42,7 @@ npm run db:seed
 npm run dev
 ```
 
-🎉 Your server is now running at `http://192.168.1.11:5000`
+🎉 Your server is now running at `https://eurl-server.onrender.com`
 
 ## 📋 Sample Data
 
@@ -79,19 +79,19 @@ npm run setup           # Interactive setup
 ### Test the API
 ```bash
 # Health check
-curl http://192.168.1.11:5000/api/health
+curl https://eurl-server.onrender.com/api/health
 
 # Get products
-curl http://192.168.1.11:5000/api/products
+curl https://eurl-server.onrender.com/api/products
 
 # Get categories
-curl http://192.168.1.11:5000/api/categories
+curl https://eurl-server.onrender.com/api/categories
 ```
 
 ### Authentication
 ```bash
 # Login
-curl -X POST http://192.168.1.11:5000/api/users/login \
+curl -X POST https://eurl-server.onrender.com/api/users/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@healthy.com","password":"admin123"}'
 ```

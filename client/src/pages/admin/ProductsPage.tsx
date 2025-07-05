@@ -39,7 +39,7 @@ import i18n from '@/i18n';
 
 
 const API_URL = import.meta.env.VITE_API_URL || `http://192.168.1.11:5000`;
-
+https://eurl-server.onrender.com
 const ProductsPage = () => {
   const { t } = useTranslation();
   const { success } = useNotification();
