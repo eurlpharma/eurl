@@ -1,4 +1,7 @@
 {
+  "ammount": {
+    "da": "DA"
+  },
   "lang": {
     "english": "English",
     "french": "French",
@@ -436,6 +439,7 @@
     "country": "country"
   },
   "admin": {
+    "app": "Overview",
     "newPrice": "New Price",
     "googleMapUrl": "Google Map URL",
     "userUpdated": "User updated successfully",

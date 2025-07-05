@@ -111,6 +111,45 @@ const DashboardPage = () => {
     },
   ];
 
+
+  const cellsTableProducts = [
+    {
+      key: 'productImage',
+      label: 'productImage',
+      algin: 'start'
+    },
+
+    {
+      key: 'productName',
+      label: 'productName',
+      align: "right"
+    },
+
+    {
+      key: 'category',
+      label: 'category',
+      align: "right"
+    },
+
+    {
+      key: 'price',
+      label: 'price',
+      align: "right"
+    },
+
+    {
+      key: 'stock',
+      label: 'stock',
+      align: "right"
+    },
+
+    {
+      key: 'status',
+      label: 'status',
+      align: "center"
+    }
+  ]
+
   if (loading) {
     return (
       <Box className="flex items-center justify-center h-full">
@@ -139,22 +178,22 @@ const DashboardPage = () => {
   }
 
   return (
-    <Box className="p-6">
+    <Box className="py-6 px-1 md:px-2 lg:px-3 font-public-sans">
       <Typography
         variant="h4"
         component="h1"
-        className="mb-6 font-semibold font-josefin"
+        className="mb-6 font-semibold font-public-sans"
       >
         {t("admin.dashboard")}
       </Typography>
 
-      <Grid container spacing={3} className="mb-6">
+      <Grid container spacing={2} className="mb-6">
         {statsData.map((stat, index) => {
-          const colorClass = bgColors[stat.color] || "bg-gray-400";  
+          const colorClass = bgColors[stat.color] || "bg-gray-400";
 
           return (
             <Grid item xs={12} sm={6} md={3} key={index}>
-              <Paper className="p-4 h-full">
+              <Paper className="p-4 h-full shadow-lighter rounded-xl">
                 <Box className="flex items-center mb-2">
                   <Box
                     style={{ backgroundColor: colorClass }}
@@ -164,17 +203,17 @@ const DashboardPage = () => {
                   >
                     {stat.icon}
                   </Box>
-                  <Typography variant="h6" component="h2">
+                  <Typography variant="h6" component="h3" className="font-public-sans">
                     {stat.title}
                   </Typography>
                 </Box>
                 <Typography
                   variant="h4"
                   component="p"
-                  className="mb-1 font-bold"
+                  className="mb-1 font-semibold font-barlow"
                 >
                   {stat.title === t("admin.totalSales")
-                    ? `${stat.value.toLocaleString()} دج`
+                    ? `${stat.value.toLocaleString()} ${t("ammount.da")}`
                     : stat.value.toLocaleString()}
                 </Typography>
                 {stat.change !== undefined && (
@@ -198,10 +237,11 @@ const DashboardPage = () => {
         })}
       </Grid>
 
-      <Grid container spacing={3} className="mb-6">
+      <Grid container spacing={2} className="mb-6">
         <Grid item xs={12}>
-          <Card>
+          <Card className="shadow-lighter rounded-xl font-public-sans">
             <CardHeader
+              className="font-public-sans"
               title={t("admin.recentProducts")}
               action={
                 <Button component={Link} to="/admin/products" color="primary">
@@ -215,12 +255,12 @@ const DashboardPage = () => {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>{t("admin.productImage")}</TableCell>
-                      <TableCell>{t("admin.productName")}</TableCell>
-                      <TableCell>{t("admin.category")}</TableCell>
-                      <TableCell align="right">{t("admin.price")}</TableCell>
-                      <TableCell align="right">{t("admin.stock")}</TableCell>
-                      <TableCell align="center">{t("admin.status")}</TableCell>
+                      {
+                        cellsTableProducts.map(cell => (
+                      <TableCell key={cell.key} align="center">{t(`admin.${cell.label}`)}</TableCell>
+
+                        ))
+                      }
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -251,7 +291,7 @@ const DashboardPage = () => {
                           <TableCell>
                             <Link
                               to={`/admin/products/edit/${product.id}`}
-                              className="text-primary-600 hover:underline"
+                              className="text-primary-600 hover:underline whitespace-nowrap"
                             >
                               {product.name}
                             </Link>
@@ -259,9 +299,9 @@ const DashboardPage = () => {
                           <TableCell>
                             {typeof product.category === "string"
                               ? product.category
-                              : product.category?.name}
+                              : product.category.nameEn}
                           </TableCell>
-                          <TableCell align="right">${product.price}</TableCell>
+                          <TableCell align="right" className="whitespace-nowrap">{product.price} {t("ammount.da")}</TableCell>
                           <TableCell align="right">
                             {product.countInStock}
                           </TableCell>
@@ -303,7 +343,7 @@ const DashboardPage = () => {
 
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Card>
+          <Card className="shadow-lighter rounded-xl">
             <CardHeader
               title={t("admin.recentOrders")}
               action={
@@ -336,10 +376,10 @@ const DashboardPage = () => {
                               to={`/admin/orders/${order.id ?? order._id}`}
                               className="text-primary-600 hover:underline"
                             >
-                              #{(order.id ?? order._id)?.slice?.(-6) ?? ''}
+                              #{(order.id ?? order._id)?.slice?.(-6) ?? ""}
                             </Link>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="whitespace-nowrap">
                             {typeof order.user === "string"
                               ? "Guest"
                               : order.user?.name ||
@@ -350,26 +390,56 @@ const DashboardPage = () => {
                             {new Date(order.createdAt).toLocaleDateString()}
                           </TableCell>
                           <TableCell align="right">
-                            ${order.totalPrice}
+                            <Typography className="flex items-center gap-1">
+                              <span>{order.totalPrice}</span>
+                              <span className="text-sm">{t("ammount.da")}</span>
+                            </Typography>
                           </TableCell>
                           <TableCell>
                             {order.orderItems && order.orderItems.length > 0 ? (
-                              <ul style={{margin:0, padding:0, listStyle:'none'}}>
-                                {order.orderItems.map((item, i) => (
-                                  <li key={i} style={{display:'flex', alignItems:'center', gap:6, marginBottom:2}}>
+                              <ul
+                                style={{
+                                  margin: 0,
+                                  padding: 0,
+                                  listStyle: "none",
+                                }}
+                              >
 
+                                {order.orderItems.map((item, i) => (
+                                  <li
+                                    key={i}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: 6,
+                                      marginBottom: 2,
+                                    }}
+                                  >
                                     {item.image ? (
                                       <img
-                                        src={item.image.startsWith('http')
-                                          ? item.image
-                                          : `${import.meta.env.VITE_API_URL}/uploads/${item.image}`}
+                                        src={item.image}
                                         alt={item.name}
-                                        style={{width:28, height:28, objectFit:'cover', borderRadius:4, marginRight:4}}
+                                        style={{
+                                          width: 28,
+                                          height: 28,
+                                          objectFit: "cover",
+                                          borderRadius: 4,
+                                          marginRight: 4,
+                                        }}
                                       />
                                     ) : (
-                                      <span style={{width:28, height:28, display:'inline-block', background:'#eee', borderRadius:4, marginRight:4}}></span>
+                                      <span
+                                        style={{
+                                          width: 28,
+                                          height: 28,
+                                          display: "inline-block",
+                                          background: "#eee",
+                                          borderRadius: 4,
+                                          marginRight: 4,
+                                        }}
+                                      ></span>
                                     )}
-                                    <span>{item.name}</span>
+                                    <span className="whitespace-nowrap">{item.name}</span>
                                   </li>
                                 ))}
                               </ul>
@@ -379,7 +449,13 @@ const DashboardPage = () => {
                           </TableCell>
                           <TableCell>
                             {order.orderItems && order.orderItems.length > 0 ? (
-                              <ul style={{margin:0, padding:0, listStyle:'none'}}>
+                              <ul
+                                style={{
+                                  margin: 0,
+                                  padding: 0,
+                                  listStyle: "none",
+                                }}
+                              >
                                 {order.orderItems.map((item, i) => (
                                   <li key={i}>
                                     <p>{item.quantity}</p>
@@ -392,7 +468,9 @@ const DashboardPage = () => {
                           </TableCell>
                           <TableCell align="center">
                             <Chip
-                              label={t(`admin.${String(order.status).toLowerCase()}`)}
+                              label={t(
+                                `admin.${String(order.status).toLowerCase()}`
+                              )}
                               color={
                                 order.status === "delivered"
                                   ? "success"

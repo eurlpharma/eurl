@@ -20,7 +20,7 @@ import { getSettings, updateSettings } from '@/store/slices/settingsSlice';
 import { RootState } from '@/store/storeConfig';
 import { AppDispatch } from '@/store';
 
-const API_URL = import.meta.env.VITE_API_URL || `https://pharma-api-e5sd.onrender.com`;
+const API_URL = import.meta.env.VITE_API_URL || `http://192.168.1.11:5000`;
 import AIButton from '@/components/buttons/AIButton';
 
 const SettingsPage = () => {

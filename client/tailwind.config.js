@@ -140,10 +140,14 @@ module.exports = {
           "Cairo",
           "sans-serif",
         ],
+        "public-sans": ['Public Sans', 'Poppins', 'Cairo', 'Tajawal', 'sans-serif'],
+        barlow: ['Barlow', 'Poppins', 'Cairo', 'Tajawal', 'sans-serif'],
       },
       boxShadow: {
         card: "0 2px 10px 0 rgba(0, 0, 0, 0.05)",
         "card-hover": "0 10px 20px 0 rgba(0, 0, 0, 0.1)",
+        girl: "0 0 2px 0 rgba(0 0 0 / 20%), 0 12px 24px -4px rgba(0 0 0 / 12%)",
+        lighter: "0 0 2px 0 rgba(145 158 171 / 20%),0 12px 24px -4px rgba(145 158 171 / 12%)"
       },
       borderRadius: {
         xl: "1rem",

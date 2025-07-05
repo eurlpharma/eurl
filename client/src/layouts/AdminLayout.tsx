@@ -22,19 +22,12 @@ import {
   Collapse,
 } from "@mui/material";
 import {
-  ChartBarIcon,
-  ShoppingBagIcon,
-  TagIcon,
-  UserGroupIcon,
-  Cog6ToothIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  Squares2X2Icon,
-  Bars3Icon,
   XMarkIcon,
-  HomeIcon,
 } from "@heroicons/react/24/outline";
 import Notification from "@/components/ui/Notification";
+import { IconBoxBold, IconChartBold, IconHomeBold, IconLaptopBold, IconMenu, IconOrderBold, IconSettingBold, IconUsersBold, IconWidgetBold } from "@/components/Iconify";
 
 const drawerWidth = 280;
 
@@ -82,58 +75,46 @@ const AdminLayout = () => {
 
   const menuItems: MenuItemType[] = [
     {
-      key: "dashboard",
-      label: t("admin.dashboard"),
+      key: "app",
+      label: t("admin.app"),
       path: "/admin",
-      icon: <Squares2X2Icon className="w-6 h-6" />,
+      icon: <IconLaptopBold />,
     },
     {
       key: "products",
       label: t("admin.products"),
       path: "/admin/products",
-      icon: <ShoppingBagIcon className="w-6 h-6" />,
-      children: [
-        {
-          key: "allProducts",
-          label: t("admin.allProducts"),
-          path: "/admin/products",
-        },
-        {
-          key: "addProduct",
-          label: t("admin.addProduct"),
-          path: "/admin/products/add",
-        },
-      ],
+      icon: <IconBoxBold className="w-6 h-6" />,
     },
     {
       key: "categories",
       label: t("admin.categories"),
       path: "/admin/categories",
-      icon: <TagIcon className="w-6 h-6" />,
+      icon: <IconWidgetBold className="w-6 h-6" />,
     },
     {
       key: "orders",
       label: t("admin.orders"),
       path: "/admin/orders",
-      icon: <ShoppingBagIcon className="w-6 h-6" />,
+      icon: <IconOrderBold className="w-6 h-6" />,
     },
     {
       key: "users",
       label: t("admin.users"),
       path: "/admin/users",
-      icon: <UserGroupIcon className="w-6 h-6" />,
+      icon: <IconUsersBold />,
     },
     {
       key: "analytics",
       label: t("admin.analytics"),
       path: "/admin/analytics",
-      icon: <ChartBarIcon className="w-6 h-6" />,
+      icon: <IconChartBold className="w-6 h-6" />,
     },
     {
       key: "settings",
       label: t("admin.settings"),
       path: "/admin/settings",
-      icon: <Cog6ToothIcon className="w-6 h-6" />,
+      icon: <IconSettingBold />,
     },
   ];
 
@@ -149,10 +130,9 @@ const AdminLayout = () => {
       <Box className="p-4 flex items-center justify-between">
         <Typography
           variant="h6"
-          className="text-girl-secondary flex items-center font-josefin"
+          className="text-girl-secondary font-paris capitalize font-semibold text-xl"
         >
-          <Cog6ToothIcon className="w-6 h-6 mr-2" />
-          {t("admin.adminPanel")}
+          pharma eurl
         </Typography>
         {isMobile && (
           <IconButton onClick={handleDrawerToggle}>
@@ -235,9 +215,11 @@ const AdminLayout = () => {
           to="/"
           onClick={() => isMobile && setMobileOpen(false)}
           className="text-girl-secondary"
+          sx={{gap: 0}}
+        
         >
           <ListItemIcon className="text-girl-secondary">
-            <HomeIcon className="w-6 h-6" />
+            <IconHomeBold className="w-6 h-6" />
           </ListItemIcon>
           <ListItemText primary={t("admin.backToSite")} />
         </ListItem>
@@ -288,20 +270,16 @@ const AdminLayout = () => {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: "none" } }}
           >
-            <Bars3Icon className="w-6 h-6" />
+            <IconMenu className="w-6 h-6" />
           </IconButton>
 
           <Typography
             variant="h6"
             noWrap
             component="div"
-            className="font-semibold flex-grow"
+            className="font-semibold font-paris flex-grow text-girl-secondary"
           >
-            {menuItems.find((item) =>
-              item.path === "/admin"
-                ? location.pathname === "/admin"
-                : location.pathname.startsWith(item.path)
-            )?.label || t("admin.adminPanel")}
+            Pharma
           </Typography>
 
           <IconButton

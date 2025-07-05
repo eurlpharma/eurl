@@ -730,10 +730,7 @@ export const IconHome: FC<IconifyProps> = ({ ...props }) => {
     >
       <g fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M2 12.204c0-2.289 0-3.433.52-4.381c.518-.949 1.467-1.537 3.364-2.715l2-1.241C9.889 2.622 10.892 2 12 2s2.11.622 4.116 1.867l2 1.241c1.897 1.178 2.846 1.766 3.365 2.715S22 9.915 22 12.203v1.522c0 3.9 0 5.851-1.172 7.063S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.212S2 17.626 2 13.725z" />
-        <path
-          strokeLinecap="round"
-          d="M9 16c.85.63 1.885 1 3 1s2.15-.37 3-1"
-        />
+        <path strokeLinecap="round" d="M9 16c.85.63 1.885 1 3 1s2.15-.37 3-1" />
       </g>
     </svg>
   );
@@ -846,95 +843,364 @@ export const IconInfoBold: FC<IconifyProps> = ({ ...props }) => {
   );
 };
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconMenu: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M7 5h10M4 12h16M7 19h10"
+        color="currentColor"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconWidgetBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M2 6.21c0-1.984 0-2.977.659-3.593S4.379 2 6.5 2s3.182 0 3.841.617C11 3.233 11 4.226 11 6.21v11.58c0 1.984 0 2.977-.659 3.593S8.621 22 6.5 22s-3.182 0-3.841-.617C2 20.767 2 19.774 2 17.79z"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        d="M13 15.4c0-2.074 0-3.111.659-3.756S15.379 11 17.5 11s3.182 0 3.841.644C22 12.29 22 13.326 22 15.4v2.2c0 2.074 0 3.111-.659 3.756S19.621 22 17.5 22s-3.182 0-3.841-.644C13 20.71 13 19.674 13 17.6zm0-9.9c0-1.087 0-1.63.171-2.06a2.3 2.3 0 0 1 1.218-1.262C14.802 2 15.327 2 16.375 2h2.25c1.048 0 1.573 0 1.986.178c.551.236.99.69 1.218 1.262c.171.43.171.973.171 2.06s0 1.63-.171 2.06a2.3 2.3 0 0 1-1.218 1.262C20.198 9 19.673 9 18.625 9h-2.25c-1.048 0-1.573 0-1.986-.178a2.3 2.3 0 0 1-1.218-1.262C13 7.13 13 6.587 13 5.5"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconWidget: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <path
+          d="M2.5 6.5c0-1.886 0-2.828.586-3.414S4.614 2.5 6.5 2.5s2.828 0 3.414.586s.586 1.528.586 3.414v11c0 1.886 0 2.828-.586 3.414S8.386 21.5 6.5 21.5s-2.828 0-3.414-.586S2.5 19.386 2.5 17.5z"
+          opacity={0.5}
+        ></path>
+        <path d="M13.5 15.5c0-1.886 0-2.828.586-3.414s1.528-.586 3.414-.586s2.828 0 3.414.586s.586 1.528.586 3.414v2c0 1.886 0 2.828-.586 3.414s-1.528.586-3.414.586s-2.828 0-3.414-.586s-.586-1.528-.586-3.414zm0-10c0-.932 0-1.398.152-1.765a2 2 0 0 1 1.083-1.083c.367-.152.833-.152 1.765-.152h2c.932 0 1.398 0 1.765.152a2 2 0 0 1 1.083 1.083c.152.367.152.833.152 1.765s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083c-.367.152-.833.152-1.765.152h-2c-.932 0-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C13.5 6.898 13.5 6.432 13.5 5.5Z"></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconBoxBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        d="M3.465 20.536C4.929 22 7.286 22 12 22s7.072 0 8.536-1.465C21.893 19.179 21.993 17.056 22 13h-3.16c-.905 0-1.358 0-1.755.183c-.398.183-.693.527-1.282 1.214l-.605.706c-.59.687-.884 1.031-1.282 1.214s-.85.183-1.755.183h-.321c-.905 0-1.358 0-1.756-.183s-.692-.527-1.281-1.214l-.606-.706c-.589-.687-.883-1.031-1.281-1.214S6.066 13 5.16 13H2c.007 4.055.107 6.179 1.465 7.535m9.065-9.205a.75.75 0 0 1-1.06 0l-3.3-3.3a.75.75 0 1 1 1.06-1.06l2.02 2.02V2h1.5v6.99l2.02-2.02a.75.75 0 1 1 1.06 1.06z"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconBox: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinejoin="round"
+          d="M12 2v8m0 0l3-3m-3 3L9 7"
+          opacity={0.5}
+        ></path>
+        <path
+          d="M2 13h3.16c.905 0 1.358 0 1.756.183s.692.527 1.281 1.214l.606.706c.589.687.883 1.031 1.281 1.214s.85.183 1.756.183h.32c.905 0 1.358 0 1.756-.183s.692-.527 1.281-1.214l.606-.706c.589-.687.883-1.031 1.281-1.214S17.934 13 18.84 13H22"
+          opacity={0.5}
+        ></path>
+        <path d="M17 2.127c1.625.16 2.72.521 3.535 1.338C22 4.929 22 7.286 22 12s0 7.071-1.465 8.536C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.464C2 19.07 2 16.714 2 12s0-7.07 1.464-8.535C4.281 2.648 5.374 2.287 7 2.127"></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconSettingBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M14.279 2.152C13.909 2 13.439 2 12.5 2s-1.408 0-1.779.152a2 2 0 0 0-1.09 1.083c-.094.223-.13.484-.145.863a1.62 1.62 0 0 1-.796 1.353a1.64 1.64 0 0 1-1.579.008c-.338-.178-.583-.276-.825-.308a2.03 2.03 0 0 0-1.49.396c-.318.242-.553.646-1.022 1.453c-.47.807-.704 1.21-.757 1.605c-.07.526.074 1.058.4 1.479c.148.192.357.353.68.555c.477.297.783.803.783 1.361s-.306 1.064-.782 1.36c-.324.203-.533.364-.682.556a2 2 0 0 0-.399 1.479c.053.394.287.798.757 1.605s.704 1.21 1.022 1.453c.424.323.96.465 1.49.396c.242-.032.487-.13.825-.308a1.64 1.64 0 0 1 1.58.008c.486.28.774.795.795 1.353c.015.38.051.64.145.863c.204.49.596.88 1.09 1.083c.37.152.84.152 1.779.152s1.409 0 1.779-.152a2 2 0 0 0 1.09-1.083c.094-.223.13-.483.145-.863c.02-.558.309-1.074.796-1.353a1.64 1.64 0 0 1 1.579-.008c.338.178.583.276.825.308c.53.07 1.066-.073 1.49-.396c.318-.242.553-.646 1.022-1.453c.47-.807.704-1.21.757-1.605a2 2 0 0 0-.4-1.479c-.148-.192-.357-.353-.68-.555c-.477-.297-.783-.803-.783-1.361s.306-1.064.782-1.36c.324-.203.533-.364.682-.556a2 2 0 0 0 .399-1.479c-.053-.394-.287-.798-.757-1.605s-.704-1.21-1.022-1.453a2.03 2.03 0 0 0-1.49-.396c-.242.032-.487.13-.825.308a1.64 1.64 0 0 1-1.58-.008a1.62 1.62 0 0 1-.795-1.353c-.015-.38-.051-.64-.145-.863a2 2 0 0 0-1.09-1.083"
+        clipRule="evenodd"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        d="M15.523 12c0 1.657-1.354 3-3.023 3s-3.023-1.343-3.023-3S10.83 9 12.5 9s3.023 1.343 3.023 3"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconSetting: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <circle cx={12} cy={12} r={3}></circle>
+        <path
+          d="M13.765 2.152C13.398 2 12.932 2 12 2s-1.398 0-1.765.152a2 2 0 0 0-1.083 1.083c-.092.223-.129.484-.143.863a1.62 1.62 0 0 1-.79 1.353a1.62 1.62 0 0 1-1.567.008c-.336-.178-.579-.276-.82-.308a2 2 0 0 0-1.478.396C4.04 5.79 3.806 6.193 3.34 7s-.7 1.21-.751 1.605a2 2 0 0 0 .396 1.479c.148.192.355.353.676.555c.473.297.777.803.777 1.361s-.304 1.064-.777 1.36c-.321.203-.529.364-.676.556a2 2 0 0 0-.396 1.479c.052.394.285.798.75 1.605c.467.807.7 1.21 1.015 1.453a2 2 0 0 0 1.479.396c.24-.032.483-.13.819-.308a1.62 1.62 0 0 1 1.567.008c.483.28.77.795.79 1.353c.014.38.05.64.143.863a2 2 0 0 0 1.083 1.083C10.602 22 11.068 22 12 22s1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083c.092-.223.129-.483.143-.863c.02-.558.307-1.074.79-1.353a1.62 1.62 0 0 1 1.567-.008c.336.178.579.276.819.308a2 2 0 0 0 1.479-.396c.315-.242.548-.646 1.014-1.453s.7-1.21.751-1.605a2 2 0 0 0-.396-1.479c-.148-.192-.355-.353-.676-.555A1.62 1.62 0 0 1 19.562 12c0-.558.304-1.064.777-1.36c.321-.203.529-.364.676-.556a2 2 0 0 0 .396-1.479c-.052-.394-.285-.798-.75-1.605c-.467-.807-.7-1.21-1.015-1.453a2 2 0 0 0-1.479-.396c-.24.032-.483.13-.82.308a1.62 1.62 0 0 1-1.566-.008a1.62 1.62 0 0 1-.79-1.353c-.014-.38-.05-.64-.143-.863a2 2 0 0 0-1.083-1.083Z"
+          opacity={0.5}
+        ></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconUsersBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <circle cx={15} cy={6} r={3} fill="currentColor" opacity={0.4}></circle>
+      <ellipse
+        cx={16}
+        cy={17}
+        fill="currentColor"
+        opacity={0.4}
+        rx={5}
+        ry={3}
+      ></ellipse>
+      <circle cx={9.001} cy={6} r={4} fill="currentColor"></circle>
+      <ellipse
+        cx={9.001}
+        cy={17.001}
+        fill="currentColor"
+        rx={7}
+        ry={4}
+      ></ellipse>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconUsers: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <circle cx={9} cy={6} r={4}></circle>
+        <path d="M12.5 4.341a3 3 0 1 1 0 3.318" opacity={0.5}></path>
+        <ellipse cx={9} cy={17} rx={7} ry={4}></ellipse>
+        <path
+          strokeLinecap="round"
+          d="M18 14c1.754.385 3 1.359 3 2.5c0 1.03-1.014 1.923-2.5 2.37"
+          opacity={0.5}
+        ></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconChartBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M6.222 4.601a9.5 9.5 0 0 1 1.395-.771c1.372-.615 2.058-.922 2.97-.33c.913.59.913 1.56.913 3.5v1.5c0 1.886 0 2.828.586 3.414s1.528.586 3.414.586H17c1.94 0 2.91 0 3.5.912c.592.913.285 1.599-.33 2.97a9.5 9.5 0 0 1-10.523 5.435A9.5 9.5 0 0 1 6.222 4.601"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        d="M21.446 7.069a8.03 8.03 0 0 0-4.515-4.515C15.389 1.947 14 3.344 14 5v4a1 1 0 0 0 1 1h4c1.657 0 3.053-1.39 2.446-2.931"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconChart: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <path
+          d="M6.222 4.601a9.5 9.5 0 0 1 1.395-.771c1.372-.615 2.058-.922 2.97-.33c.913.59.913 1.56.913 3.5v1.5c0 1.886 0 2.828.586 3.414s1.528.586 3.414.586H17c1.94 0 2.91 0 3.5.912c.592.913.285 1.599-.33 2.97a9.5 9.5 0 0 1-10.523 5.435A9.5 9.5 0 0 1 6.222 4.601Z"
+          opacity={0.5}
+        ></path>
+        <path d="M21.446 7.069a8.03 8.03 0 0 0-4.515-4.515C15.389 1.947 14 3.344 14 5v4a1 1 0 0 0 1 1h4c1.657 0 3.053-1.39 2.446-2.931Z"></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconOrderBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M4.083 10.894c.439-2.34.658-3.511 1.491-4.203C6.408 6 7.598 6 9.98 6h4.04c2.383 0 3.573 0 4.407.691c.833.692 1.052 1.862 1.491 4.203l.75 4c.617 3.292.926 4.938.026 6.022S18.12 22 14.771 22H9.23c-3.349 0-5.024 0-5.923-1.084c-.9-1.084-.591-2.73.026-6.022z"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        d="M9.75 5a2.25 2.25 0 0 1 4.5 0v1c.566 0 1.062.002 1.5.015V5a3.75 3.75 0 1 0-7.5 0v1.015C8.688 6.002 9.184 6 9.75 6zm-1.49 5.877a.75.75 0 1 1 1.48.246l-1 6a.75.75 0 1 1-1.48-.246zm6.617-.617a.75.75 0 0 1 .863.617l1 6a.75.75 0 1 1-1.48.246l-1-6a.75.75 0 0 1 .617-.863"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconOrder: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <path d="M3.742 20.555C4.942 22 7.174 22 11.639 22h.722c4.465 0 6.698 0 7.897-1.445m-16.516 0c-1.2-1.446-.789-3.64.034-8.03c.586-3.12.878-4.681 1.99-5.603M3.741 20.555Zm16.516 0c1.2-1.446.788-3.64-.034-8.03c-.586-3.12-.878-4.681-1.99-5.603m2.024 13.633ZM18.235 6.922C17.124 6 15.536 6 12.36 6h-.722c-3.175 0-4.763 0-5.874.922m12.47 0Zm-12.47 0Z"></path>
+        <path
+          strokeLinecap="round"
+          d="m15 11l1 6m-7-6l-1 6M9 6V5a3 3 0 1 1 6 0v1"
+          opacity={0.5}
+        ></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconLaptopBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M4.938 3.586c-.585.586-.585 1.528-.585 3.414v7h15.294V7c0-1.886 0-2.828-.586-3.414S17.532 3 15.647 3H8.353c-1.886 0-2.829 0-3.415.586"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="m21.391 16.336l.088.092a2 2 0 0 1 .52 1.284l.001.127c0 .15 0 .224-.004.287a2 2 0 0 1-1.87 1.87a5 5 0 0 1-.287.004H4.161c-.15 0-.224 0-.287-.004a2 2 0 0 1-1.87-1.87C2 18.063 2 17.988 2 17.84l.001-.127a2 2 0 0 1 .52-1.284l.088-.092L3.903 15h16.194zM8.75 18a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75"
+        clipRule="evenodd"
+      ></path>
+      <path
+        fill="currentColor"
+        d="M12.75 5.75a.75.75 0 1 1-1.5 0a.75.75 0 0 1 1.5 0"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconLaptop: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none">
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth={1.5}
+          d="M19.647 15.536H4.353m15.294 0V8c0-1.886 0-2.828-.586-3.414C18.476 4 17.533 4 15.647 4H8.353c-1.886 0-2.828 0-3.414.586S4.353 6.114 4.353 8v7.536m15.294 0l1.744 1.8l.088.092a2 2 0 0 1 .52 1.284l.001.127c0 .15 0 .224-.004.287a2 2 0 0 1-1.87 1.87a5 5 0 0 1-.287.004H4.161c-.15 0-.224 0-.287-.004a2 2 0 0 1-1.87-1.87C2 19.063 2 18.988 2 18.84l.001-.127a2 2 0 0 1 .52-1.284l.088-.092l1.744-1.8"
+        ></path>
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth={1.5}
+          d="M9.5 18.5h5"
+          opacity={0.5}
+        ></path>
+        <path
+          fill="currentColor"
+          d="M12.75 6.75a.75.75 0 1 1-1.5 0a.75.75 0 0 1 1.5 0"
+          opacity={0.5}
+        ></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
 /* export const MyIcon: FC<IconifyProps> = ({...props}) => {
   return (
