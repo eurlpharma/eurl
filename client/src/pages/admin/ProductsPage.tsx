@@ -34,7 +34,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProducts, deleteProduct } from '@/store/slices/productSlice';
 import AIButton from '@/components/buttons/AIButton';
 import { AppDispatch } from '@/store';
-import { useLocalizedCategory } from '@/hooks/useLocalizedCategory';
 import { getLocalizedCategoryName } from '@/utils/formatters';
 import i18n from '@/i18n';
 
