@@ -91,14 +91,14 @@ const RichTextEditor: FC<RichTextEditorProps> = ({
     <FormControl fullWidth error={!!error} className="mb-4">
       {label && <FormLabel className="mb-2">{label}</FormLabel>}
       <div
-        className={`border rounded-md font-poppins ${
-          error ? "border-red-500" : "border-gray-300"
+        className={`border rounded-lg font-poppins scrollbar-hide ${
+          error ? "border-red-500" : "border-[#919eab33]"
         } overflow-hidden`}
       >
         <Editor
           editorState={editorState}
           onEditorStateChange={handleEditorStateChange}
-          wrapperClassName="w-full h-96 font-poppins"
+          wrapperClassName="w-full h-80 font-poppins bg-[#919eab14] text-sm font-public-sans"
           editorClassName={`px-3 py-2 font-poppins min-h-[${height}px]`}
           placeholder={placeholder || t("form.richTextPlaceholder")}
           toolbar={{
@@ -113,6 +113,7 @@ const RichTextEditor: FC<RichTextEditorProps> = ({
               options: ["left", "center", "right", "justify"],
             },
           }}
+        
         />
       </div>
       {error && <FormHelperText>{error}</FormHelperText>}

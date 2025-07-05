@@ -124,7 +124,7 @@ const HeroHome: FC<HeroHomeProps> = ({ isScreen = true, ...props }) => {
             offset={-50}
             className="cursor-pointer text-girl-primary"
           >
-            <ChevronDown size={42} className="animate-bounce" />
+            <ChevronDown size={42} className="animate-bounce animate__delay-1s" />
           </Link>
         </div>
 

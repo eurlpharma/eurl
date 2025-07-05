@@ -14,15 +14,16 @@ import {
 import { getCategories } from "@/store/slices/categorySlice";
 import { toast } from "react-toastify";
 import { RootState } from "@/store";
-import { v4 as uuidv4 } from 'uuid';
-import { Grid, Paper, Typography } from "@mui/material";
+import { v4 as uuidv4 } from "uuid";
+import { Paper, Typography } from "@mui/material";
 import FormField from "@/components/form/FormField";
 import RichTextEditor from "@/components/form/RichTextEditor";
 import ImageUpload from "@/components/form/ImageUpload";
 import AIButton from "@/components/buttons/AIButton";
-import { IconAI, IconAIBold, IconTrashBold } from "@/components/Iconify";
+import { IconAI, IconStarTo, IconTrashBold } from "@/components/Iconify";
 import { GeminiAI } from "@/utils/gemini";
 import { getLocalizedCategoryName } from "@/utils/formatters";
+import FormLayout from "@/components/layout/FormLayout";
 
 interface ProductFormData {
   name: string;
@@ -92,7 +93,11 @@ const ProductFormPage = () => {
   const { product, loading } = useAppSelector(
     (state: RootState) => state.products
   );
-  const { categories, loading: categoriesLoading, error: categoriesError } = useAppSelector((state: RootState) => state.categories);
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useAppSelector((state: RootState) => state.categories);
 
   const form = useForm<ProductFormData>({
     resolver: yupResolver(productSchema),
@@ -117,7 +122,11 @@ const ProductFormPage = () => {
 
   // Debug: Log categories state
   useEffect(() => {
-    console.log('Categories state:', { categories, categoriesLoading, categoriesError });
+    console.log("Categories state:", {
+      categories,
+      categoriesLoading,
+      categoriesError,
+    });
   }, [categories, categoriesLoading, categoriesError]);
 
   useEffect(() => {
@@ -175,7 +184,6 @@ const ProductFormPage = () => {
   }, [isEditMode, product, form]);
 
   useEffect(() => {
-
     if (!isEditMode && !productId) {
       setProductId(uuidv4());
     } else if (isEditMode && product?.id) {
@@ -198,17 +206,20 @@ const ProductFormPage = () => {
       delete submitData.newPrice;
       let uploadedImageUrls: string[] = [...imageUrls];
       if (images.length > 0 && productId) {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         const productIdShort = productId.slice(0, 8);
         for (const file of images) {
           const formData = new FormData();
-          formData.append('image', file);
-          formData.append('productId', productIdShort);
-          const res = await fetch('https://pharma-api-e5sd.onrender.com/api/upload/product-image', {
-            method: 'POST',
-            headers: token ? { 'Authorization': `Bearer ${token}` } : {},
-            body: formData,
-          });
+          formData.append("image", file);
+          formData.append("productId", productIdShort);
+          const res = await fetch(
+            "https://pharma-api-e5sd.onrender.com/api/upload/product-image",
+            {
+              method: "POST",
+              headers: token ? { Authorization: `Bearer ${token}` } : {},
+              body: formData,
+            }
+          );
           const data = await res.json();
           if (data.url) {
             uploadedImageUrls.push(data.url);
@@ -218,7 +229,6 @@ const ProductFormPage = () => {
       submitData.images = uploadedImageUrls;
 
       if (isEditMode && id) {
-
         const formData = new FormData();
         Object.entries(submitData).forEach(([key, value]) => {
           if (value !== undefined) {
@@ -371,7 +381,7 @@ const ProductFormPage = () => {
 
   const handleAIForm = async () => {
     if (watch("name")) {
-      setIsLoadAIForm("pending")
+      setIsLoadAIForm("pending");
       const prompt = `
         You are an expert in e-commerce product copywriting and market analysis.
 
@@ -396,132 +406,62 @@ const ProductFormPage = () => {
       const res = await GeminiAI(prompt);
       const { success, data } = res;
       if (success) {
-
         const raw = data.candidates[0].content.parts[0].text;
         const cleaned = raw.replace(/```json|```/g, "").trim();
         const result = JSON.parse(cleaned);
         const { brand, price, shortDescription, richDescription } = result;
 
         typeof brand === "string" && setValue("brand", brand);
-        typeof Number(price)==="number" && setValue("price", price);
+        typeof Number(price) === "number" && setValue("price", price);
         typeof shortDescription === "string" &&
           setValue("description", shortDescription);
         typeof shortDescription === "string" &&
           setValue("richDescription", richDescription);
-        setIsLoadAIForm("fulfilled")
+        setIsLoadAIForm("fulfilled");
       } else {
-        setIsLoadAIForm("rejected")
+        setIsLoadAIForm("rejected");
       }
     }
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center justify-between gap-3 mb-6">
-        <Typography variant="h4" component="div" className="font-josefin">
+    <div className="container mx-auto p-4">
+      <div className="flex items-center justify-between gap-3 px-6 mb-6 w-full lg:w-[720px] xl:w-[880px] mx-auto">
+        <Typography
+          component="div"
+          className="font-public-sans text-lg md:text-xl lg:text-2xl"
+        >
           {isEditMode ? t("admin.editProduct") : t("admin.createProduct")}
         </Typography>
         <AIButton
-          startContent={<IconAI />}
-          radius="full"
+          startContent={<IconStarTo />}
+          radius="none"
+          variant="liner"
           className="font-josefin"
           onClick={handleAIForm}
-          isLoading={isLoadAIForm==="pending"}
+          isLoading={isLoadAIForm === "pending"}
           isDisabled={watch("name").length > 0 ? false : true}
+          isIconOnly
         >
-          Generate
         </AIButton>
       </div>
 
-      <Paper elevation={0} className="p-6 mb-6">
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography variant="h6" className="mb-4">
-                {t("admin.basicInformation")}
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
+      <Paper
+        elevation={0}
+        className="lg:p-4 mb-6 w-full lg:w-[720px] xl:w-[880px] mx-auto font-public-sans"
+      >
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="p-4">
+          <div className="space-y-6 md:space-y-8 lg:space-y-10">
+            {/* Main info */}
+            <FormLayout title="Details" subTitle="Name, description, rich...">
               <FormField
                 control={form.control}
                 name="name"
                 label={t("admin.productName")}
                 type="text"
                 error={form.formState.errors.name}
-                required
               />
-            </Grid>
 
-            <Grid item xs={12} md={6}>
-              <FormField
-                control={form.control}
-                name="brand"
-                label={t("admin.brand")}
-                type="text"
-                error={form.formState.errors.brand}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <FormField
-                control={form.control}
-                name="price"
-                label={t("admin.price")}
-                type="number"
-                error={form.formState.errors.price}
-                required
-                textFieldProps={{
-                  inputProps: { min: 0, step: 0.01 },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <FormField
-                control={form.control}
-                name="stock"
-                label={t("admin.countInStock")}
-                type="number"
-                error={form.formState.errors.stock}
-                required
-                textFieldProps={{
-                  inputProps: { min: 0, step: 1 },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <FormField
-                control={form.control}
-                name="category"
-                label={t("admin.category")}
-                type="select"
-                error={form.formState.errors.category}
-                required
-                disabled={categoriesLoading}
-                options={
-                  categoriesLoading || !categories || categories.length === 0
-                    ? [{ value: '', label: categoriesLoading ? t('common.loading') : (categoriesError ? t('common.errorLoadingCategories') : t('common.noCategories')) }]
-                    : categories.map((category: any) => ({
-                        value: category.id || category._id,
-                        label: getLocalizedCategoryName(category, i18n.language) || `${category.nameAr || category.nameEn || category.nameFr || 'Unnamed Category'}`,
-                      }))
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <FormField
-                control={form.control}
-                name="isFeatured"
-                label={t("admin.featured")}
-                type="checkbox"
-                error={form.formState.errors.isFeatured}
-              />
-            </Grid>
-
-            <Grid item xs={12} className="font-poppins">
               <div className="relative">
                 <AIButton
                   type="button"
@@ -533,7 +473,7 @@ const ProductFormPage = () => {
                     watch("description").trim().length > 0 ? (
                       <IconTrashBold />
                     ) : (
-                      <IconAIBold />
+                      <IconStarTo />
                     )
                   }
                   isDisabled={
@@ -550,19 +490,16 @@ const ProductFormPage = () => {
                 ></AIButton>
 
                 <FormField
-                  className="font-poppins"
-                  control={form.control}
-                  name="description"
-                  label={t("admin.shortDescription")}
+                  rows={4}
                   type="textarea"
+                  name="description"
+                  control={form.control}
+                  className="font-poppins"
+                  label={t("admin.subDescription")}
                   error={form.formState.errors.description}
-                  required
-                  rows={3}
                 />
               </div>
-            </Grid>
 
-            <Grid item xs={12}>
               <div className="relative">
                 <AIButton
                   type="button"
@@ -574,7 +511,7 @@ const ProductFormPage = () => {
                     (watch("richDescription")?.trim() || "").length > 0 ? (
                       <IconTrashBold />
                     ) : (
-                      <IconAIBold />
+                      <IconStarTo />
                     )
                   }
                   isDisabled={
@@ -587,7 +524,7 @@ const ProductFormPage = () => {
                       ? handleCleareRichDescripionAI()
                       : handleCreateRichDescription()
                   }
-                  className="absolute z-10 right-0 bottom-4"
+                  className="absolute z-10 right-0 bottom-4 "
                 ></AIButton>
                 <RichTextEditor
                   value={form.watch("richDescription") || ""}
@@ -598,53 +535,125 @@ const ProductFormPage = () => {
                   height={600}
                 />
               </div>
-            </Grid>
+            </FormLayout>
 
-            <Grid item xs={12} sm={6}>
+            {/* Properties */}
+            <FormLayout title="Properties" subTitle="Additional functions and attributes...">
+              <FormField
+                control={form.control}
+                name="brand"
+                label={t("admin.brand")}
+                type="text"
+                error={form.formState.errors.brand}
+              />
+
+              <FormField
+                control={form.control}
+                name="stock"
+                label={t("admin.quantity")}
+                type="number"
+                error={form.formState.errors.stock}
+                textFieldProps={{
+                  inputProps: { min: 0, step: 1 },
+                }}
+              />
+
+              <FormField
+                control={form.control}
+                name="category"
+                label={t("admin.category")}
+                type="select"
+                error={form.formState.errors.category}
+                disabled={categoriesLoading}
+                options={
+                  categoriesLoading || !categories || categories.length === 0
+                    ? [
+                        {
+                          value: "",
+                          label: categoriesLoading
+                            ? t("common.loading")
+                            : categoriesError
+                            ? t("common.errorLoadingCategories")
+                            : t("common.noCategories"),
+                        },
+                      ]
+                    : categories.map((category: any) => ({
+                        value: category.id || category._id,
+                        label:
+                          getLocalizedCategoryName(category, i18n.language) ||
+                          `${
+                            category.nameAr ||
+                            category.nameEn ||
+                            category.nameFr ||
+                            "Unknown Category"
+                          }`,
+                      }))
+                }
+              />
+            </FormLayout>
+
+            {/* Pricing & images */}
+            <FormLayout title="Pricing" subTitle="Price related inputs">
+              <FormField
+                control={form.control}
+                name="price"
+                label={t("admin.price")}
+                type="number"
+                error={form.formState.errors.price}
+                textFieldProps={{
+                  inputProps: { min: 0, step: 0.01 },
+                }}
+              />
+
               <FormField
                 name="newPrice"
-                label={t("admin.newPrice") || "السعر الجديد (اختياري)"}
+                label={t("admin.newPrice")}
                 type="number"
                 control={form.control}
                 textFieldProps={{
-                  placeholder:
-                    t("admin.newPricePlaceholder") ||
-                    "اتركه فارغًا إذا لم يوجد عرض",
+                  placeholder: t("admin.newPricePlaceholder"),
                   inputProps: { min: 0 },
                 }}
               />
-            </Grid>
 
-            <Grid item xs={12}>
-              <Typography variant="h6" className="mb-4">
-                {t("admin.images")}
-              </Typography>
-              <ImageUpload
-                images={images}
-                imageUrls={imageUrls}
-                onImagesChange={setImages}
-                onImageUrlsChange={setImageUrls}
-                maxFiles={5}
+              <div className="images">
+                <Typography className="mb-2 font-public-sans">
+                  {t("admin.images")}
+                </Typography>
+                <ImageUpload
+                  images={images}
+                  imageUrls={imageUrls}
+                  onImagesChange={setImages}
+                  onImageUrlsChange={setImageUrls}
+                  maxFiles={5}
+                />
+              </div>
+            </FormLayout>
+
+            <div className="flex items-center justify-between gap-3">
+              <FormField
+                control={form.control}
+                name="isFeatured"
+                label={t("admin.featured")}
+                type="checkbox"
+                error={form.formState.errors.isFeatured}
               />
-            </Grid>
 
-            <Grid item xs={12}>
               <AIButton
                 type="submit"
                 variant="solid"
-                radius="full"
+                radius="lg"
                 isDisabled={isSubmitting}
-                className="mt-4"
-                fullWidth
+                className="mt-4 w-fit whitespace-nowrap"
               >
                 {isSubmitting
                   ? t("common.saving")
                   : isEditMode
                   ? t("common.update")
-                  : "Create New Product"}
+                  : "Create Product"}
               </AIButton>
-            </Grid>
-          </Grid>
+            </div>
+          </div>
         </form>
       </Paper>
     </div>

@@ -14,11 +14,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { PencilIcon, TrashIcon } from "lucide-react";
 import { ChangeEvent, FC, HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { Link } from "react-router-dom";
+import { IconPenBold, IconTrashBold } from "../Iconify";
 
 interface TableProductsProps extends HTMLAttributes<HTMLElement> {
   page: number;
@@ -48,12 +48,6 @@ const cells = [
   {
     key: "products.price",
     label: "price",
-    align: "left" as const,
-  },
-
-  {
-    key: "products.category",
-    label: "category",
     align: "left" as const,
   },
 
@@ -93,7 +87,10 @@ const TableProducts: FC<TableProductsProps> = ({
 
   return (
     <div {...props}>
-      <TableContainer component={Paper} className="rounded-xl shadow-lighter">
+      <TableContainer
+        component={Paper}
+        className="rounded-xl shadow-lighter mx-auto h-[75vh]"
+      >
         <Table
           sx={{
             "& .MuiTableCell-root": {
@@ -104,10 +101,7 @@ const TableProducts: FC<TableProductsProps> = ({
           <TableHead>
             <TableRow>
               {cells.map(({ align, key }) => (
-                <TableCell
-                  key={key}
-                  align={align}
-                >
+                <TableCell key={key} align={align} className="capitalize">
                   {t(key)}
                 </TableCell>
               ))}
@@ -130,7 +124,7 @@ const TableProducts: FC<TableProductsProps> = ({
               </TableRow>
             ) : products && products.length > 0 ? (
               products.map((product: any) => (
-                <TableRow key={product.id}>
+                <TableRow key={product.id} className="font-public-sans hover:bg-[#ed1b6f0f] transition duration-700">
                   <TableCell>
                     {product.images && product.images.length > 0 ? (
                       <Box
@@ -162,15 +156,19 @@ const TableProducts: FC<TableProductsProps> = ({
                       />
                     )}
                   </TableCell>
-                  <TableCell>{product.name}</TableCell>
-                  <TableCell>{product.price} DA</TableCell>
-                  <TableCell>
-                    {product.category
-                      ? getLocalizedCategoryName(
-                          product.category,
-                          i18n.language
-                        )
-                      : "-"}
+                  <TableCell className="font-public-sans whitespace-nowrap capitalize">
+                    <div>{product.name}</div>
+                    <div className="text-gray-500">
+                      {product.category
+                        ? getLocalizedCategoryName(
+                            product.category,
+                            i18n.language
+                          )
+                        : "-"}
+                    </div>
+                  </TableCell>
+                  <TableCell className="font-barlow whitespace-nowrap">
+                    {product.price} {t("ammount.da")}
                   </TableCell>
                   <TableCell>{product.countInStock}</TableCell>
                   <TableCell>
@@ -189,19 +187,21 @@ const TableProducts: FC<TableProductsProps> = ({
                     )}
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton
-                      component={Link}
-                      to={`/admin/products/edit/${product.id}`}
-                      color="primary"
-                    >
-                      <PencilIcon className="w-5 h-5" />
-                    </IconButton>
-                    <IconButton
-                      color="error"
-                      onClick={() => handleOpenDeleteDialog(product.id)}
-                    >
-                      <TrashIcon className="w-5 h-5" />
-                    </IconButton>
+                    <div className="flex items-center justify-end pe-3">
+                      <IconButton
+                        component={Link}
+                        to={`/admin/products/edit/${product.id}`}
+                        color="primary"
+                      >
+                        <IconPenBold />
+                      </IconButton>
+                      <IconButton
+                        color="error"
+                        onClick={() => handleOpenDeleteDialog(product.id)}
+                      >
+                        <IconTrashBold />
+                      </IconButton>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

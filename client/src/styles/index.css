@@ -632,3 +632,22 @@ main {
   @apply w-full md:max-w-4xl lg:max-w-7xl px-6 md:px-10 lg:px-52 text-center
 }
 /* about end */
+
+
+/* Custom Inputs */
+.mui-1380n9-MuiInputBase-root-MuiOutlinedInput-root {
+  border-color: #919eabcc !important;
+  border-radius: 8px !important;
+}
+
+.mui-hr5xgz-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+  color: #ed1b6f !important;
+}
+
+.mui-1380n9-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #ed1b6f !important;
+}
+
+.MuiFormControl-root {
+  @apply hidden
+}

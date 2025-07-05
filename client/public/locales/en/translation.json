@@ -440,6 +440,8 @@
     "country": "country"
   },
   "admin": {
+    "newPricePlaceholder": "New Price",
+    "subDescription": "Sub Description",
     "messages": "Messages",
     "chats": "chats",
     "app": "Overview",
@@ -577,7 +579,7 @@
     "lowStock": "Low stock",
     "quantity": "Quantity",
     "availability": "Availability",
-    "richTextPlaceholder": "Rich text placeholder",
+    "richTextPlaceholder": "Write something...",
     "images": "Images",
     "image": "Image",
     "sku": "SKU",

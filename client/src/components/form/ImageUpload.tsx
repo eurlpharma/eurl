@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { Box, Grid, IconButton, Typography } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ImageIcon from '@mui/icons-material/Image';
+import { IconGallery, IconTrashBold } from '../Iconify';
 
 interface ImageUploadProps {
   images: File[];
@@ -52,19 +51,21 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       <Box
         {...getRootProps()}
         sx={{
-          border: '2px dashed #ccc',
+          border: '1px dashed #919eab33',
           borderRadius: 2,
           p: 3,
           textAlign: 'center',
           cursor: 'pointer',
-          bgcolor: isDragActive ? 'action.hover' : 'background.paper',
+          bgcolor: isDragActive ? 'action.hover' : '#919eab14',
           '&:hover': {
             bgcolor: 'action.hover'
           }
         }}
       >
+        <div className="flex flex-col items-center justify-center gap-2 font-public-sans">
+          
         <input {...getInputProps()} />
-        <ImageIcon sx={{ fontSize: 40, color: 'text.secondary', mb: 1 }} />
+        <IconGallery className='w-20 h-20' />
         <Typography variant="body1" color="text.secondary">
           {isDragActive
             ? 'Drag images here..'
@@ -73,6 +74,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         <Typography variant="caption" color="text.secondary">
           (You can upload {maxFiles} max files)
         </Typography>
+        </div>
+
       </Box>
 
       {(images.length > 0 || imageUrls.length > 0) && (
@@ -101,7 +104,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                     '&:hover': { bgcolor: 'action.hover' }
                   }}
                 >
-                  <DeleteIcon fontSize="small" />
+                  <IconTrashBold className="text-girl-secondary" />
                 </IconButton>
               </Box>
             </Grid>
@@ -130,7 +133,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                     '&:hover': { bgcolor: 'action.hover' }
                   }}
                 >
-                  <DeleteIcon fontSize="small" />
+                  <IconTrashBold className="text-girl-secondary" />
                 </IconButton>
               </Box>
             </Grid>

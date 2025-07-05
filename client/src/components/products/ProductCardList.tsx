@@ -154,11 +154,13 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, isLoading=false, .
           </div>
         )}
 
-        {product.countInStock > 0 && (
+        {/* {product.countInStock > 0 && (
           <div className="over pink">
             <i className="fi fi-rr-thumbtack flex items-center justify-center"></i>
+            <IconPinBold />
           </div>
-        )}
+        )} */}
+
       </div>
 
       <div className={clsx("info", "flex flex-col-reverse items-start")}>
