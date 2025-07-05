@@ -203,6 +203,7 @@
     "acceptTerms": "You must accept the terms and conditions"
   },
   "common": {
+    "refreshPage": "Refresh Page",
     "currency": "Currency",
     "update": "Update",
     "all": "All",

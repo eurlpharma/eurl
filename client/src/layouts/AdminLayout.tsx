@@ -268,13 +268,13 @@ const AdminLayout = () => {
               onClick={handleProfileMenuOpen}
               color="primary"
             >
-                <div className="rounded-full bg-gradient-to-tr from-pink-500 via-purple-500 to-indigo-500 p-[2px]">
-                    <Avatar
-                      alt={user?.name || "Profile"}
-                      src={userAvatar}
-                      className="w-8 h-8 rounded-full object-cover z-10"
-                    />
-                </div>
+              <div className="rounded-full bg-gradient-to-tr from-pink-500 via-purple-500 to-indigo-500 p-[2px]">
+                <Avatar
+                  alt={user?.name || "Profile"}
+                  src={userAvatar}
+                  className="w-8 h-8 rounded-full object-cover z-10"
+                />
+              </div>
             </IconButton>
           </div>
         </Toolbar>

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import unDrawError from "../../assets/undraw/bug_fix.svg";
 import {
   Box,
   Typography,
@@ -25,15 +26,15 @@ import {
   ShoppingCartIcon,
   ArrowUpIcon,
   ArrowDownIcon,
-  PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 import { Link } from "react-router-dom";
 import { getDashboardStats } from "@/store/slices/adminSlice";
-import { ProductData } from "../../types/product";
 import { Order } from "../../types/order";
 import Preloader from "@/components/global/Preloader";
+import AIButton from "@/components/buttons/AIButton";
+import ProductTable from "@/components/tables/ProductTable";
 
 declare global {
   interface ImportMeta {
@@ -111,45 +112,6 @@ const DashboardPage = () => {
     },
   ];
 
-
-  const cellsTableProducts = [
-    {
-      key: 'productImage',
-      label: 'productImage',
-      algin: 'start'
-    },
-
-    {
-      key: 'productName',
-      label: 'productName',
-      align: "right"
-    },
-
-    {
-      key: 'category',
-      label: 'category',
-      align: "right"
-    },
-
-    {
-      key: 'price',
-      label: 'price',
-      align: "right"
-    },
-
-    {
-      key: 'stock',
-      label: 'stock',
-      align: "right"
-    },
-
-    {
-      key: 'status',
-      label: 'status',
-      align: "center"
-    }
-  ]
-
   if (loading) {
     return (
       <Box className="flex items-center justify-center h-full">
@@ -161,30 +123,30 @@ const DashboardPage = () => {
   if (error) {
     return (
       <Box className="flex flex-col items-center justify-center h-full p-6">
-        <Typography variant="h6" color="error" className="mb-4">
+        <img src={unDrawError} className="h-[80%]" />
+        <Typography
+          variant="h6"
+          className="mb-4 font-paris text-xl lg:text-2xl font-bold capitalize text-girl-secondary"
+        >
           {t("common.errorOccurred")}
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
+        <AIButton
+          variant="solid"
+          radius="full"
           onClick={() => {
             dispatch(getDashboardStats());
           }}
         >
-          {t("common.tryAgain")}
-        </Button>
+          {t("common.refreshPage")}
+        </AIButton>
       </Box>
     );
   }
 
   return (
-    <Box className="py-6 px-1 md:px-2 lg:px-3 font-public-sans">
-      <Typography
-        variant="h4"
-        component="h1"
-        className="mb-6 font-semibold font-public-sans"
-      >
-        {t("admin.dashboard")}
+    <Box className="py-6 px-1 md:px-2 lg:px-6 font-public-sans">
+      <Typography variant="h3" className="mb-6 font-semibold font-public-sans">
+        {t("admin.app")}
       </Typography>
 
       <Grid container spacing={2} className="mb-6">
@@ -203,7 +165,11 @@ const DashboardPage = () => {
                   >
                     {stat.icon}
                   </Box>
-                  <Typography variant="h6" component="h3" className="font-public-sans">
+                  <Typography
+                    variant="h6"
+                    component="h3"
+                    className="font-public-sans"
+                  >
                     {stat.title}
                   </Typography>
                 </Box>
@@ -239,105 +205,8 @@ const DashboardPage = () => {
 
       <Grid container spacing={2} className="mb-6">
         <Grid item xs={12}>
-          <Card className="shadow-lighter rounded-xl font-public-sans">
-            <CardHeader
-              className="font-public-sans"
-              title={t("admin.recentProducts")}
-              action={
-                <Button component={Link} to="/admin/products" color="primary">
-                  {t("common.viewAll")}
-                </Button>
-              }
-            />
-            <Divider />
-            <CardContent>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      {
-                        cellsTableProducts.map(cell => (
-                      <TableCell key={cell.key} align="center">{t(`admin.${cell.label}`)}</TableCell>
-
-                        ))
-                      }
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {recentProducts && recentProducts.length > 0 ? (
-                      recentProducts.map((product: ProductData) => (
-                        <TableRow key={product.id}>
-                          <TableCell>
-                            <Box className="w-12 h-12 relative">
-                              {product.images && product.images.length > 0 ? (
-                                <img
-                                  src={
-                                    product.images[0].startsWith("http")
-                                      ? product.images[0]
-                                      : `${
-                                          import.meta.env.VITE_API_URL
-                                        }/uploads/${product.images[0]}`
-                                  }
-                                  alt={product.name}
-                                  className="w-full h-full object-cover rounded"
-                                />
-                              ) : (
-                                <Box className="w-full h-full bg-gray-200 rounded flex items-center justify-center">
-                                  <PhotoIcon className="w-6 h-6 text-gray-400" />
-                                </Box>
-                              )}
-                            </Box>
-                          </TableCell>
-                          <TableCell>
-                            <Link
-                              to={`/admin/products/edit/${product.id}`}
-                              className="text-primary-600 hover:underline whitespace-nowrap"
-                            >
-                              {product.name}
-                            </Link>
-                          </TableCell>
-                          <TableCell>
-                            {typeof product.category === "string"
-                              ? product.category
-                              : product.category.nameEn}
-                          </TableCell>
-                          <TableCell align="right" className="whitespace-nowrap">{product.price} {t("ammount.da")}</TableCell>
-                          <TableCell align="right">
-                            {product.countInStock}
-                          </TableCell>
-                          <TableCell align="center">
-                            <Chip
-                              label={
-                                product.countInStock === 0
-                                  ? t("products.outOfStock")
-                                  : product.countInStock < 10
-                                  ? t("products.lowStock")
-                                  : t("products.inStock")
-                              }
-                              color={
-                                product.countInStock === 0
-                                  ? "error"
-                                  : product.countInStock < 10
-                                  ? "warning"
-                                  : "success"
-                              }
-                              size="small"
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={5} align="center">
-                          {t("products.noProductsFound")}
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
+          {/* Recent Products */}
+          <ProductTable products={recentProducts ? recentProducts : null} />
         </Grid>
       </Grid>
 
@@ -404,7 +273,6 @@ const DashboardPage = () => {
                                   listStyle: "none",
                                 }}
                               >
-
                                 {order.orderItems.map((item, i) => (
                                   <li
                                     key={i}
@@ -439,7 +307,9 @@ const DashboardPage = () => {
                                         }}
                                       ></span>
                                     )}
-                                    <span className="whitespace-nowrap">{item.name}</span>
+                                    <span className="whitespace-nowrap">
+                                      {item.name}
+                                    </span>
                                   </li>
                                 ))}
                               </ul>
