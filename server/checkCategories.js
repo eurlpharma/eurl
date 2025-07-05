@@ -14,15 +14,6 @@ async function checkCategories() {
         createdAt: 'asc'
       }
     });
-
-    console.log('All categories:');
-    console.log(JSON.stringify(categories, null, 2));
-
-    console.log('\nCategory IDs for deletion:');
-    categories.forEach((cat, index) => {
-      console.log(`${index + 1}. ${cat.name} - ID: ${cat.id}`);
-    });
-
   } catch (error) {
     console.error('Error:', error);
   } finally {

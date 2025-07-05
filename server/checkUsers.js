@@ -13,9 +13,6 @@ async function checkUsers() {
       }
     });
 
-    console.log('All users:');
-    console.log(JSON.stringify(users, null, 2));
-
     // Check admin users specifically
     const adminUsers = await prisma.user.findMany({
       where: {
@@ -29,9 +26,6 @@ async function checkUsers() {
         isActive: true
       }
     });
-
-    console.log('\nAdmin users:');
-    console.log(JSON.stringify(adminUsers, null, 2));
 
   } catch (error) {
     console.error('Error:', error);

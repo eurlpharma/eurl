@@ -17,28 +17,16 @@ async function checkPassword() {
       }
     });
 
-    console.log('Admin user found:', {
-      id: adminUser.id,
-      name: adminUser.name,
-      email: adminUser.email,
-      role: adminUser.role,
-      isActive: adminUser.isActive,
-      hasPassword: !!adminUser.password
-    });
 
     // Test password
     const testPassword = 'admin123';
     const isMatch = await bcrypt.compare(testPassword, adminUser.password);
     
-    console.log(`Password '${testPassword}' matches:`, isMatch);
-
     // Generate new password hash for comparison
     const salt = await bcrypt.genSalt(10);
     const newHash = await bcrypt.hash(testPassword, salt);
-    console.log('New hash for admin123:', newHash);
 
   } catch (error) {
-    console.error('Error:', error);
   } finally {
     await prisma.$disconnect();
   }

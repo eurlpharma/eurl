@@ -11,7 +11,6 @@ async function deleteCategories() {
       'cmcgkpc5d0001osnreqcqy9vn'  // Vitamine D3 – 3000 UI
     ];
 
-    console.log('🗑️  Deleting static categories...');
 
     // Check if any products are using these categories
     for (const categoryId of categoryIdsToDelete) {
@@ -21,14 +20,11 @@ async function deleteCategories() {
       });
 
       if (productsInCategory.length > 0) {
-        console.log(`⚠️  Category has ${productsInCategory.length} products. Deleting products first...`);
         
         // Delete products in this category
         await prisma.product.deleteMany({
           where: { categoryId }
         });
-        
-        console.log(`✅ Deleted ${productsInCategory.length} products from category`);
       }
     }
 
@@ -41,8 +37,6 @@ async function deleteCategories() {
       }
     });
 
-    console.log(`✅ Successfully deleted ${deleteResult.count} categories`);
-
     // Show remaining categories
     const remainingCategories = await prisma.category.findMany({
       select: {
@@ -53,12 +47,9 @@ async function deleteCategories() {
       }
     });
 
-    console.log('\n📋 Remaining categories:');
     if (remainingCategories.length === 0) {
-      console.log('No categories remaining');
     } else {
       remainingCategories.forEach((cat, index) => {
-        console.log(`${index + 1}. ${cat.name} - ${cat.description}`);
       });
     }
 

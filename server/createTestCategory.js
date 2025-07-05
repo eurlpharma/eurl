@@ -2,7 +2,6 @@ import http from 'http';
 
 // Create a test category
 function createTestCategory() {
-  console.log('🔍 Creating test category...');
   
   const postData = JSON.stringify({
     name: 'Test Category for Edit',
@@ -22,7 +21,6 @@ function createTestCategory() {
   };
 
   const req = http.request(options, (res) => {
-    console.log(`Create STATUS: ${res.statusCode}`);
     
     let data = '';
     res.on('data', (chunk) => {
@@ -30,20 +28,15 @@ function createTestCategory() {
     });
     
     res.on('end', () => {
-      console.log('Create RESPONSE:');
-      console.log(data);
       
       try {
         const response = JSON.parse(data);
         if (response.success) {
-          console.log('✅ Test category created successfully!');
-          console.log('Category ID:', response.category.id);
-          console.log('Category Name:', response.category.name);
         } else {
-          console.log('❌ Failed to create test category:', response.message);
+          return null;
         }
       } catch (error) {
-        console.log('❌ Error parsing response:', error);
+        return null;
       }
     });
   });
