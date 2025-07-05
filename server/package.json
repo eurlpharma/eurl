@@ -15,7 +15,8 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset",
-    "db:seed": "node data/prismaSeeder.js"
+    "db:seed": "node data/prismaSeeder.js",
+    "test:db": "node testConnection.js"
   },
   "keywords": [
     "medical",
