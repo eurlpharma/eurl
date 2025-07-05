@@ -426,7 +426,7 @@ const ProductFormPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex items-center justify-between gap-3 px-6 mb-6 w-full lg:w-[720px] xl:w-[880px] mx-auto">
+      <div className="flex items-center justify-between gap-3 px-4 mb-4 w-full lg:w-[720px] xl:w-[880px] mx-auto">
         <Typography
           component="div"
           className="font-public-sans text-lg md:text-xl lg:text-2xl"
@@ -451,7 +451,7 @@ const ProductFormPage = () => {
         className="lg:p-4 mb-6 w-full lg:w-[720px] xl:w-[880px] mx-auto font-public-sans"
       >
         <form onSubmit={form.handleSubmit(handleSubmit)} className="lg:p-4">
-          <div className="space-y-6 md:space-y-8 lg:space-y-10">
+          <div className="space-y-4 md:space-y-6 lg:space-y-8">
             {/* Main info */}
             <FormLayout title="Details" subTitle="Name, description, rich...">
               <FormField

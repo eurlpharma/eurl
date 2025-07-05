@@ -21,18 +21,29 @@ const FormLayout: FC<FormLayoutProps> = ({
 
   return (
     <div className="font-public-sans rounded-lg shadow-lighter" {...rest}>
-      <div className="header flex items-start justify-between p-6 border-b border-solid border-[#919eab33]">
+      <div
+        onClick={handleCollapse}
+        className="header flex items-start justify-between p-6 border-b border-solid border-[#919eab33] cursor-pointer"
+      >
         <div className="info select-none">
-          {title && <div className="text-[18px] font-semibold text-[#1C252E]">{title}</div>}
-          {subTitle && <div className="text-[14px] text-[#637381]">{subTitle}</div>}
+          {title && (
+            <div className="text-[18px] font-semibold text-[#1C252E]">
+              {title}
+            </div>
+          )}
+          {subTitle && (
+            <div className="text-[14px] text-[#637381]">{subTitle}</div>
+          )}
         </div>
 
-        <div onClick={handleCollapse} className="cursor-pointer">
+        <div className="cursor-pointer">
           <span className="text-[#637381] transition duration-700">
-            <IconArrow className={clsx(
-              "transition-transform duration-500",
-              collapse && "-rotate-90"
-            )} />
+            <IconArrow
+              className={clsx(
+                "transition-transform duration-500",
+                collapse && "-rotate-90"
+              )}
+            />
           </span>
         </div>
       </div>
