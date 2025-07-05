@@ -439,6 +439,8 @@
     "country": "country"
   },
   "admin": {
+    "messages": "Messages",
+    "chats": "chats",
     "app": "Overview",
     "newPrice": "New Price",
     "googleMapUrl": "Google Map URL",

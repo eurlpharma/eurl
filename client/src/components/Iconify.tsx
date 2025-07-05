@@ -1202,17 +1202,53 @@ export const IconLaptop: FC<IconifyProps> = ({ ...props }) => {
   );
 };
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconChatBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M12 23c6.075 0 11-4.925 11-11S18.075 1 12 1S1 5.925 1 12c0 1.76.413 3.423 1.148 4.898c.195.392.26.84.147 1.263l-.655 2.448a1.43 1.43 0 0 0 1.75 1.751l2.45-.655a1.8 1.8 0 0 1 1.262.147A10.96 10.96 0 0 0 12 23"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        d="M10.9 12a1.1 1.1 0 1 0 2.2 0a1.1 1.1 0 0 0-2.2 0m-4.4 0a1.1 1.1 0 1 0 2.2 0a1.1 1.1 0 0 0-2.2 0m8.8 0a1.1 1.1 0 1 0 2.2 0a1.1 1.1 0 0 0-2.2 0"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconChat: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeWidth={1}>
+        <path
+          strokeWidth={1.5}
+          d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22Z"
+        ></path>
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M8 12h.009m3.982 0H12m3.991 0H16"
+          opacity={0.5}
+        ></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
 /* export const MyIcon: FC<IconifyProps> = ({...props}) => {
   return (

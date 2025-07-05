@@ -27,7 +27,19 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Notification from "@/components/ui/Notification";
-import { IconBoxBold, IconChartBold, IconHomeBold, IconLaptopBold, IconMenu, IconOrderBold, IconSettingBold, IconUsersBold, IconWidgetBold } from "@/components/Iconify";
+import {
+  IconBoxBold,
+  IconChartBold,
+  IconChatBold,
+  IconHomeBold,
+  IconLaptopBold,
+  IconMenu,
+  IconOrderBold,
+  IconSettingBold,
+  IconUsersBold,
+  IconWidgetBold,
+} from "@/components/Iconify";
+import clsx from "clsx";
 
 const drawerWidth = 280;
 
@@ -105,6 +117,12 @@ const AdminLayout = () => {
       icon: <IconUsersBold />,
     },
     {
+      key: "messages",
+      label: t("admin.messages"),
+      path: "/admin/analytics",
+      icon: <IconChatBold className="w-6 h-6" />,
+    },
+    {
       key: "analytics",
       label: t("admin.analytics"),
       path: "/admin/analytics",
@@ -134,77 +152,34 @@ const AdminLayout = () => {
         >
           pharma eurl
         </Typography>
-        {isMobile && (
-          <IconButton onClick={handleDrawerToggle}>
-            <XMarkIcon className="w-6 h-6" />
-          </IconButton>
-        )}
       </Box>
-      <Divider />
       <List>
         {menuItems.map((item) => (
           <Box key={item.key}>
-            {item.children ? (
-              <>
-                <ListItem
-                  onClick={() => handleSubmenuToggle(item.key)}
-                  className={`${
-                    isActive(item.path) ? "bg-girl-secondary/20 text-secondary" : ""
-                  }`}
-                >
-                  <ListItemIcon
-                    className={isActive(item.path) ? "text-girl-secondary" : ""}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.label} className={isActive(item.path) ? "text-girl-secondary" : ""} />
-                  {openSubmenu === item.key ? (
-                    <ChevronUpIcon className="w-5 h-5" />
-                  ) : (
-                    <ChevronDownIcon className="w-5 h-5" />
-                  )}
-                </ListItem>
-                <Collapse
-                  in={openSubmenu === item.key}
-                  timeout="auto"
-                  unmountOnExit
-                >
-                  <List component="div" disablePadding>
-                    {item.children.map((child) => (
-                      <ListItem
-                        key={child.key}
-                        component={Link}
-                        to={child.path}
-                        className={`pl-12 ${
-                          location.pathname === child.path
-                            ? "bg-girl-secondary/20 text-girl-secondary"
-                            : ""
-                        }`}
-                        onClick={() => isMobile && setMobileOpen(false)}
-                      >
-                        <ListItemText primary={child.label} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Collapse>
-              </>
-            ) : (
-              <ListItem
-                component={Link}
-                to={item.path}
-                className={`${
-                  isActive(item.path) ? "bg-girl-secondary/20 text-girl-secondary" : "text-girl-typograph"
-                }`}
-                onClick={() => isMobile && setMobileOpen(false)}
+            <ListItem
+              component={Link}
+              to={item.path}
+              className={clsx(
+                "rounded-lg gap-3",
+                isActive(item.path)
+                  ? "bg-girl-secondary/20 text-girl-secondary"
+                  : "text-girl-typograph"
+              )}
+
+
+              onClick={() => isMobile && setMobileOpen(false)}
+            >
+              <ListItemIcon
+
+               className={clsx(
+                "w-fit min-w-fit",
+                isActive(item.path) ? "text-girl-secondary" : "text-girl-typograph"
+               )}
               >
-                <ListItemIcon
-                  className={isActive(item.path) ? "text-girl-secondary" : "text-girl-typograph"}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.label} />
-              </ListItem>
-            )}
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItem>
           </Box>
         ))}
       </List>
@@ -215,8 +190,7 @@ const AdminLayout = () => {
           to="/"
           onClick={() => isMobile && setMobileOpen(false)}
           className="text-girl-secondary"
-          sx={{gap: 0}}
-        
+          sx={{ gap: 0 }}
         >
           <ListItemIcon className="text-girl-secondary">
             <IconHomeBold className="w-6 h-6" />
@@ -309,10 +283,10 @@ const AdminLayout = () => {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile
+            keepMounted: true,
           }}
           PaperProps={{
-            className: "backdrop-blur-sm bg-white/80",
+            className: "backdrop-blur-sm bg-white/90 w-[74%] rounded-r-lg px-3",
           }}
           sx={{
             display: { xs: "block", md: "none" },
