@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '@/store';
 import { logout } from '@/store/slices/authSlice';
 
-const API_URL = `https://eurl-server.onrender.com`;
+const API_URL = `https://pharma-api-e5sd.onrender.com`;
 
 
 const instance = axios.create({

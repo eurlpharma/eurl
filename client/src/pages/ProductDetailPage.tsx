@@ -69,7 +69,7 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const API_URL =
-  import.meta.env.VITE_API_URL || `https://eurl-server.onrender.com`;
+  import.meta.env.VITE_API_URL || `https://pharma-api-e5sd.onrender.com`;
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();

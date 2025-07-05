@@ -38,7 +38,7 @@ import { getLocalizedCategoryName } from '@/utils/formatters';
 import i18n from '@/i18n';
 
 
-const API_URL = import.meta.env.VITE_API_URL || `https://eurl-server.onrender.com`;
+const API_URL = import.meta.env.VITE_API_URL || `https://pharma-api-e5sd.onrender.com`;
 const ProductsPage = () => {
   const { t } = useTranslation();
   const { success } = useNotification();
