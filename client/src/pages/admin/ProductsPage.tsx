@@ -39,8 +39,6 @@ const ProductsPage = () => {
     (state: any) => state.products
   );
 
-  console.log(rowsPerPage);
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {

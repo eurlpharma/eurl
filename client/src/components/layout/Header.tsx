@@ -107,7 +107,7 @@ const Header = () => {
     }
 
     handleLangMenuClose();
-    window.location.reload()
+    // window.location.reload()
   };
 
   const handleLogout = () => {

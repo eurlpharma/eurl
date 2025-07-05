@@ -94,16 +94,19 @@ const TableProducts: FC<TableProductsProps> = ({
   return (
     <div {...props}>
       <TableContainer component={Paper} className="rounded-xl shadow-lighter">
-        <Table>
+        <Table
+          sx={{
+            "& .MuiTableCell-root": {
+              borderBottom: "1px dashed #0000001f",
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
-              {cells.map(({align, key}) => (
+              {cells.map(({ align, key }) => (
                 <TableCell
-                  align={
-                    align && typeof align === "string"
-                      ? align
-                      : "inherit"
-                  }
+                  key={key}
+                  align={align}
                 >
                   {t(key)}
                 </TableCell>
