@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
+import userAvatar from "../assets/avatars/avatar-user.png";
 import {
   Box,
   Drawer,
   AppBar,
   Toolbar,
   Typography,
-  Divider,
   List,
   ListItem,
   ListItemIcon,
@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 import Notification from "@/components/ui/Notification";
 import {
+  IconBellBold,
   IconBoxBold,
   IconChartBold,
   IconChatBold,
@@ -173,7 +174,6 @@ const AdminLayout = () => {
           </Box>
         ))}
       </List>
-      <Divider />
       <List>
         <ListItem
           component={Link}
@@ -185,7 +185,11 @@ const AdminLayout = () => {
           <ListItemIcon className="text-girl-secondary min-w-fit w-fit">
             <IconHomeBold />
           </ListItemIcon>
-          <ListItemText primary={<span className="font-public-sans">{t("admin.backToSite")}</span>} />
+          <ListItemText
+            primary={
+              <span className="font-public-sans">{t("admin.backToSite")}</span>
+            }
+          />
         </ListItem>
       </List>
     </Box>
@@ -234,7 +238,7 @@ const AdminLayout = () => {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: "none" } }}
           >
-            <IconMenu className="w-6 h-6" />
+            <IconMenu />
           </IconButton>
 
           <Typography
@@ -246,22 +250,36 @@ const AdminLayout = () => {
             Pharma
           </Typography>
 
-          <IconButton
-            edge="end"
-            aria-label="account"
-            aria-controls={menuId}
-            aria-haspopup="true"
-            onClick={handleProfileMenuOpen}
-            color="primary"
-          >
-            <Avatar
-              alt={user?.name}
-              className="w-8 h-8"
-              // src="@/assets/icons/default/default-user.png"
-            />
-          </IconButton>
+          <div className="">
+            <IconButton aria-label="alerts">
+              <IconBellBold className="w-7 h-7" />
+            </IconButton>
+
+            <IconButton aria-label="settings">
+              <div className="animate-spin-slow">
+                <IconSettingBold className="w-7 h-7" />
+              </div>
+            </IconButton>
+
+            <IconButton
+              aria-label="account"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="primary"
+            >
+                <div className="rounded-full bg-gradient-to-tr from-pink-500 via-purple-500 to-indigo-500 p-[2px]">
+                    <Avatar
+                      alt={user?.name || "Profile"}
+                      src={userAvatar}
+                      className="w-8 h-8 rounded-full object-cover z-10"
+                    />
+                </div>
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
+
       <Box
         component="nav"
         sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}

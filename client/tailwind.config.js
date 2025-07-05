@@ -153,6 +153,9 @@ module.exports = {
         xl: "1rem",
         "2xl": "1.5rem",
       },
+      animation: {
+        'spin-slow': 'spin 8s linear infinite'
+      }
     },
   },
   plugins: [heroui()],
