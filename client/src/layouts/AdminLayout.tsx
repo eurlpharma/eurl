@@ -19,13 +19,7 @@ import {
   MenuItem,
   useTheme as useMuiTheme,
   useMediaQuery,
-  Collapse,
 } from "@mui/material";
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
 import Notification from "@/components/ui/Notification";
 import {
   IconBoxBold,
@@ -60,15 +54,10 @@ const AdminLayout = () => {
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("md"));
 
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
-  };
-
-  const handleSubmenuToggle = (key: string) => {
-    setOpenSubmenu(openSubmenu === key ? null : key);
   };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -165,20 +154,21 @@ const AdminLayout = () => {
                   ? "bg-girl-secondary/20 text-girl-secondary"
                   : "text-girl-typograph"
               )}
-
-
               onClick={() => isMobile && setMobileOpen(false)}
             >
               <ListItemIcon
-
-               className={clsx(
-                "w-fit min-w-fit",
-                isActive(item.path) ? "text-girl-secondary" : "text-girl-typograph"
-               )}
+                className={clsx(
+                  "w-fit min-w-fit",
+                  isActive(item.path)
+                    ? "text-girl-secondary"
+                    : "text-girl-typograph"
+                )}
               >
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.label} />
+              <ListItemText
+                primary={<span className="font-public-sans">{item.label}</span>}
+              />
             </ListItem>
           </Box>
         ))}
@@ -189,13 +179,13 @@ const AdminLayout = () => {
           component={Link}
           to="/"
           onClick={() => isMobile && setMobileOpen(false)}
-          className="text-girl-secondary"
+          className="text-girl-secondary gap-3"
           sx={{ gap: 0 }}
         >
-          <ListItemIcon className="text-girl-secondary">
-            <IconHomeBold className="w-6 h-6" />
+          <ListItemIcon className="text-girl-secondary min-w-fit w-fit">
+            <IconHomeBold />
           </ListItemIcon>
-          <ListItemText primary={t("admin.backToSite")} />
+          <ListItemText primary={<span className="font-public-sans">{t("admin.backToSite")}</span>} />
         </ListItem>
       </List>
     </Box>
