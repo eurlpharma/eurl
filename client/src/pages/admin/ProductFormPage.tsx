@@ -20,7 +20,7 @@ import FormField from "@/components/form/FormField";
 import RichTextEditor from "@/components/form/RichTextEditor";
 import ImageUpload from "@/components/form/ImageUpload";
 import AIButton from "@/components/buttons/AIButton";
-import { IconAI, IconStarTo, IconTrashBold } from "@/components/Iconify";
+import { IconStarTo, IconTrashBold } from "@/components/Iconify";
 import { GeminiAI } from "@/utils/gemini";
 import { getLocalizedCategoryName } from "@/utils/formatters";
 import FormLayout from "@/components/layout/FormLayout";
@@ -450,7 +450,7 @@ const ProductFormPage = () => {
         elevation={0}
         className="lg:p-4 mb-6 w-full lg:w-[720px] xl:w-[880px] mx-auto font-public-sans"
       >
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="p-4">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="lg:p-4">
           <div className="space-y-6 md:space-y-8 lg:space-y-10">
             {/* Main info */}
             <FormLayout title="Details" subTitle="Name, description, rich...">
