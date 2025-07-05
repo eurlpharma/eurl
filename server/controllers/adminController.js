@@ -52,9 +52,7 @@ const getDashboardStats = asyncHandler(async (req, res) => {
   const recentProducts = await prisma.product.findMany({
     select: {
       id: true,
-      nameAr: true,
-      nameEn: true,
-      nameFr: true,
+      name: true,
       price: true,
       countInStock: true,
       images: true,
@@ -113,17 +111,14 @@ const getDashboardStats = asyncHandler(async (req, res) => {
       user: {
         select: {
           id: true,
-          nameAr: true,
-          nameEn: true,
-          nameFr: true
+          name: true
         }
       },
       orderItems: {
         select: {
-          nameAr: true,
-          nameEn: true,
-          nameFr: true,
+          name: true,
           qty: true,
+          price: true,
           product: {
             select: {
               images: true
