@@ -1,5 +1,14 @@
-import { ReactNode, ReactElement } from 'react';
-import { Controller, Control, FieldValues, Path, FieldError, ControllerRenderProps, ControllerFieldState, UseFormStateReturn } from 'react-hook-form';
+import { ReactNode, ReactElement } from "react";
+import {
+  Controller,
+  Control,
+  FieldValues,
+  Path,
+  FieldError,
+  ControllerRenderProps,
+  ControllerFieldState,
+  UseFormStateReturn,
+} from "react-hook-form";
 import {
   TextField,
   FormControl,
@@ -15,7 +24,8 @@ import {
   FormLabel,
   TextFieldProps,
   SelectProps,
-} from '@mui/material';
+} from "@mui/material";
+import { IOSSwitch } from "../custom/switch";
 
 interface Option {
   value: string | number;
@@ -33,36 +43,52 @@ interface BaseFormFieldProps<T extends FieldValues> {
   className?: string;
 }
 
-interface TextFormFieldProps<T extends FieldValues> extends BaseFormFieldProps<T> {
-  type: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'textarea';
-  textFieldProps?: Omit<TextFieldProps, 'name' | 'type' | 'error' | 'fullWidth' | 'multiline' | 'rows'>;
+interface TextFormFieldProps<T extends FieldValues>
+  extends BaseFormFieldProps<T> {
+  type: "text" | "email" | "password" | "number" | "tel" | "url" | "textarea";
+  textFieldProps?: Omit<
+    TextFieldProps,
+    "name" | "type" | "error" | "fullWidth" | "multiline" | "rows"
+  >;
   rows?: number;
 }
 
-interface SelectFormFieldProps<T extends FieldValues> extends BaseFormFieldProps<T> {
-  type: 'select';
+interface SelectFormFieldProps<T extends FieldValues>
+  extends BaseFormFieldProps<T> {
+  type: "select";
   options: Option[];
-  selectProps?: Omit<SelectProps, 'name' | 'error' | 'fullWidth'>;
+  selectProps?: Omit<SelectProps, "name" | "error" | "fullWidth">;
 }
 
-interface CheckboxFormFieldProps<T extends FieldValues> extends BaseFormFieldProps<T> {
-  type: 'checkbox';
+interface CheckboxFormFieldProps<T extends FieldValues>
+  extends BaseFormFieldProps<T> {
+  type: "checkbox";
 }
 
-interface RadioFormFieldProps<T extends FieldValues> extends BaseFormFieldProps<T> {
-  type: 'radio';
+interface SwitchFormFieldProps<T extends FieldValues>
+  extends BaseFormFieldProps<T> {
+    type: "switch"
+  }
+interface RadioFormFieldProps<T extends FieldValues>
+  extends BaseFormFieldProps<T> {
+  type: "radio";
   options: Option[];
 }
 
-interface CustomFormFieldProps<T extends FieldValues> extends BaseFormFieldProps<T> {
-  type: 'custom';
-  renderInput: (props: { field: any; fieldState: { error: FieldError | undefined } }) => ReactNode;
+interface CustomFormFieldProps<T extends FieldValues>
+  extends BaseFormFieldProps<T> {
+  type: "custom";
+  renderInput: (props: {
+    field: any;
+    fieldState: { error: FieldError | undefined };
+  }) => ReactNode;
 }
 
 type FormFieldProps<T extends FieldValues> =
   | TextFormFieldProps<T>
   | SelectFormFieldProps<T>
   | CheckboxFormFieldProps<T>
+  | SwitchFormFieldProps<T>
   | RadioFormFieldProps<T>
   | CustomFormFieldProps<T>;
 
@@ -82,24 +108,34 @@ const FormField = <T extends FieldValues>(props: FormFieldProps<T>) => {
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState }: {
+      render={({
+        field,
+        fieldState,
+      }: {
         field: ControllerRenderProps<T, Path<T>>;
         fieldState: ControllerFieldState;
         formState: UseFormStateReturn<T>;
       }): ReactElement => {
         const currentError = fieldState.error || error;
-        
+
         // Text fields (including textarea)
-        if (props.type === 'text' || props.type === 'email' || props.type === 'password' ||
-            props.type === 'number' || props.type === 'tel' || props.type === 'url' || props.type === 'textarea') {
+        if (
+          props.type === "text" ||
+          props.type === "email" ||
+          props.type === "password" ||
+          props.type === "number" ||
+          props.type === "tel" ||
+          props.type === "url" ||
+          props.type === "textarea"
+        ) {
           const { type, textFieldProps = {}, rows } = props;
-          const isTextarea = type === 'textarea';
-          
+          const isTextarea = type === "textarea";
+
           return (
             <TextField
               {...field}
               {...textFieldProps}
-              type={isTextarea ? 'text' : type}
+              type={isTextarea ? "text" : type}
               label={label}
               multiline={isTextarea}
               rows={isTextarea ? rows || 4 : undefined}
@@ -108,18 +144,17 @@ const FormField = <T extends FieldValues>(props: FormFieldProps<T>) => {
               required={required}
               fullWidth={fullWidth}
               disabled={disabled}
-              classes={{root: "font-poppins"}}
+              classes={{ root: "font-poppins" }}
               className={`font-josefin ${className}`}
-              value={field.value || ''}
-
+              value={field.value || ""}
             />
           );
         }
-        
+
         // Select field
-        if (props.type === 'select') {
+        if (props.type === "select") {
           const { options, selectProps = {} } = props;
-          
+
           return (
             <FormControl
               error={!!currentError}
@@ -133,7 +168,7 @@ const FormField = <T extends FieldValues>(props: FormFieldProps<T>) => {
                 {...field}
                 {...selectProps}
                 label={label}
-                value={field.value || ''}
+                value={field.value || ""}
               >
                 {options.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -141,13 +176,15 @@ const FormField = <T extends FieldValues>(props: FormFieldProps<T>) => {
                   </MenuItem>
                 ))}
               </Select>
-              {currentError && <FormHelperText>{currentError.message}</FormHelperText>}
+              {currentError && (
+                <FormHelperText>{currentError.message}</FormHelperText>
+              )}
             </FormControl>
           );
         }
-        
+
         // Checkbox field
-        if (props.type === 'checkbox') {
+        if (props.type === "checkbox") {
           return (
             <FormControl
               error={!!currentError}
@@ -158,24 +195,46 @@ const FormField = <T extends FieldValues>(props: FormFieldProps<T>) => {
             >
               <FormGroup>
                 <FormControlLabel
-                  control={
-                    <Checkbox
-                      {...field}
-                      checked={!!field.value}
-                    />
-                  }
-                  label={label || ''}
+                  control={<Checkbox {...field} checked={!!field.value} />}
+                  label={label || ""}
                 />
               </FormGroup>
-              {currentError && <FormHelperText>{currentError.message}</FormHelperText>}
+              {currentError && (
+                <FormHelperText>{currentError.message}</FormHelperText>
+              )}
             </FormControl>
           );
         }
-        
+
+        // Switch Field
+        if (props.type === "switch") {
+          return (
+            <FormControl
+              error={!!currentError}
+              required={required}
+              fullWidth={fullWidth}
+              disabled={disabled}
+              className={className}
+            >
+              <FormGroup>
+                <FormControlLabel
+                  className="flex items-center gap-3"
+                  classes={{label: 'font-public-sans text-sm font-semibold'}}
+                  control={<IOSSwitch {...field} checked={!!field.value} />}
+                  label={label || ""}
+                />
+              </FormGroup>
+              {currentError && (
+                <FormHelperText>{currentError.message}</FormHelperText>
+              )}
+            </FormControl>
+          );
+        }
+
         // Radio field
-        if (props.type === 'radio') {
+        if (props.type === "radio") {
           const { options } = props;
-          
+
           return (
             <FormControl
               error={!!currentError}
@@ -185,10 +244,7 @@ const FormField = <T extends FieldValues>(props: FormFieldProps<T>) => {
               className={className}
             >
               <FormLabel>{label}</FormLabel>
-              <RadioGroup
-                {...field}
-                value={field.value || ''}
-              >
+              <RadioGroup {...field} value={field.value || ""}>
                 {options.map((option) => (
                   <FormControlLabel
                     key={option.value}
@@ -198,17 +254,22 @@ const FormField = <T extends FieldValues>(props: FormFieldProps<T>) => {
                   />
                 ))}
               </RadioGroup>
-              {currentError && <FormHelperText>{currentError.message}</FormHelperText>}
+              {currentError && (
+                <FormHelperText>{currentError.message}</FormHelperText>
+              )}
             </FormControl>
           );
         }
-        
+
         // Custom field
-        if (props.type === 'custom') {
-          const result = props.renderInput({ field, fieldState: { error: currentError } });
+        if (props.type === "custom") {
+          const result = props.renderInput({
+            field,
+            fieldState: { error: currentError },
+          });
           return <>{result}</>;
         }
-        
+
         return <div />; // Default return element
       }}
     />

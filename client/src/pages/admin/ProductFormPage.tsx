@@ -429,7 +429,7 @@ const ProductFormPage = () => {
       <div className="flex items-center justify-between gap-3 px-4 mb-4 w-full lg:w-[720px] xl:w-[880px] mx-auto">
         <Typography
           component="div"
-          className="font-public-sans text-lg md:text-xl lg:text-2xl"
+          className="font-public-sans text-lg md:text-xl"
         >
           {isEditMode ? t("admin.editProduct") : t("admin.createProduct")}
         </Typography>
@@ -442,8 +442,7 @@ const ProductFormPage = () => {
           isLoading={isLoadAIForm === "pending"}
           isDisabled={watch("name").length > 0 ? false : true}
           isIconOnly
-        >
-        </AIButton>
+        ></AIButton>
       </div>
 
       <Paper
@@ -538,7 +537,10 @@ const ProductFormPage = () => {
             </FormLayout>
 
             {/* Properties */}
-            <FormLayout title="Properties" subTitle="Additional functions and attributes...">
+            <FormLayout
+              title="Properties"
+              subTitle="Additional functions and attributes..."
+            >
               <FormField
                 control={form.control}
                 name="brand"
@@ -631,11 +633,12 @@ const ProductFormPage = () => {
             </FormLayout>
 
             <div className="flex items-center justify-between gap-3">
+
               <FormField
                 control={form.control}
                 name="isFeatured"
                 label={t("admin.featured")}
-                type="checkbox"
+                type="switch"
                 error={form.formState.errors.isFeatured}
               />
 
