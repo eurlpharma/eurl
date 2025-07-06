@@ -154,7 +154,6 @@ const DashboardPage = () => {
       <Grid container spacing={2} className="mb-6">
         {statsData.map((stat, index) => {
           const colorClass = bgColors[stat.color] || "bg-gray-400";
-
           return (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Paper className="p-4 h-full shadow-lighter rounded-xl flex items-center justify-between gap-3">
@@ -202,7 +201,7 @@ const DashboardPage = () => {
                   )}
                 </div>
 
-                <BarCharts {...BarChartPaper} colors={["#00BFFF"]} />
+                <BarCharts {...BarChartPaper} colors={[colorClass]} />
               </Paper>
             </Grid>
           );
