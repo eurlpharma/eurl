@@ -35,6 +35,8 @@ import { Order } from "../../types/order";
 import Preloader from "@/components/global/Preloader";
 import AIButton from "@/components/buttons/AIButton";
 import ProductTable from "@/components/tables/ProductTable";
+import BarCharts from "@/components/charts/BarCharts";
+import { BarChartPaper } from "@/components/charts/PaperCharts/BarChartSetting";
 
 declare global {
   interface ImportMeta {
@@ -155,48 +157,52 @@ const DashboardPage = () => {
 
           return (
             <Grid item xs={12} sm={6} md={3} key={index}>
-              <Paper className="p-4 h-full shadow-lighter rounded-xl">
-                <Box className="flex items-center mb-2">
-                  <Box
-                    style={{ backgroundColor: colorClass }}
-                    className={`p-2 rounded-full ${
-                      bgColors[stat.color]
-                    } mr-3 text-girl-white`}
-                  >
-                    {stat.icon}
-                  </Box>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    className="font-public-sans"
-                  >
-                    {stat.title}
-                  </Typography>
-                </Box>
-                <Typography
-                  variant="h4"
-                  component="p"
-                  className="mb-1 font-semibold font-barlow"
-                >
-                  {stat.title === t("admin.totalSales")
-                    ? `${stat.value.toLocaleString()} ${t("ammount.da")}`
-                    : stat.value.toLocaleString()}
-                </Typography>
-                {stat.change !== undefined && (
-                  <Box className="flex items-center">
-                    {stat.change >= 0 ? (
-                      <ArrowUpIcon className="w-4 h-4 text-green-500 mr-1" />
-                    ) : (
-                      <ArrowDownIcon className="w-4 h-4 text-red-500 mr-1" />
-                    )}
-                    <Typography
-                      variant="caption"
-                      color={stat.change >= 0 ? "success" : "error"}
+              <Paper className="p-4 h-full shadow-lighter rounded-xl flex items-center justify-between gap-3">
+                <div>
+                  <Box className="flex items-center mb-2">
+                    <Box
+                      style={{ backgroundColor: colorClass }}
+                      className={`p-2 rounded-full ${
+                        bgColors[stat.color]
+                      } mr-3 text-girl-white`}
                     >
-                      {Math.abs(stat.change)}% {t("admin.vsPreviousPeriod")}
+                      {stat.icon}
+                    </Box>
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      className="font-public-sans"
+                    >
+                      {stat.title}
                     </Typography>
                   </Box>
-                )}
+                  <Typography
+                    variant="h4"
+                    component="p"
+                    className="mb-1 font-semibold font-barlow"
+                  >
+                    {stat.title === t("admin.totalSales")
+                      ? `${stat.value.toLocaleString()} ${t("ammount.da")}`
+                      : stat.value.toLocaleString()}
+                  </Typography>
+                  {stat.change !== undefined && (
+                    <Box className="flex items-center">
+                      {stat.change >= 0 ? (
+                        <ArrowUpIcon className="w-4 h-4 text-green-500 mr-1" />
+                      ) : (
+                        <ArrowDownIcon className="w-4 h-4 text-red-500 mr-1" />
+                      )}
+                      <Typography
+                        variant="caption"
+                        color={stat.change >= 0 ? "success" : "error"}
+                      >
+                        {Math.abs(stat.change)}% {t("admin.vsPreviousPeriod")}
+                      </Typography>
+                    </Box>
+                  )}
+                </div>
+
+                <BarCharts {...BarChartPaper} colors={["#00BFFF"]} />
               </Paper>
             </Grid>
           );

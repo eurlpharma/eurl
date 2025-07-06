@@ -61,24 +61,24 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       },
     },
     typography: {
-      fontFamily: '"Poppins", "Open Sans", "Helvetica", "Arial", sans-serif',
+      fontFamily: '"Poppins", "Public Sans", "Cairo", "Open Sans", "Helvetica", "Arial", sans-serif',
       h1: {
-        fontFamily: '"Poppins", "Open Sans", "Helvetica", "Arial", sans-serif',
+        fontFamily: '"Poppins", "Public Sans", "Cairo", "Open Sans", "Helvetica", "Arial", sans-serif',
       },
       h2: {
-        fontFamily: '"Poppins", "Open Sans", "Helvetica", "Arial", sans-serif',
+        fontFamily: '"Poppins", "Public Sans", "Cairo", "Open Sans", "Helvetica", "Arial", sans-serif',
       },
       h3: {
-        fontFamily: '"Poppins", "Open Sans", "Helvetica", "Arial", sans-serif',
+        fontFamily: '"Poppins", "Public Sans", "Cairo", "Open Sans", "Helvetica", "Arial", sans-serif',
       },
       h4: {
-        fontFamily: '"Poppins", "Open Sans", "Helvetica", "Arial", sans-serif',
+        fontFamily: '"Poppins", "Public Sans", "Cairo", "Open Sans", "Helvetica", "Arial", sans-serif',
       },
       h5: {
-        fontFamily: '"Poppins", "Open Sans", "Helvetica", "Arial", sans-serif',
+        fontFamily: '"Poppins", "Public Sans", "Cairo", "Open Sans", "Helvetica", "Arial", sans-serif',
       },
       h6: {
-        fontFamily: '"Poppins", "Open Sans", "Helvetica", "Arial", sans-serif',
+        fontFamily: '"Poppins", "Public Sans", "Cairo", "Open Sans", "Helvetica", "Arial", sans-serif',
       },
     },
     components: {
@@ -101,6 +101,13 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
           },
         },
       },
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            borderRadius: '20px'
+          }
+        }
+      }
     },
   });
   

@@ -84,9 +84,6 @@ module.exports = {
         tiny: "12px",
       },
 
-      latin: ['Poppins', 'Open Sans', 'sans-serif'],
-      arabic: ['Cairo', 'Tajawal', 'sans-serif'],
-
       fontFamily: {
         sans: ["Roboto", "Cairo", "Tajawal", "sans-serif"],
         heading: ["Poppins", "Cairo", "Tajawal", "sans-serif"],
@@ -142,6 +139,9 @@ module.exports = {
         ],
         "public-sans": ['Public Sans', 'Poppins', 'Cairo', 'Tajawal', 'sans-serif'],
         barlow: ['Barlow', 'Poppins', 'Cairo', 'Tajawal', 'sans-serif'],
+
+        latin: ['Poppins', 'Open Sans', 'sans-serif'],
+        arabic: ['Cairo', 'Tajawal', 'sans-serif'],
       },
       boxShadow: {
         card: "0 2px 10px 0 rgba(0, 0, 0, 0.05)",

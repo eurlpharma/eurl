@@ -14,17 +14,18 @@ import {
   MenuItem,
   SelectChangeEvent,
   useTheme,
-  CircularProgress,
-  Button,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 import ReactApexChart from "react-apexcharts";
+import unDrawError from "../../assets/undraw/charts.svg";
 import {
   getSalesStats,
   getVisitorStats,
   getProductStats,
 } from "@/store/slices/adminSlice";
+import Preloader from "@/components/global/Preloader";
+import AIButton from "@/components/buttons/AIButton";
 
 const AnalyticsPage = () => {
   const { t } = useTranslation();
@@ -64,7 +65,6 @@ const AnalyticsPage = () => {
     productStats.topSellingProducts &&
     Array.isArray(productStats.topSellingProducts) &&
     productStats.topSellingProducts.length > 0;
-
 
   const defaultProductData = [
     { _id: "1", name: "Product 1", sales: 10, revenue: 1000 },
@@ -424,35 +424,30 @@ const AnalyticsPage = () => {
   const isValidStockStatusSeries =
     Array.isArray(stockStatusSeries) &&
     stockStatusSeries.length > 0 &&
-    stockStatusSeries.every(
-      (item) => typeof item === "number" && !isNaN(item)
-    );
+    stockStatusSeries.every((item) => typeof item === "number" && !isNaN(item));
 
   if (loading) {
-    return (
-      <Box className="flex items-center justify-center h-full">
-        <CircularProgress />
-      </Box>
-    );
+    return <Preloader />;
   }
 
   if (error) {
     return (
-      <Box className="flex flex-col items-center justify-center h-full p-6">
-        <Typography variant="h6" color="error" className="mb-4">
+      <Box className="flex flex-col items-center justify-center h-full p-6 space-y-3">
+        <img src={unDrawError} />
+        <Typography className="mb-4 font-paris text-girl-secondary text-2xl font-semibold capitalize">
           {t("common.errorOccurred")}
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
+        <AIButton
+          variant="solid"
+          radius="full"
           onClick={() => {
             dispatch(getSalesStats(period));
             dispatch(getVisitorStats(period));
             dispatch(getProductStats());
           }}
         >
-          {t("common.tryAgain")}
-        </Button>
+          {t("common.refreshPage")}
+        </AIButton>
       </Box>
     );
   }
