@@ -162,6 +162,7 @@ const ProductsPage = () => {
       {/* Tabla de productos */}
       <TableProducts
         page={page}
+        isPagination
         error={error}
         loading={loading}
         products={products}

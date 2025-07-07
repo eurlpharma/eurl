@@ -32,6 +32,7 @@ import AIButton from "../buttons/AIButton";
 import { PlusIcon } from "lucide-react";
 import UIChip from "../design/UIChip";
 import UIProgress from "../design/UIProgress";
+import { calcProgress } from "@/library/Calculation";
 
 interface TableProductsProps extends HTMLAttributes<HTMLElement> {
   page: number;
@@ -43,6 +44,7 @@ interface TableProductsProps extends HTMLAttributes<HTMLElement> {
   totalProducts: number | undefined;
   handleChangeRowsPerPage: (event: ChangeEvent<HTMLInputElement>) => void;
   handleOpenDeleteDialog: (id: string) => void;
+  isPagination?: boolean
 }
 
 const cells = [
@@ -93,6 +95,7 @@ const TableProducts: FC<TableProductsProps> = ({
   handleChangePage,
   handleOpenDeleteDialog,
   handleChangeRowsPerPage,
+  isPagination,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -143,16 +146,11 @@ const TableProducts: FC<TableProductsProps> = ({
     }
   }, [products]);
 
-  const calculateProgress = (current: number, total: number): number => {
-    if (total === 0) return 0;
-    return Math.round((current / total) * 100);
-  };
-
   return (
     <div {...props}>
       <TableContainer
         component={Paper}
-        className="rounded-xl shadow-lighter mx-auto"
+        className="rounded-xl shadow-lighter max-w-fit"
       >
         <SimpleBar style={{ maxHeight: "75vh" }}>
           <Table
@@ -206,7 +204,7 @@ const TableProducts: FC<TableProductsProps> = ({
               ) : (
                 <>
                   {products?.map((product: any) => {
-                    const percent: number = calculateProgress(
+                    const percent: number = calcProgress(
                       product.countInStock,
                       maxQuant
                     );
@@ -264,20 +262,30 @@ const TableProducts: FC<TableProductsProps> = ({
                         <TableCell className="font-barlow lg:text-lg">
                           <Box>
                             <UIProgress
+                              className="max-w-20"
                               variant="soft"
                               progress={percent}
                               color={
-                                percent <= 0 ? "error"
-                                : percent > 0 && percent <= 10 ? "warning"
-                                : percent > 10 && percent <= 40 ? "secondary"
-                                : percent > 40 && percent <= 80 ? "grey"
-                                : percent > 80 ? "primary"
-                                : "info"
+                                percent <= 0
+                                  ? "error"
+                                  : percent > 0 && percent <= 10
+                                  ? "warning"
+                                  : percent > 10 && percent <= 40
+                                  ? "secondary"
+                                  : percent > 40 && percent <= 80
+                                  ? "grey"
+                                  : percent > 80
+                                  ? "primary"
+                                  : "info"
                               }
                             />
-                            <div className="flex items-start gap-1 text-[#637381] text-tiny md:text-sm lg:text-medium whitespace-nowrap">
-                              <span className="font-barlow">{product.countInStock.toString().padStart(2, '0')}</span>
-                              <span className="font-public-sans">in stock</span>
+                            <div className="flex items-start gap-1 text-[#637381] text-tiny md:text-sm whitespace-nowrap">
+                              <span className="font-barlow">
+                                {product.countInStock
+                                  .toString()
+                                  .padStart(2, "0")}
+                              </span>
+                              <span className="font-public-sans">{product.countInStock > 0 ? "in stock" : "out stock"}</span>
                             </div>
                           </Box>
                         </TableCell>
@@ -328,7 +336,7 @@ const TableProducts: FC<TableProductsProps> = ({
           </Table>
         </SimpleBar>
 
-        <TablePagination
+        {isPagination && <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={totalProducts || 0} // Use totalProducts from Redux
@@ -337,7 +345,7 @@ const TableProducts: FC<TableProductsProps> = ({
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           labelRowsPerPage={t("common.rowsPerPage")}
-        />
+        />}
       </TableContainer>
     </div>
   );
