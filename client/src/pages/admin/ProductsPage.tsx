@@ -123,7 +123,7 @@ const ProductsPage = () => {
         <Typography
           variant="h4"
           component="h1"
-          className="font-semibold font-josefin"
+          className="font-semibold font-public-sans text-lg px-1 md:text-xl lg:text-2xl"
         >
           {t("admin.products")}
         </Typography>
@@ -131,11 +131,12 @@ const ProductsPage = () => {
         <AIButton
           onClick={() => navigate("/admin/products/add")}
           variant="solid"
-          radius="full"
+          radius="lg"
           color="primary"
           startContent={<PlusIcon className="w-5 h-5" />}
+          className="font-public-sans text-sm lg:text-medium"
         >
-          {t("admin.addProduct")}
+          {t("admin.NewProduct")}
         </AIButton>
       </Box>
 

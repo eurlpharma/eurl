@@ -440,6 +440,7 @@
     "country": "country"
   },
   "admin": {
+    "NewProduct": "New Product",
     "newPricePlaceholder": "New Price",
     "subDescription": "Sub Description",
     "messages": "Messages",

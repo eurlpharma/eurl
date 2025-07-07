@@ -65,6 +65,7 @@
     "react-toastify": "^11.0.5",
     "react-typed": "^2.0.12",
     "recharts": "^2.7.2",
+    "simplebar-react": "^3.3.2",
     "slate-history": "^0.113.1",
     "slate-react": "^0.117.3",
     "stylis": "^4.3.6",

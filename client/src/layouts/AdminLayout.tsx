@@ -143,7 +143,7 @@ const AdminLayout = () => {
           pharma eurl
         </Typography>
       </Box>
-      <List>
+      <List className="lg:px-3">
         {menuItems.map((item) => (
           <Box key={item.key}>
             <ListItem
@@ -174,12 +174,12 @@ const AdminLayout = () => {
           </Box>
         ))}
       </List>
-      <List>
+      <List className="lg:px-3">
         <ListItem
           component={Link}
           to="/"
           onClick={() => isMobile && setMobileOpen(false)}
-          className="text-girl-secondary gap-3"
+          className="text-girl-secondary gap-3 "
           sx={{ gap: 0 }}
         >
           <ListItemIcon className="text-girl-secondary min-w-fit w-fit">

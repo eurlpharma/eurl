@@ -29,43 +29,42 @@ const cellsTableProducts = [
   {
     key: "productImage",
     label: "productImage",
-    algin: "start",
+    align: "inherit" as const,
   },
 
   {
     key: "productName",
     label: "productName",
-    align: "start",
+    align: "inherit" as const,
   },
 
   {
     key: "category",
     label: "category",
-    align: "start",
+    align: "inherit" as const,
   },
 
   {
     key: "price",
     label: "price",
-    align: "right",
+    align: "right" as const,
   },
 
   {
     key: "stock",
     label: "stock",
-    align: "right",
+    align: "right" as const,
   },
 
   {
     key: "status",
     label: "status",
-    align: "center",
+    align: "center" as const,
   },
 ];
 
 const ProductTable: FC<ProductTableProps> = ({ products, ...props }) => {
-
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div {...props}>
@@ -73,8 +72,16 @@ const ProductTable: FC<ProductTableProps> = ({ products, ...props }) => {
         <CardHeader
           className="font-public-sans"
           title={t("admin.recentProducts")}
+          classes={{
+            title:
+              "font-public-sans text-medium font-semibold lg:text-lg xl:text-xl",
+          }}
           action={
-            <Button component={Link} to="/admin/products" color="primary">
+            <Button
+              component={Link}
+              to="/admin/products"
+              className="font-public-sans text-sm text-girl-secondary capitalize lg:text-medium"
+            >
               {t("common.viewAll")}
             </Button>
           }
@@ -93,9 +100,9 @@ const ProductTable: FC<ProductTableProps> = ({ products, ...props }) => {
               >
                 <TableHead>
                   <TableRow>
-                    {cellsTableProducts.map((cell) => (
-                      <TableCell key={cell.key} align="center">
-                        {t(`admin.${cell.label}`)}
+                    {cellsTableProducts.map(({ key, align, label }) => (
+                      <TableCell key={key} align={align}>
+                        {t(`admin.${label}`)}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -104,7 +111,7 @@ const ProductTable: FC<ProductTableProps> = ({ products, ...props }) => {
                   {products.map((product: ProductData) => (
                     <TableRow
                       key={product.id}
-                      className="hover:bg-girl-secondary/10 transition-background duration-700"
+                      className="hover:bg-[#cdcdcd0d] transition-background duration-700"
                     >
                       <TableCell>
                         <Box className="w-12 h-12 relative">

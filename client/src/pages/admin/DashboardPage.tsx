@@ -20,10 +20,6 @@ import {
   Chip,
 } from "@mui/material";
 import {
-  ShoppingBagIcon,
-  UserGroupIcon,
-  CurrencyDollarIcon,
-  ShoppingCartIcon,
   ArrowUpIcon,
   ArrowDownIcon,
 } from "@heroicons/react/24/outline";
@@ -37,6 +33,7 @@ import AIButton from "@/components/buttons/AIButton";
 import ProductTable from "@/components/tables/ProductTable";
 import BarCharts from "@/components/charts/BarCharts";
 import { BarChartPaper } from "@/components/charts/PaperCharts/BarChartSetting";
+import { IconBoxBold, IconCartBold, IconDollarBold, IconUsersBold } from "@/components/Iconify";
 
 declare global {
   interface ImportMeta {
@@ -88,28 +85,28 @@ const DashboardPage = () => {
       title: t("admin.totalSales"),
       value: stats.totalRevenue || 0,
       change: stats.percentageChange?.sales || 0,
-      icon: <CurrencyDollarIcon className="w-8 h-8" />,
+      icon: <IconDollarBold />,
       color: "primary",
     },
     {
       title: t("admin.totalOrders"),
       value: stats.totalOrders || 0,
       change: stats.percentageChange?.orders || 0,
-      icon: <ShoppingCartIcon className="w-8 h-8" />,
+      icon: <IconCartBold />,
       color: "info",
     },
     {
       title: t("admin.totalProducts"),
       value: stats.totalProducts || 0,
       change: 0,
-      icon: <ShoppingBagIcon className="w-8 h-8" />,
+      icon: <IconBoxBold />,
       color: "success",
     },
     {
       title: t("admin.totalUsers"),
       value: stats.totalUsers || 0,
       change: 0,
-      icon: <UserGroupIcon className="w-8 h-8" />,
+      icon: <IconUsersBold />,
       color: "warning",
     },
   ];
@@ -146,43 +143,41 @@ const DashboardPage = () => {
   }
 
   return (
-    <Box className="py-6 px-1 md:px-2 lg:px-6 font-public-sans">
-      <Typography variant="h3" className="mb-6 font-semibold font-public-sans">
+    <Box className="py-6 px-3 md:px-4 lg:px-6 font-public-sans space-y-3">
+
+      <Typography className="font-semibold font-public-sans text-lg px-1 md:text-xl lg:text-2xl">
         {t("admin.app")}
       </Typography>
 
-      <Grid container spacing={2} className="mb-6">
+      <Grid container spacing={2}>
         {statsData.map((stat, index) => {
           const colorClass = bgColors[stat.color] || "bg-gray-400";
           return (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Paper className="p-4 h-full shadow-lighter rounded-xl flex items-center justify-between gap-3">
                 <div>
-                  <Box className="flex items-center mb-2">
+                  <Box className="flex items-center mb-2 gap-2">
                     <Box
-                      style={{ backgroundColor: colorClass }}
-                      className={`p-2 rounded-full ${
+                      style={{ color: colorClass }}
+                      className={`${
                         bgColors[stat.color]
-                      } mr-3 text-girl-white`}
+                      }  text-girl-white`}
                     >
                       {stat.icon}
                     </Box>
                     <Typography
-                      variant="h6"
-                      component="h3"
-                      className="font-public-sans"
+                      className="font-public-sans lg:font-semibold lg:text-lg"
                     >
                       {stat.title}
                     </Typography>
                   </Box>
                   <Typography
-                    variant="h4"
                     component="p"
-                    className="mb-1 font-semibold font-barlow"
+                    className="mb-1 font-semibold font-barlow text-xl md:text-2xl lg:text-3xl"
                   >
-                    {stat.title === t("admin.totalSales")
+                      {stat.title === t("admin.totalSales")
                       ? `${stat.value.toLocaleString()} ${t("ammount.da")}`
-                      : stat.value.toLocaleString()}
+                      : stat.value.toString().padStart(3, '0')}
                   </Typography>
                   {stat.change !== undefined && (
                     <Box className="flex items-center">
@@ -208,7 +203,7 @@ const DashboardPage = () => {
         })}
       </Grid>
 
-      <Grid container spacing={2} className="mb-6">
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           {/* Recent Products */}
           <ProductTable products={recentProducts ? recentProducts : null} />
