@@ -1509,29 +1509,98 @@ export const IconDollar: FC<IconifyProps> = ({ ...props }) => {
   );
 };
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconCheck: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M17.517 7.957c.3.286.312.76.026 1.06l-6.667 7a.75.75 0 0 1-1.086 0l-3.333-3.5a.75.75 0 1 1 1.086-1.034l2.79 2.93l6.124-6.43a.75.75 0 0 1 1.06-.026"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconCheckCircle: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M15.53 9.47a.75.75 0 0 1 0 1.06l-4 4a.75.75 0 0 1-1.06 0l-2-2a.75.75 0 1 1 1.06-1.06L11 12.94l3.47-3.47a.75.75 0 0 1 1.06 0"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        d="M12 19.25a7.25 7.25 0 1 1 0-14.5a7.25 7.25 0 0 1 0 14.5M3.25 12a8.75 8.75 0 1 0 17.5 0a8.75 8.75 0 0 0-17.5 0"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconTimeBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none">
+        <circle
+          cx={12}
+          cy={12}
+          r={8}
+          fill="currentColor"
+          fillOpacity={0.25}
+        ></circle>
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          d="M12 7v4.75c0 .138.112.25.25.25H15"
+          strokeWidth={1}
+        ></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconTimes: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeWidth={1.2}>
+        <circle
+          cx={12}
+          cy={12}
+          r={8.6}
+          fill="currentColor"
+          fillOpacity={0.25}
+        ></circle>
+        <path
+          strokeLinecap="round"
+          d="M16.5 12h-4.25a.25.25 0 0 1-.25-.25V8.5"
+        ></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
 /* export const MyIcon: FC<IconifyProps> = ({...props}) => {
   return (

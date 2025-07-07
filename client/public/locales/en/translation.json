@@ -203,6 +203,9 @@
     "acceptTerms": "You must accept the terms and conditions"
   },
   "common": {
+    "featured": "Featured",
+    "available": "Available",
+    "EmptyProducts": "Empty Product",
     "refreshPage": "Refresh Page",
     "currency": "Currency",
     "update": "Update",

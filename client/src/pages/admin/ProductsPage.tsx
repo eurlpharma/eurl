@@ -140,22 +140,24 @@ const ProductsPage = () => {
         </AIButton>
       </Box>
 
-      <Box className="mb-4">
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder={t("common.search")}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <MagnifyingGlassIcon className="w-5 h-5 text-gray-500" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Box>
+      {!loading && !error && products && products.length > 0 && (
+        <Box className="mb-4">
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder={t("common.search")}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <MagnifyingGlassIcon className="w-5 h-5 text-gray-500" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
+      )}
 
       {/* Tabla de productos */}
       <TableProducts
