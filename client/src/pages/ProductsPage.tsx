@@ -300,6 +300,8 @@ const ProductsPage = () => {
     });
   }
 
+
+
   return (
     <div className="bg-girl-white">
       {!isMobile && <Breadcrumb pageName="Products" />}

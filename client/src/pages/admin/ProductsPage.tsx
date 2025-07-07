@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
-  Typography,
   Button,
   TextField,
   InputAdornment,
@@ -12,12 +11,10 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import { PlusIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useNotification } from "@/hooks/useNotification";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts, deleteProduct } from "@/store/slices/productSlice";
-import AIButton from "@/components/buttons/AIButton";
 import { AppDispatch } from "@/store";
 import TableProducts from "@/components/tables/TableProducts";
 
@@ -25,7 +22,6 @@ const ProductsPage = () => {
   const { t } = useTranslation();
   const { success } = useNotification();
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -119,27 +115,6 @@ const ProductsPage = () => {
 
   return (
     <Box className="p-4">
-      <Box className="flex justify-between items-center mb-6">
-        <Typography
-          variant="h4"
-          component="h1"
-          className="font-semibold font-public-sans text-lg px-1 md:text-xl lg:text-2xl"
-        >
-          {t("admin.products")}
-        </Typography>
-
-        <AIButton
-          onClick={() => navigate("/admin/products/add")}
-          variant="solid"
-          radius="lg"
-          color="primary"
-          startContent={<PlusIcon className="w-5 h-5" />}
-          className="font-public-sans text-sm lg:text-medium"
-        >
-          {t("admin.NewProduct")}
-        </AIButton>
-      </Box>
-
       {!loading && !error && products && products.length > 0 && (
         <Box className="mb-4">
           <TextField
@@ -164,6 +139,8 @@ const ProductsPage = () => {
         page={page}
         isPagination
         error={error}
+        header="products"
+        isViewAll={"new"}
         loading={loading}
         products={products}
         rowsPerPage={rowsPerPage}

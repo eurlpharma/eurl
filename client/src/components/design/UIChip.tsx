@@ -8,6 +8,10 @@ interface UIChipProps extends HTMLAttributes<HTMLElement> {
   isDisabled?: boolean;
   endContent?: ReactNode;
   startContent?: ReactNode;
+  classNames?: {
+    startContent?: string;
+    endContent?: string;
+  };
   size?: "sm" | "md" | "lg";
   variant?: "filled" | "outlined" | "soft";
   radius?: "sm" | "md" | "lg" | "full" | "none";
@@ -30,9 +34,9 @@ const radiusClasses = {
 };
 
 const sizeClassess = {
-  sm: "24px",
-  md: "32px",
-  lg: "36px",
+  sm: "22px",
+  md: "28px",
+  lg: "34px",
 };
 
 const colorClasses: Record<string, string> = {
@@ -55,6 +59,7 @@ const UIChip: FC<UIChipProps> = ({
   size = "md",
   radius = "lg",
   className,
+  classNames,
   style,
   ...props
 }) => {
@@ -101,9 +106,17 @@ const UIChip: FC<UIChipProps> = ({
       disabled={isDisabled}
       {...props}
     >
-      {startContent && <span className="ps-1">{startContent}</span>}
+      {startContent && (
+        <span className={clsx("ps-1", classNames?.startContent)}>
+          {startContent}
+        </span>
+      )}
       <span className={clsx("px-1")}>{children}</span>
-      {endContent && <span className="pe-1">{endContent}</span>}
+      {endContent && (
+        <span className={clsx("pe-1", classNames?.endContent)}>
+          {endContent}
+        </span>
+      )}
     </ButtonBase>
   );
 };

@@ -19,10 +19,7 @@ import {
   TableRow,
   Chip,
 } from "@mui/material";
-import {
-  ArrowUpIcon,
-  ArrowDownIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowUpIcon, ArrowDownIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 import { Link } from "react-router-dom";
@@ -33,7 +30,13 @@ import AIButton from "@/components/buttons/AIButton";
 import ProductTable from "@/components/tables/ProductTable";
 import BarCharts from "@/components/charts/BarCharts";
 import { BarChartPaper } from "@/components/charts/PaperCharts/BarChartSetting";
-import { IconBoxBold, IconCartBold, IconDollarBold, IconUsersBold } from "@/components/Iconify";
+import {
+  IconBoxBold,
+  IconCartBold,
+  IconDollarBold,
+  IconUsersBold,
+} from "@/components/Iconify";
+import TableProducts from "@/components/tables/TableProducts";
 
 declare global {
   interface ImportMeta {
@@ -144,7 +147,6 @@ const DashboardPage = () => {
 
   return (
     <Box className="py-6 px-3 md:px-4 lg:px-6 font-public-sans space-y-3">
-
       <Typography className="font-semibold font-public-sans text-lg px-1 md:text-xl lg:text-2xl">
         {t("admin.app")}
       </Typography>
@@ -159,15 +161,11 @@ const DashboardPage = () => {
                   <Box className="flex items-center mb-2 gap-2">
                     <Box
                       style={{ color: colorClass }}
-                      className={`${
-                        bgColors[stat.color]
-                      }  text-girl-white`}
+                      className={`${bgColors[stat.color]}  text-girl-white`}
                     >
                       {stat.icon}
                     </Box>
-                    <Typography
-                      className="font-public-sans lg:font-semibold lg:text-lg"
-                    >
+                    <Typography className="font-public-sans lg:font-semibold lg:text-lg">
                       {stat.title}
                     </Typography>
                   </Box>
@@ -175,9 +173,9 @@ const DashboardPage = () => {
                     component="p"
                     className="mb-1 font-semibold font-barlow text-xl md:text-2xl lg:text-3xl"
                   >
-                      {stat.title === t("admin.totalSales")
+                    {stat.title === t("admin.totalSales")
                       ? `${stat.value.toLocaleString()} ${t("ammount.da")}`
-                      : stat.value.toString().padStart(3, '0')}
+                      : stat.value.toString().padStart(3, "0")}
                   </Typography>
                   {stat.change !== undefined && (
                     <Box className="flex items-center">
@@ -206,7 +204,21 @@ const DashboardPage = () => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           {/* Recent Products */}
-          <ProductTable products={recentProducts ? recentProducts : null} />
+          {/* <ProductTable products={recentProducts ? recentProducts : null} /> */}
+
+          <TableProducts
+            page={0}
+            error={null}
+            isViewAll={"all"}
+            loading={loading}
+            totalProducts={0}
+            header="recentProducts"
+            products={recentProducts}
+            handleChangePage={() => null}
+            handleOpenDeleteDialog={() => null}
+            handleChangeRowsPerPage={() => null}
+            
+          />
         </Grid>
       </Grid>
 
