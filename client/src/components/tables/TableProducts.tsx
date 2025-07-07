@@ -150,7 +150,7 @@ const TableProducts: FC<TableProductsProps> = ({
     <div {...props}>
       <TableContainer
         component={Paper}
-        className="rounded-xl shadow-lighter max-w-fit"
+        className="rounded-xl shadow-lighter"
       >
         <SimpleBar style={{ maxHeight: "75vh" }}>
           <Table
