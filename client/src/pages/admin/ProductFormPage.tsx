@@ -120,14 +120,6 @@ const ProductFormPage = () => {
     dispatch(getCategories());
   }, [dispatch]);
 
-  // Debug: Log categories state
-  useEffect(() => {
-    console.log("Categories state:", {
-      categories,
-      categoriesLoading,
-      categoriesError,
-    });
-  }, [categories, categoriesLoading, categoriesError]);
 
   useEffect(() => {
     if (isEditMode && id) {

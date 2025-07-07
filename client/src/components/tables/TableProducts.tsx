@@ -14,18 +14,24 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { ChangeEvent, FC, HTMLAttributes } from "react";
+import { ChangeEvent, FC, HTMLAttributes, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { Link, useNavigate } from "react-router-dom";
-import { IconCheckCircle, IconPenBold, IconTime, IconTrashBold } from "../Iconify";
+import {
+  IconCheckCircle,
+  IconPenBold,
+  IconTime,
+  IconTrashBold,
+} from "../Iconify";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import unDrawEmpty from "../../assets/undraw/empty.svg";
 import unDrawError from "../../assets/undraw/bug_fix.svg";
 import AIButton from "../buttons/AIButton";
 import { PlusIcon } from "lucide-react";
-import UIChip from "../chip/UIChip";
+import UIChip from "../design/UIChip";
+import UIProgress from "../design/UIProgress";
 
 interface TableProductsProps extends HTMLAttributes<HTMLElement> {
   page: number;
@@ -92,6 +98,7 @@ const TableProducts: FC<TableProductsProps> = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const API_URL = `https://pharma-api-e5sd.onrender.com`;
+  const [maxQuant, setMaxQuant] = useState<number>(0);
 
   if (error) {
     return (
@@ -126,6 +133,20 @@ const TableProducts: FC<TableProductsProps> = ({
       </div>
     );
   }
+
+  useEffect(() => {
+    if (products && products.length > 0) {
+      const maxStock = Math.max(
+        ...products.map((product) => product.countInStock)
+      );
+      setMaxQuant(maxStock);
+    }
+  }, [products]);
+
+  const calculateProgress = (current: number, total: number): number => {
+    if (total === 0) return 0;
+    return Math.round((current / total) * 100);
+  };
 
   return (
     <div {...props}>
@@ -184,93 +205,123 @@ const TableProducts: FC<TableProductsProps> = ({
                 ))
               ) : (
                 <>
-                  {products?.map((product: any) => (
-                    <TableRow
-                      key={product.id}
-                      className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
-                    >
-                      <TableCell>
-                        {product.images && product.images.length > 0 ? (
-                          <Box
-                            component="img"
-                            src={
-                              product.images[0].startsWith("http")
-                                ? product.images[0]
-                                : `${API_URL}${product.images[0]}`
-                            }
-                            alt={product.name}
-                            sx={{
-                              width: 50,
-                              height: 50,
-                              objectFit: "cover",
-                              borderRadius: 1,
-                            }}
-                          />
-                        ) : (
-                          <Box
-                            component="img"
-                            src="/placeholder.png"
-                            alt="No image"
-                            sx={{
-                              width: 50,
-                              height: 50,
-                              objectFit: "cover",
-                              borderRadius: 1,
-                            }}
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell className="font-public-sans whitespace-nowrap capitalize">
-                        <div>{product.name}</div>
-                        <div className="text-gray-500">
-                          {product.category
-                            ? getLocalizedCategoryName(
-                                product.category,
-                                i18n.language
-                              )
-                            : "-"}
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-barlow text-lg whitespace-nowrap">
-                        {product.price} {t("ammount.da")}
-                      </TableCell>
-                      <TableCell className="font-barlow text-lg">
-                        {product.countInStock}
-                      </TableCell>
-                      <TableCell className="font-barlow">
-                        <UIChip
-                          variant="soft"
-                          radius="full"
-                          color={product.isFeatured ? "secondary" : "primary"}
-                          size="sm"
-                          startContent={product.isFeatured ? <IconTime /> : <IconCheckCircle /> }
-                        >
-                          {t(
-                            `common.${
-                              product.isFeatured ? "featured" : "available"
-                            }`
+                  {products?.map((product: any) => {
+                    const percent: number = calculateProgress(
+                      product.countInStock,
+                      maxQuant
+                    );
+
+                    return (
+                      <TableRow
+                        key={product.id}
+                        className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
+                      >
+                        <TableCell>
+                          {product.images && product.images.length > 0 ? (
+                            <Box
+                              component="img"
+                              src={
+                                product.images[0].startsWith("http")
+                                  ? product.images[0]
+                                  : `${API_URL}${product.images[0]}`
+                              }
+                              alt={product.name}
+                              sx={{
+                                width: 50,
+                                height: 50,
+                                objectFit: "cover",
+                                borderRadius: 1,
+                              }}
+                            />
+                          ) : (
+                            <Box
+                              component="img"
+                              src="/placeholder.png"
+                              alt="No image"
+                              sx={{
+                                width: 50,
+                                height: 50,
+                                objectFit: "cover",
+                                borderRadius: 1,
+                              }}
+                            />
                           )}
-                        </UIChip>
-                      </TableCell>
-                      <TableCell align="right">
-                        <div className="flex items-center justify-end pe-3">
-                          <IconButton
-                            component={Link}
-                            to={`/admin/products/edit/${product.id}`}
-                            color="primary"
+                        </TableCell>
+                        <TableCell className="font-public-sans whitespace-nowrap capitalize">
+                          <div>{product.name}</div>
+                          <div className="text-gray-500">
+                            {product.category
+                              ? getLocalizedCategoryName(
+                                  product.category,
+                                  i18n.language
+                                )
+                              : "-"}
+                          </div>
+                        </TableCell>
+                        <TableCell className="font-barlow lg:text-lg whitespace-nowrap">
+                          {product.price} {t("ammount.da")}
+                        </TableCell>
+                        <TableCell className="font-barlow lg:text-lg">
+                          <Box>
+                            <UIProgress
+                              variant="soft"
+                              progress={percent}
+                              color={
+                                percent <= 0 ? "error"
+                                : percent > 0 && percent <= 10 ? "warning"
+                                : percent > 10 && percent <= 40 ? "secondary"
+                                : percent > 40 && percent <= 80 ? "grey"
+                                : percent > 80 ? "primary"
+                                : "info"
+                              }
+                            />
+                            <div className="flex items-start gap-1 text-[#637381] text-tiny md:text-sm lg:text-medium whitespace-nowrap">
+                              <span className="font-barlow">{product.countInStock.toString().padStart(3, '2')}</span>
+                              <span className="font-public-sans">in stock</span>
+                            </div>
+                          </Box>
+                        </TableCell>
+                        <TableCell className="font-barlow">
+                          <UIChip
+                            variant="soft"
+                            radius="full"
+                            color={product.isFeatured ? "secondary" : "primary"}
+                            size="sm"
+                            startContent={
+                              product.isFeatured ? (
+                                <IconTime />
+                              ) : (
+                                <IconCheckCircle />
+                              )
+                            }
                           >
-                            <IconPenBold />
-                          </IconButton>
-                          <IconButton
-                            color="error"
-                            onClick={() => handleOpenDeleteDialog(product.id)}
-                          >
-                            <IconTrashBold />
-                          </IconButton>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            {t(
+                              `common.${
+                                product.isFeatured ? "featured" : "available"
+                              }`
+                            )}
+                          </UIChip>
+                        </TableCell>
+                        <TableCell align="right">
+                          <div className="flex items-center justify-end pe-3">
+                            <IconButton
+                              component={Link}
+                              to={`/admin/products/edit/${product.id}`}
+                              color="primary"
+                            >
+                              <IconPenBold />
+                            </IconButton>
+                            <IconButton
+                              color="error"
+                              onClick={() => handleOpenDeleteDialog(product.id)}
+                            >
+                              <IconTrashBold />
+                            </IconButton>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </>
               )}
             </TableBody>
