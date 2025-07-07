@@ -276,7 +276,7 @@ const TableProducts: FC<TableProductsProps> = ({
                               }
                             />
                             <div className="flex items-start gap-1 text-[#637381] text-tiny md:text-sm lg:text-medium whitespace-nowrap">
-                              <span className="font-barlow">{product.countInStock.toString().padStart(3, '2')}</span>
+                              <span className="font-barlow">{product.countInStock.toString().padStart(2, '0')}</span>
                               <span className="font-public-sans">in stock</span>
                             </div>
                           </Box>
