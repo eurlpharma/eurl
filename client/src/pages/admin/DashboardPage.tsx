@@ -27,7 +27,6 @@ import { getDashboardStats } from "@/store/slices/adminSlice";
 import { Order } from "../../types/order";
 import Preloader from "@/components/global/Preloader";
 import AIButton from "@/components/buttons/AIButton";
-import ProductTable from "@/components/tables/ProductTable";
 import BarCharts from "@/components/charts/BarCharts";
 import { BarChartPaper } from "@/components/charts/PaperCharts/BarChartSetting";
 import {
@@ -59,8 +58,9 @@ const DashboardPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { dashboardStats, recentProducts, recentOrders, loading, error } =
-    useSelector((state: RootState) => state.admin);
+  const { dashboardStats, recentOrders, loading, error } = useSelector(
+    (state: RootState) => state.admin
+  );
 
   useEffect(() => {
     dispatch(getDashboardStats());
@@ -204,20 +204,10 @@ const DashboardPage = () => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           {/* Recent Products */}
-          {/* <ProductTable products={recentProducts ? recentProducts : null} /> */}
-
           <TableProducts
-            page={0}
-            error={null}
             isViewAll={"all"}
-            loading={loading}
-            totalProducts={0}
             header="recentProducts"
-            products={recentProducts}
-            handleChangePage={() => null}
-            handleOpenDeleteDialog={() => null}
-            handleChangeRowsPerPage={() => null}
-            
+            isRecent={4}
           />
         </Grid>
       </Grid>

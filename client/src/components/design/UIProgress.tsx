@@ -88,7 +88,7 @@ const UIProgress: FC<UIProgressProps> = ({
       {...props}
     >
       <div
-        className="absolute top-0 left-0 h-full transition-all duration-300"
+        className="absolute top-0 left-0 h-full transition-all duration-700"
         style={{
           width: `${clampedProgress}%`,
           backgroundColor:

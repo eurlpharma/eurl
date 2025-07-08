@@ -2,11 +2,16 @@ import { ProductData } from "@/types/product";
 import { getLocalizedCategoryName } from "@/utils/formatters";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
+  InputAdornment,
   Paper,
   Skeleton,
   Table,
@@ -16,9 +21,10 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
-import { ChangeEvent, FC, HTMLAttributes, useEffect, useState } from "react";
+import { FC, HTMLAttributes, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { Link, useNavigate } from "react-router-dom";
@@ -37,22 +43,21 @@ import { PlusIcon } from "lucide-react";
 import UIChip from "../design/UIChip";
 import UIProgress from "../design/UIProgress";
 import { calcProgress } from "@/library/Calculation";
+import { useNotification } from "@/hooks/useNotification";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/store";
+import { deleteProduct, getProducts } from "@/store/slices/productSlice";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import UIButton from "../design/UIButton";
 
 interface TableProductsProps extends HTMLAttributes<HTMLElement> {
-  page?: number;
-  loading: boolean;
-  rowsPerPage?: number;
-  error: string | null;
-  handleChangePage: (_: unknown, newPage: number) => void;
-  products: ProductData[] | null;
-  totalProducts?: number | undefined;
-  handleChangeRowsPerPage: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleOpenDeleteDialog: (id: string) => void;
   isPagination?: boolean;
   isViewAll?: "new" | "all" | null;
-  header?: string,
-  subHeader?: string,
-  isHeader?: boolean
+  header?: string;
+  subHeader?: string;
+  isHeader?: boolean;
+  isFilter?: boolean;
+  isRecent?: number | null;
 }
 
 const cells = [
@@ -94,27 +99,78 @@ const cells = [
 ];
 
 const TableProducts: FC<TableProductsProps> = ({
-  page = 0,
-  error,
-  loading,
-  products,
-  rowsPerPage = 0,
-  totalProducts,
-  handleChangePage,
-  handleOpenDeleteDialog,
-  handleChangeRowsPerPage,
   isPagination,
   isViewAll,
   header,
   subHeader,
-  isHeader=true,
+  isHeader = true,
+  isFilter,
+  isRecent,
   ...props
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const API_URL = `https://pharma-api-e5sd.onrender.com`;
+  const { success } = useNotification();
+  const dispatch = useDispatch<AppDispatch>();
   const [maxQuant, setMaxQuant] = useState<number>(0);
+  const { products, loading, error, totalProducts } = useSelector(
+    (state: any) => state.products
+  );
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isProductId, setIsProductId] = useState<string | null>(null);
+
+  /* Search Products */
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const result: any = dispatch(
+          getProducts({
+            page: page + 1,
+            keyword: searchTerm,
+            limit: isRecent ? isRecent : rowsPerPage,
+          })
+        );
+        if (getProducts.rejected.match(result)) {
+          throw new Error(result.payload as string);
+        }
+      } catch (error) {
+        return false;
+      }
+    };
+    fetchProducts();
+  }, [dispatch, isRecent, page, rowsPerPage, searchTerm]);
+
+  /* Fetch Products */
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const result: any = dispatch(
+          getProducts({ page: 1, limit: isRecent ? isRecent : 10 })
+        );
+        if (getProducts.rejected.match(result)) {
+          throw new Error(result.payload as string);
+        }
+      } catch (error) {
+        return false;
+      }
+    };
+    fetchProducts();
+  }, [dispatch, isRecent]);
+
+  /* get max stock */
+  useEffect(() => {
+    if (products && products.length > 0) {
+      const maxStock = Math.max(
+        ...products.map((product: ProductData) => product.countInStock)
+      );
+      setMaxQuant(maxStock);
+    }
+  }, [products]);
 
   if (error) {
     return (
@@ -150,53 +206,112 @@ const TableProducts: FC<TableProductsProps> = ({
     );
   }
 
-  useEffect(() => {
-    if (products && products.length > 0) {
-      const maxStock = Math.max(
-        ...products.map((product) => product.countInStock)
-      );
-      setMaxQuant(maxStock);
+  const handleChangePage = (_: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newLimit = parseInt(event.target.value, 10);
+    setRowsPerPage(newLimit);
+    setPage(0);
+  };
+
+  const handleOpenDeleteDialog = (productId: string | undefined) => {
+    if (productId) {
+      setIsProductId(productId);
+      setDeleteDialogOpen(true);
     }
-  }, [products]);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setIsProductId(null);
+  };
+
+  const handleDeleteProduct = async () => {
+    if (isProductId) {
+      try {
+        await dispatch(deleteProduct(isProductId) as any).unwrap();
+        success(t("admin.productDeleted"));
+        dispatch(
+          getProducts({
+            page: page + 1,
+            limit: rowsPerPage,
+            keyword: searchTerm,
+          }) as any
+        );
+      } catch (err) {
+        return;
+      } finally {
+        handleCloseDeleteDialog();
+      }
+    }
+  };
+
+  const limited = isRecent ?? Infinity;
 
   return (
     <div {...props}>
       <Card classes={{ root: "shadow-lighter p-0 rounded-xl" }}>
-        {isHeader && <CardHeader
-          
-          className="font-public-sans"
-          title={header && t(`admin.${header}`)}
-          subheader={subHeader && t(`admin.${subHeader}`)}
-          classes={{
-            title:
-              "font-public-sans text-medium lg:text-lg xl:text-xl",
-              
-          }}
-          action={
-            isViewAll && (
-              <>
-                {
-                  isViewAll==="all" ? (<Button
-                component={Link}
-                to="/admin/products"
-                className="font-public-sans text-sm text-girl-secondary capitalize lg:text-medium"
-              >
-                {t("common.viewAll")}
-              </Button>) : (<Button
-                component={Link}
-                to="add"
-                className="font-public-sans text-sm text-girl-secondary capitalize lg:text-medium"
-              >
-                {t("admin.NewProduct")}
-              </Button>)
-                }
-              </>
-            )
-          }
-        />}
+        {isHeader && (
+          <CardHeader
+            className="font-public-sans"
+            title={header && t(`admin.${header}`)}
+            subheader={subHeader && t(`admin.${subHeader}`)}
+            classes={{
+              title: "font-public-sans text-medium lg:text-lg xl:text-xl",
+            }}
+            action={
+              isViewAll && (
+                <>
+                  {isViewAll === "all" ? (
+                    <UIButton
+                      component={Link}
+                      variant="link"
+                      to="/admin/products"
+                    >
+                      {t("common.viewAll")}
+                    </UIButton>
+                  ) : (
+                    <UIButton
+                      component={Link}
+                      to="add"
+                      variant="link"
+                      color="grey"
+                    >
+                      {t("admin.NewProduct")}
+                    </UIButton>
+                  )}
+                </>
+              )
+            }
+          />
+        )}
+        {isFilter && (
+          <CardContent>
+            <Box className="mb-4">
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder={t("common.search")}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MagnifyingGlassIcon className="w-5 h-5 text-gray-500" />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+          </CardContent>
+        )}
         <CardContent className="p-0">
           <TableContainer component={Paper} className="shadow-none">
-            <SimpleBar style={{ maxHeight: "70vh" }}>
+            <SimpleBar style={{ maxHeight: "66vh" }}>
               <Table
                 sx={{
                   "& .MuiTableCell-root": {
@@ -247,143 +362,145 @@ const TableProducts: FC<TableProductsProps> = ({
                     ))
                   ) : (
                     <>
-                      {products?.map((product: any) => {
-                        const percent: number = calcProgress(
-                          product.countInStock,
-                          maxQuant
-                        );
+                      {products?.map((product: ProductData, index: number) => {
+                        if (index <= limited) {
+                          const percent: number = calcProgress(
+                            product.countInStock,
+                            maxQuant
+                          );
 
-                        return (
-                          <TableRow
-                            key={product.id}
-                            className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
-                          >
-                            <TableCell>
-                              {product.images && product.images.length > 0 ? (
-                                <Box
-                                  component="img"
-                                  src={
-                                    product.images[0].startsWith("http")
-                                      ? product.images[0]
-                                      : `${API_URL}${product.images[0]}`
-                                  }
-                                  alt={product.name}
-                                  sx={{
-                                    width: 50,
-                                    height: 50,
-                                    objectFit: "cover",
-                                    borderRadius: 1,
-                                  }}
-                                />
-                              ) : (
-                                <Box
-                                  component="img"
-                                  src="/placeholder.png"
-                                  alt="No image"
-                                  sx={{
-                                    width: 50,
-                                    height: 50,
-                                    objectFit: "cover",
-                                    borderRadius: 1,
-                                  }}
-                                />
-                              )}
-                            </TableCell>
-                            <TableCell className="font-public-sans whitespace-nowrap capitalize">
-                              <div>{product.name}</div>
-                              <div className="text-gray-500">
-                                {product.category
-                                  ? getLocalizedCategoryName(
-                                      product.category,
-                                      i18n.language
-                                    )
-                                  : "-"}
-                              </div>
-                            </TableCell>
-                            <TableCell className="font-barlow lg:text-lg whitespace-nowrap">
-                              {product.price} {t("ammount.da")}
-                            </TableCell>
-                            <TableCell className="font-barlow lg:text-lg">
-                              <Box>
-                                <UIProgress
-                                  className="max-w-20"
-                                  variant="soft"
-                                  progress={percent}
-                                  color={
-                                    percent <= 0
-                                      ? "error"
-                                      : percent > 0 && percent <= 10
-                                      ? "warning"
-                                      : percent > 10 && percent <= 40
-                                      ? "secondary"
-                                      : percent > 40 && percent <= 80
-                                      ? "grey"
-                                      : percent > 80
-                                      ? "primary"
-                                      : "info"
-                                  }
-                                />
-                                <div className="flex items-start gap-1 text-[#637381] text-tiny md:text-sm whitespace-nowrap">
-                                  <span className="font-barlow">
-                                    {product.countInStock
-                                      .toString()
-                                      .padStart(2, "0")}
-                                  </span>
-                                  <span className="font-public-sans">
-                                    {product.countInStock > 0
-                                      ? "in stock"
-                                      : "out stock"}
-                                  </span>
-                                </div>
-                              </Box>
-                            </TableCell>
-                            <TableCell className="font-barlow">
-                              <UIChip
-                                variant="soft"
-                                radius="full"
-                                classNames={{startContent: 'ps-0'}}
-                                color={
-                                  product.isFeatured ? "secondary" : "primary"
-                                }
-                                size="sm"
-                                startContent={
-                                  product.isFeatured ? (
-                                    <IconTime />
-                                  ) : (
-                                    <IconCheckCircle />
-                                  )
-                                }
-                              >
-                                {t(
-                                  `common.${
-                                    product.isFeatured
-                                      ? "featured"
-                                      : "available"
-                                  }`
+                          return (
+                            <TableRow
+                              key={product.id}
+                              className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
+                            >
+                              <TableCell>
+                                {product.images && product.images.length > 0 ? (
+                                  <Box
+                                    component="img"
+                                    src={
+                                      product.images[0].startsWith("http")
+                                        ? product.images[0]
+                                        : `${API_URL}${product.images[0]}`
+                                    }
+                                    alt={product.name}
+                                    sx={{
+                                      width: 50,
+                                      height: 50,
+                                      objectFit: "cover",
+                                      borderRadius: 1,
+                                    }}
+                                  />
+                                ) : (
+                                  <Box
+                                    component="img"
+                                    src="/placeholder.png"
+                                    alt="No image"
+                                    sx={{
+                                      width: 50,
+                                      height: 50,
+                                      objectFit: "cover",
+                                      borderRadius: 1,
+                                    }}
+                                  />
                                 )}
-                              </UIChip>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center justify-end">
-                                <IconButton
-                                  component={Link}
-                                  to={`/admin/products/edit/${product.id}`}
-                                  color="primary"
-                                >
-                                  <IconPenBold />
-                                </IconButton>
-                                <IconButton
-                                  color="error"
-                                  onClick={() =>
-                                    handleOpenDeleteDialog(product.id)
+                              </TableCell>
+                              <TableCell className="font-public-sans whitespace-nowrap capitalize">
+                                <div>{product.name}</div>
+                                <div className="text-gray-500">
+                                  {product.category
+                                    ? getLocalizedCategoryName(
+                                        product.category,
+                                        i18n.language
+                                      )
+                                    : "-"}
+                                </div>
+                              </TableCell>
+                              <TableCell className="font-barlow lg:text-lg whitespace-nowrap">
+                                {product.price} {t("ammount.da")}
+                              </TableCell>
+                              <TableCell className="font-barlow lg:text-lg">
+                                <Box>
+                                  <UIProgress
+                                    className="max-w-20"
+                                    variant="soft"
+                                    progress={percent}
+                                    color={
+                                      percent <= 0
+                                        ? "error"
+                                        : percent > 0 && percent <= 10
+                                        ? "warning"
+                                        : percent > 10 && percent <= 40
+                                        ? "secondary"
+                                        : percent > 40 && percent <= 80
+                                        ? "grey"
+                                        : percent > 80
+                                        ? "primary"
+                                        : "info"
+                                    }
+                                  />
+                                  <div className="flex items-start gap-1 text-[#637381] text-tiny md:text-sm whitespace-nowrap">
+                                    <span className="font-barlow">
+                                      {product.countInStock
+                                        .toString()
+                                        .padStart(2, "0")}
+                                    </span>
+                                    <span className="font-public-sans">
+                                      {product.countInStock > 0
+                                        ? "in stock"
+                                        : "out stock"}
+                                    </span>
+                                  </div>
+                                </Box>
+                              </TableCell>
+                              <TableCell className="font-barlow">
+                                <UIChip
+                                  variant="soft"
+                                  radius="full"
+                                  classNames={{ startContent: "ps-0" }}
+                                  color={
+                                    product.isFeatured ? "secondary" : "primary"
+                                  }
+                                  size="sm"
+                                  startContent={
+                                    product.isFeatured ? (
+                                      <IconTime />
+                                    ) : (
+                                      <IconCheckCircle />
+                                    )
                                   }
                                 >
-                                  <IconTrashBold />
-                                </IconButton>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        );
+                                  {t(
+                                    `common.${
+                                      product.isFeatured
+                                        ? "featured"
+                                        : "available"
+                                    }`
+                                  )}
+                                </UIChip>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center justify-end">
+                                  <IconButton
+                                    component={Link}
+                                    to={`/admin/products/edit/${product.id}`}
+                                    color="primary"
+                                  >
+                                    <IconPenBold />
+                                  </IconButton>
+                                  <IconButton
+                                    color="error"
+                                    onClick={() =>
+                                      handleOpenDeleteDialog(product.id)
+                                    }
+                                  >
+                                    <IconTrashBold />
+                                  </IconButton>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        }
                       })}
                     </>
                   )}
@@ -406,6 +523,43 @@ const TableProducts: FC<TableProductsProps> = ({
           </TableContainer>
         </CardContent>
       </Card>
+
+      <Dialog
+        className="backdrop-blur-sm bg-white/10 transition-transform-background duration-500"
+        classes={{
+          paper: "shadow-lighter rounded-xl",
+        }}
+        open={deleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        container={document.getElementById("root")}
+      >
+        <DialogTitle className="font-public-sans">
+          {t("admin.deleteProductTitle")}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText className="font-public-sans">
+            {t("admin.deleteProductConfirmation")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <UIButton
+            onClick={handleCloseDeleteDialog}
+            variant="light"
+            color="grey"
+            size="sm"
+          >
+            {t("common.cancel")}
+          </UIButton>
+          <UIButton
+            onClick={handleDeleteProduct}
+            color="error"
+            size="sm"
+            variant="filled"
+          >
+            {t("common.delete")}
+          </UIButton>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
