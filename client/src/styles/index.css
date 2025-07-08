@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Cairo:wght@200..1000&family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Parisienne&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Cairo:wght@200..1000&family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Parisienne&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap");
 @import "@flaticon/flaticon-uicons/css/all/all.css";
 
 @tailwind base;
@@ -233,17 +233,25 @@ main {
 /* Product Card Start */
 .product {
   @apply w-[98%] border border-solid border-transparent rounded-lg
-    transition-all lg:hover:border-girl-secondary overflow-hidden
+    transition-all lg:hover:border-girl-secondary overflow-hidden;
 }
 
 .product .thumbs {
-  @apply relative overflow-hidden rounded-lg h-fit ;
+  @apply relative overflow-hidden rounded-lg h-fit;
 }
 
 .product .thumbs .image {
   /* background: linear-gradient(to bottom, #e0e0e0, #c0c0c0, #a8a8a8); to bottom */
   background: radial-gradient(circle, #ffffff 0%, #cecece 60%, #b2b2b2 100%);
   @apply w-full rounded-lg h-[14rem] py-2.5 lg:h-72 object-contain transition duration-300 ease-in-out;
+}
+
+.bg-product-1 {
+  background: linear-gradient(to bottom, #e0e0e0, #c0c0c0, #a8a8a8);
+}
+
+.bg-product-2 {
+  background: radial-gradient(circle, #ffffff 0%, #cecece 60%, #b2b2b2 100%);
 }
 
 .product .thumbs .over-mode {
@@ -304,64 +312,63 @@ main {
 
 /* Stretch section start */
 .stretch {
-  @apply py-20 bg-girl-primary/5 relative overflow-hidden
+  @apply py-20 bg-girl-primary/5 relative overflow-hidden;
 }
 
 .stretch .back-over {
-  @apply absolute top-0 left-0 w-full h-full object-cover opacity-[0.05]
+  @apply absolute top-0 left-0 w-full h-full object-cover opacity-[0.05];
 }
 
 .stretch .back-over img {
-  @apply w-full h-full object-contain
+  @apply w-full h-full object-contain;
 }
 
 .stretch .content {
-  @apply flex flex-col lg:flex-row gap-10 min-h-[24rem]
+  @apply flex flex-col lg:flex-row gap-10 min-h-[24rem];
 }
 
 .stretch .content .side.left {
-  @apply min-w-[33%] min-h-[24rem] relative
+  @apply min-w-[33%] min-h-[24rem] relative;
 }
 
 .stretch .content .side.left img {
-  @apply absolute w-full h-full object-cover
+  @apply absolute w-full h-full object-cover;
 }
 
 .stretch .content .side.right {
-  @apply w-full h-full relative
+  @apply w-full h-full relative;
 }
 
 .stretch .content .side.right .items {
-  @apply grid grid-cols-2 gap-y-7 lg:gap-y-14
+  @apply grid grid-cols-2 gap-y-7 lg:gap-y-14;
 }
 
 .stretch .content .side.right .items .item {
-  @apply flex items-start gap-2 lg:gap-5 w-full left-0 lg:left-auto
+  @apply flex items-start gap-2 lg:gap-5 w-full left-0 lg:left-auto;
 }
 
 .stretch .content .side.right .items .item .icon img {
-  @apply w-20
+  @apply w-20;
 }
 
 .stretch .content .side.right .items .item .info {
-  @apply space-y-4
+  @apply space-y-4;
 }
 
 .stretch .content .side.right .items .item .info .name {
-  @apply lg:text-xl capitalize transition-colors
+  @apply lg:text-xl capitalize transition-colors;
 }
 
 .stretch .content .side.right .items .item .info .name.active {
-  @apply text-girl-secondary
+  @apply text-girl-secondary;
 }
 
 .stretch .content .side.right .items .item:hover .info .name.active {
-  @apply text-girl-black
+  @apply text-girl-black;
 }
 
-
 .stretch .content .side.right .items .item .info .text {
-  @apply text-sm lg:text-medium font-poppins text-[#848484] w-full
+  @apply text-sm lg:text-medium font-poppins text-[#848484] w-full;
 }
 /* Stretch section end */
 
@@ -491,11 +498,11 @@ main {
 }
 
 .ui-navbar .btm {
-  @apply h-20
+  @apply h-20;
 }
 
 .ui-navbar .btm .content {
-  @apply h-20 justify-between
+  @apply h-20 justify-between;
 }
 /* AppBar End */
 
@@ -534,105 +541,103 @@ main {
 
 /* hacker-fields start */
 .hacker-input .css-w8xu18-MuiInputBase-root-MuiInput-root::after {
-  @apply border-girl-secondary
+  @apply border-girl-secondary;
 }
 
 .hacker-input .css-1kgtf8q-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
-  @apply text-girl-secondary
+  @apply text-girl-secondary;
 }
 
 .hacker-input .css-jid95t-MuiFormLabel-root-MuiInputLabel-root {
-  @apply font-josefin text-lg
+  @apply font-josefin text-lg;
 }
 /* hacker-fields end */
 
 /* about start */
 .about {
-  @apply relative
+  @apply relative;
 }
 
 .about .cover {
-  @apply fixed top-0 left-0 w-screen h-screen object-cover z-0 opacity-10
+  @apply fixed top-0 left-0 w-screen h-screen object-cover z-0 opacity-10;
 }
 
 .about .content {
-  @apply bg-girl-secondary/10 py-20
+  @apply bg-girl-secondary/10 py-20;
 }
 
 .about .content .toolbar {
-  @apply flex flex-col items-center justify-center gap-4
+  @apply flex flex-col items-center justify-center gap-4;
 }
 
 .about .content .toolbar p {
-  @apply text-girl-secondary capitalize
+  @apply text-girl-secondary capitalize;
 }
 
 .about .content .toolbar h2 {
-  @apply capitalize font-josefin text-5xl pb-10
+  @apply capitalize font-josefin text-5xl pb-10;
 }
 
 .about .details {
-  @apply flex flex-col lg:flex-row relative z-20 gap-6 lg:gap-0
+  @apply flex flex-col lg:flex-row relative z-20 gap-6 lg:gap-0;
 }
 
 .about .details .side {
-  @apply relative
+  @apply relative;
 }
 
 .about .details .side.start {
-  @apply w-full bg-girl-white
+  @apply w-full bg-girl-white;
 }
 
 .about .details .side.end {
-  @apply lg:w-3/4
+  @apply lg:w-3/4;
 }
 
 .about .details .side iframe {
-  @apply w-full h-[20rem] md:h-[28rem] lg:h-[42rem] shadow-lg rounded-lg
+  @apply w-full h-[20rem] md:h-[28rem] lg:h-[42rem] shadow-lg rounded-lg;
 }
 
 .about .details .side .social-box {
-  @apply bg-girl-yellow relative lg:absolute z-10 lg:top-1/2 lg:-translate-y-1/2 lg:-left-10 p-3
+  @apply bg-girl-yellow relative lg:absolute z-10 lg:top-1/2 lg:-translate-y-1/2 lg:-left-10 p-3;
 }
 
 .about .details .side .social-box .social {
-  @apply border-dashed border-girl-black/50 border-2 p-6 md:p-10 lg:p-20 space-y-8
+  @apply border-dashed border-girl-black/50 border-2 p-6 md:p-10 lg:p-20 space-y-8;
 }
 
 .about .details .side .social-box h2 {
-  @apply font-josefin text-xl capitalize
+  @apply font-josefin text-xl capitalize;
 }
 
 .about .details .side .social-box .items {
-  @apply space-y-6
+  @apply space-y-6;
 }
 
 .about .details .side .social-box .items .item {
-  @apply flex items-center gap-3
+  @apply flex items-center gap-3;
 }
 
-
 .about .ab-sect {
-  @apply relative py-20
+  @apply relative py-20;
 }
 
 .about .ab-sect .cover-sect {
-  @apply absolute top-0 left-0 w-full h-full object-cover z-10 hidden
+  @apply absolute top-0 left-0 w-full h-full object-cover z-10 hidden;
 }
 
 .about .ab-sect .semi-title {
-  @apply text-girl-secondary
+  @apply text-girl-secondary;
 }
 
 .about .ab-sect .extra-title {
-  @apply text-2xl md:text-4xl lg:text-6xl font-semibold font-josefin
+  @apply text-2xl md:text-4xl lg:text-6xl font-semibold font-josefin;
 }
 
 .about .ab-sect .text {
-  @apply w-full md:max-w-4xl lg:max-w-7xl px-6 md:px-10 lg:px-52 text-center
+  @apply w-full md:max-w-4xl lg:max-w-7xl px-6 md:px-10 lg:px-52 text-center;
 }
 /* about end */
-
 
 /* Custom Inputs */
 .mui-1380n9-MuiInputBase-root-MuiOutlinedInput-root {
@@ -644,14 +649,14 @@ main {
   color: #ed1b6f !important;
 }
 
-.mui-1380n9-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+.mui-1380n9-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
   border-color: #ed1b6f !important;
 }
 
 .MuiFormControl-root {
-  @apply hidden
+  @apply hidden;
 }
-
 
 .simplebar-scrollbar::before {
   background-color: #ed1b6f !important;
@@ -662,7 +667,7 @@ main {
 }
 
 .simplebar-track.simplebar-horizontal {
-  height: 6px !important; 
+  height: 6px !important;
 }
 
 .simplebar-scrollbar {

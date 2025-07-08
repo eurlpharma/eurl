@@ -8,17 +8,11 @@ import {
   Grid,
   Paper,
   Divider,
-  Chip,
-  Stepper,
-  Step,
-  StepLabel,
-  CircularProgress,
   Alert,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   IconButton,
   Menu,
@@ -30,11 +24,9 @@ import {
   Select,
   FormControl,
   InputLabel,
-  Tooltip,
 } from "@mui/material";
 import {
   ArrowLeftIcon,
-  PrinterIcon,
   EllipsisVerticalIcon,
   CheckCircleIcon,
   XCircleIcon,
@@ -53,6 +45,12 @@ import AIButton from "@/components/buttons/AIButton";
 import willayatData from "@/data/willayat.json";
 import i18n from "@/i18n";
 import clsx from "clsx";
+import Preloader from "@/components/global/Preloader";
+import moment from "moment";
+import UIButton from "@/components/design/UIButton";
+import { IconPrintBold } from "@/components/Iconify";
+import { ChevronLeft } from "lucide-react";
+import UIChip from "@/components/design/UIChip";
 
 type Order = OrderBase & { id?: string };
 
@@ -80,7 +78,6 @@ const OrderDetailPage = () => {
       try {
         setLoading(true);
         const data = await getOrderById(id);
-        // تطبيع orderItems ليحتوي كل عنصر على quantity
         const normalizedOrder = {
           ...data,
           orderItems: Array.isArray(data.orderItems)
@@ -154,7 +151,7 @@ const OrderDetailPage = () => {
       case "cancelled":
         return "error";
       default:
-        return "default";
+        return "grey";
     }
   };
 
@@ -176,7 +173,6 @@ const OrderDetailPage = () => {
     }
   };
 
-  // Helper to get wilaya name by id
   const getWilayaNameById = (wilayaId: string) => {
     const wilaya = willayatData.find((w: any) => w.wilaya_id === wilayaId);
     if (!wilaya) return wilayaId;
@@ -184,7 +180,6 @@ const OrderDetailPage = () => {
     return wilaya.name;
   };
 
-  // Helper to get daira name by post code
   const getDairaNameByPostCode = (postCode: string) => {
     const daira = willayatData.find((d: any) => d.post_code === postCode);
     if (!daira) return postCode;
@@ -221,7 +216,7 @@ const OrderDetailPage = () => {
   if (loading) {
     return (
       <Box className="flex justify-center items-center h-64">
-        <CircularProgress />
+        <Preloader />
       </Box>
     );
   }
@@ -248,26 +243,34 @@ const OrderDetailPage = () => {
   const deliveryType = shippingAddress.deliveryType || "office";
 
   return (
-    <Container maxWidth="lg" className="py-8">
+    <Container maxWidth="lg" className="p-4">
       <Box className="flex justify-between items-center mb-6">
-        <Typography variant="h4" component="h1" className="font-josefin">
-          {t("orders.orderDetails")}
-        </Typography>
+        <div className="flex items-start gap-2">
+          <IconButton onClick={handleBack}>
+            <ChevronLeft className="w-5 h-5" />
+          </IconButton>
+          <div>
+            <Typography className="font-public-sans text-tiny text-[#919EAB]">
+              {moment(order.createdAt).format("DD MMM YYYY HH:mm")}
+            </Typography>
+            <Typography className="font-public-sans md:text-lg font-medium">
+              {t("Order")}{" "}
+              <span className="uppercase">
+                #{order.id?.toString().slice(0, 6)}
+              </span>
+            </Typography>
+          </div>
+        </div>
         <Box className="flex gap-2">
-          <AIButton
-            variant="outlined"
-            startContent={<PrinterIcon className="w-5 h-5" />}
+          <UIButton
+            size="sm"
+            variant="soft"
+            startIcon={<IconPrintBold />}
             onClick={handlePrintInvoice}
           >
-            {t("orders.printInvoice")}
-          </AIButton>
-          <AIButton
-            variant="outlined"
-            startContent={<ArrowLeftIcon className="w-5 h-5" />}
-            onClick={handleBack}
-          >
-            {t("orders.backToOrders")}
-          </AIButton>
+            {t("Print")}
+          </UIButton>
+
           <IconButton onClick={handleOpenMenu}>
             <EllipsisVerticalIcon className="w-5 h-5" />
           </IconButton>
@@ -277,41 +280,39 @@ const OrderDetailPage = () => {
       <Grid container spacing={4}>
         {/* Order Summary */}
         <Grid item xs={12} lg={8}>
-          <Paper className="p-6 mb-4">
+          <Paper
+            className="p-6 mb-4"
+            classes={{ root: "shadow-lighter rounded-xl" }}
+          >
             <Box className="flex flex-wrap justify-between items-center mb-4">
               <Box>
-                <Typography variant="h6" className="font-josefin">
-                  {t("orders.orderId")}: #
-                  {order._id && order._id.length >= 8
-                    ? order._id.substring(order._id.length - 8)
-                    : order._id || "-"}
+                <Typography variant="h6" className="font-public-sans">
+                  {t("Details")}
                 </Typography>
-                <Typography variant="body2" className="text-gray-600">
-                  {t("orders.placedOn")}: {formatDate(order.createdAt)}
-                </Typography>
-                <Typography variant="body2" className="text-gray-600">
+                {/* <Typography variant="body2" className="text-gray-600">
                   {t("checkout.deliveryType")}:{" "}
                   {deliveryType === "home"
                     ? t("checkout.deliveryHome")
                     : t("checkout.deliveryOffice")}
-                </Typography>
+                </Typography> */}
               </Box>
 
               <div className="mt-2 sm:mt-0">
-                <Tooltip title="Update Order Status">
-                  <Chip
-                    label={t(`orders.status.${order.status}`)}
-                    color={getStatusColor(order.status)}
-                    onClick={() => {
-                      setNewStatus(order.status);
-                      setStatusDialogOpen(true);
-                    }}
-                  />
-                </Tooltip>
+                <UIChip
+                  radius="lg"
+                  variant="soft"
+                  color={getStatusColor(order.status)}
+                  onClick={() => {
+                    setNewStatus(order.status);
+                    setStatusDialogOpen(true);
+                  }}
+                >
+                  {t(`orders.status.${order.status}`)}
+                </UIChip>
               </div>
             </Box>
 
-            {currentStep !== -1 ? (
+            {/* {currentStep !== -1 ? (
               <div>
                 <Box className="my-6">
                   <Stepper activeStep={currentStep} alternativeLabel>
@@ -338,27 +339,18 @@ const OrderDetailPage = () => {
                 <XCircleIcon className="w-6 h-6 mr-2" />
                 <Typography>{t("orders.cancelled")}</Typography>
               </Box>
-            )}
-
-            <Divider className="my-4" />
+            )} */}
 
             <Box className="mb-6">
-              <Typography variant="h6" className="mb-3">
-                {t("orders.orderItems")}
-              </Typography>
-
               <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>{t("orders.product")}</TableCell>
-                      <TableCell align="right">{t("orders.price")}</TableCell>
-                      <TableCell align="right">
-                        {t("orders.quantity")}
-                      </TableCell>
-                      <TableCell align="right">{t("orders.total")}</TableCell>
-                    </TableRow>
-                  </TableHead>
+                <Table
+                  className="border-separate"
+                  sx={{
+                    "& .MuiTableCell-root": {
+                      borderBottom: "1px dashed #0000001f",
+                    },
+                  }}
+                >
                   <TableBody>
                     {order.orderItems.map((item, idx) => (
                       <TableRow key={item._id || idx}>
@@ -368,17 +360,30 @@ const OrderDetailPage = () => {
                               <img
                                 src={item.image}
                                 alt={item.name}
-                                className="w-10 h-10 object-cover rounded"
+                                className="w-14 h-14 object-cover"
                               />
                             )}
-                            <Typography>{item.name}</Typography>
+                            <Typography className="font-public-sans capitalize">
+                              {item.name}
+                            </Typography>
                           </Box>
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell
+                          align="right"
+                          className="font-barlow font-medium"
+                        >
                           {formatPrice(item.price)}
                         </TableCell>
-                        <TableCell align="right">{item.quantity}</TableCell>
-                        <TableCell align="right">
+                        <TableCell
+                          align="right"
+                          className="font-barlow font-medium"
+                        >
+                          x{item.quantity}
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          className="font-barlow font-semibold"
+                        >
                           {formatPrice(item.price * item.quantity)}
                         </TableCell>
                       </TableRow>
@@ -387,27 +392,18 @@ const OrderDetailPage = () => {
                 </Table>
               </TableContainer>
             </Box>
-          </Paper>
-        </Grid>
 
-        {/* Order Info */}
-        <Grid item xs={12} lg={4}>
-          <Paper className="p-6">
-            <Typography variant="h6" className="mb-4">
-              {t("orders.orderSummary")}
-            </Typography>
-
-            <Box className="space-y-3">
+            <Box className="space-y-5 py-2">
               <Box className="flex justify-between">
-                <Typography variant="body1">{t("orders.subtotal")}</Typography>
-                <Typography variant="body1">
+                <Typography className="font-public-sans text-[#637381] text-sm">{t("orders.subtotal")}</Typography>
+                <Typography className="font-public-sans font-medium">
                   {formatPrice(order.itemsPrice)}
                 </Typography>
               </Box>
 
               <Box className="flex justify-between">
-                <Typography variant="body1">{t("orders.shipping")}</Typography>
-                <Typography variant="body1">
+                <Typography className="font-public-sans text-[#637381] text-sm">{t("orders.shipping")}</Typography>
+                <Typography className="font-public-sans font-medium">
                   {formatPrice(order.shippingPrice)}
                 </Typography>
               </Box>
@@ -417,21 +413,31 @@ const OrderDetailPage = () => {
                   <Typography variant="body1">
                     {t("orders.discount")}
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography className="font-public-sans text-[#637381] text-sm">
                     -{formatPrice(order.discount)}
                   </Typography>
                 </Box>
               )}
 
-              <Divider />
-
               <Box className="flex justify-between font-bold">
-                <Typography variant="body1">{t("orders.total")}</Typography>
-                <Typography variant="body1">
+                <Typography className="font-public-sans text-[#637381] text-sm">{t("orders.total")}</Typography>
+                <Typography className="font-public-sans font-medium">
                   {formatPrice(order.totalPrice)}
                 </Typography>
               </Box>
             </Box>
+          </Paper>
+        </Grid>
+
+        {/* Order Info */}
+        <Grid item xs={12} lg={4}>
+          <Paper
+            className="p-6"
+            classes={{ root: "shadow-lighter rounded-xl" }}
+          >
+            <Typography variant="h6" className="mb-4">
+              {t("orders.orderSummary")}
+            </Typography>
 
             <Divider className="my-4" />
 
@@ -528,15 +534,18 @@ const OrderDetailPage = () => {
                             : [],
                           // إذا أعاد السيرفر status = 'processing' بعد الدفع، احتفظ بالحالة الأصلية
                           status:
-                            updatedOrder.status === 'processing' && originalStatus !== 'processing'
+                            updatedOrder.status === "processing" &&
+                            originalStatus !== "processing"
                               ? originalStatus
                               : updatedOrder.status,
                         };
                         setOrder(normalizedOrder);
                         success(
                           order.isPaid
-                            ? t("orders.markedAsUnpaid") || "تم التراجع عن الدفع"
-                            : t("orders.markedAsPaid") || "تم تعيين الطلب كمدفوع"
+                            ? t("orders.markedAsUnpaid") ||
+                                "تم التراجع عن الدفع"
+                            : t("orders.markedAsPaid") ||
+                                "تم تعيين الطلب كمدفوع"
                         );
                       } catch (err) {
                         showError(

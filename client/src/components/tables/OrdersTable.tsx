@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -41,7 +41,7 @@ import { AppDispatch } from "@/store";
 import AIButton from "@/components/buttons/AIButton";
 import SimpleBar from "simplebar-react";
 import UIChip from "../design/UIChip";
-import { IconEyeBold, IconPrintBold, IconTrashBold } from "../Iconify";
+import { IconPrintBold, IconTrashBold } from "../Iconify";
 import "simplebar-react/dist/simplebar.min.css";
 
 const shortenOrderId = (id: string) => {
@@ -65,8 +65,21 @@ const getStatusColor = (status: OrderStatus) => {
   }
 };
 
+const cells = [
+  { key: "orders.id" },
+  { key: "orders.customerInfo" },
+  { key: "orders.phone" },
+  { key: "orders.orderDate" },
+  { key: "orders.totalAmount" },
+  { key: "orders.paidStatus" },
+  { key: "orders.titleStatus" },
+  { key: "orders.products" },
+  { key: "common.actions" },
+];
+
 const OrdersTable = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate()
   const { success, error: showError } = useNotification();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -340,36 +353,11 @@ const OrdersTable = () => {
           >
             <TableHead>
               <TableRow>
-                <TableCell className="capitalize font-public-sans">
-                  {t("orders.id")}
-                </TableCell>
-                <TableCell className="capitalize font-public-sans">
-                  {t("orders.customerInfo")}
-                </TableCell>
-                <TableCell className="capitalize font-public-sans">
-                  {t("orders.phone")}
-                </TableCell>
-                <TableCell className="capitalize font-public-sans">
-                  {t("orders.orderDate")}
-                </TableCell>
-                <TableCell className="capitalize font-public-sans">
-                  {t("orders.totalAmount")}
-                </TableCell>
-                <TableCell className="capitalize font-public-sans">
-                  {t("orders.paidStatus") || "Paid"}
-                </TableCell>
-                <TableCell className="capitalize font-public-sans">
-                  {t("orders.titleStatus")}
-                </TableCell>
-                <TableCell className="capitalize font-public-sans">
-                  {t("orders.products") || "Products"}
-                </TableCell>
-                <TableCell
-                  className="capitalize font-public-sans"
-                  align="right"
-                >
-                  {t("common.actions")}
-                </TableCell>
+                {cells.map(({ key }) => (
+                  <TableCell key={key} className="capitalize font-public-sans">
+                    {t(key)}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -381,7 +369,7 @@ const OrdersTable = () => {
                   <TableCell className="font-public-sans">
                     {order.id ? (
                       <Link
-                        to={`/admin/orders/${order._id || order.id}`}
+                        to={`/admin/orders/${order._id}`}
                         className="text-primary-600 hover:underline"
                       >
                         #{shortenOrderId(order._id || order.id || "")}
@@ -390,7 +378,7 @@ const OrdersTable = () => {
                       <span>-</span>
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell onClick={() => navigate(`/admin/orders/${order.id}`)}>
                     <Box>
                       <Typography className="whitespace-nowrap font-public-sans">
                         {order.guestInfo?.name ||
@@ -400,7 +388,7 @@ const OrdersTable = () => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>
+                  <TableCell onClick={() => navigate(`/admin/orders/${order.id}`)}>
                     <Typography className="whitespace-nowrap font-barlow">
                       {order.guestInfo?.phone ||
                         (typeof order.user === "object" && order.user?.phone
@@ -504,19 +492,6 @@ const OrdersTable = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-end">
-                      <IconButton
-                        component={order._id || order.id ? Link : "button"}
-                        to={
-                          order._id || order.id
-                            ? `/admin/orders/${order._id || order.id}`
-                            : undefined
-                        }
-                        color="primary"
-                        title={t("common.view")}
-                        disabled={!order._id && !order.id}
-                      >
-                        <IconEyeBold />
-                      </IconButton>
                       <IconButton
                         onClick={() =>
                           handlePrintInvoice(order._id || order.id || "")
