@@ -266,24 +266,22 @@ const TableProducts: FC<TableProductsProps> = ({
             action={
               isViewAll && (
                 <>
-                  {isViewAll === "all" ? (
-                    <UIButton
-                      component={Link}
-                      variant="link"
-                      to="/admin/products"
-                    >
-                      {t("common.viewAll")}
-                    </UIButton>
-                  ) : (
-                    <UIButton
-                      component={Link}
-                      to="add"
-                      variant="link"
-                      color="grey"
-                    >
-                      {t("admin.NewProduct")}
-                    </UIButton>
-                  )}
+                  <UIButton
+                    color="grey"
+                    variant="link"
+                    component={Link}
+                    to={
+                      isViewAll === "all"
+                        ? "/admin/products"
+                        : "/admin/products/add"
+                    }
+                  >
+                    {t(
+                      isViewAll === "all"
+                        ? "common.viewAll"
+                        : "admin.NewProduct"
+                    )}
+                  </UIButton>
                 </>
               )
             }
