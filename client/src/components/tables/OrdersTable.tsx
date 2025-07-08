@@ -39,9 +39,9 @@ import { showNotification } from "@/store/slices/uiSlice";
 import { UpdateOrderStatusData } from "@/types/order";
 import { AppDispatch } from "@/store";
 import AIButton from "@/components/buttons/AIButton";
-import SimpleBar from "simplebar-react";
 import UIChip from "../design/UIChip";
 import { IconPrintBold, IconTrashBold } from "../Iconify";
+import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 
 const shortenOrderId = (id: string) => {

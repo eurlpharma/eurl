@@ -51,6 +51,8 @@ import UIButton from "@/components/design/UIButton";
 import { IconPrintBold } from "@/components/Iconify";
 import { ChevronLeft } from "lucide-react";
 import UIChip from "@/components/design/UIChip";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
 
 type Order = OrderBase & { id?: string };
 
@@ -342,67 +344,73 @@ const OrderDetailPage = () => {
             )} */}
 
             <Box className="mb-6">
-              <TableContainer>
-                <Table
-                  className="border-separate"
-                  sx={{
-                    "& .MuiTableCell-root": {
-                      borderBottom: "1px dashed #0000001f",
-                    },
-                  }}
-                >
-                  <TableBody>
-                    {order.orderItems.map((item, idx) => (
-                      <TableRow key={item._id || idx}>
-                        <TableCell>
-                          <Box className="flex items-center gap-2">
-                            {item.image && (
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="w-14 h-14 object-cover"
-                              />
-                            )}
-                            <Typography className="font-public-sans capitalize">
-                              {item.name}
-                            </Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell
-                          align="right"
-                          className="font-barlow font-medium"
-                        >
-                          {formatPrice(item.price)}
-                        </TableCell>
-                        <TableCell
-                          align="right"
-                          className="font-barlow font-medium"
-                        >
-                          x{item.quantity}
-                        </TableCell>
-                        <TableCell
-                          align="right"
-                          className="font-barlow font-semibold"
-                        >
-                          {formatPrice(item.price * item.quantity)}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <TableContainer style={{ maxHeight: "50vh" }}>
+                <SimpleBar>
+                  <Table
+                    className="border-separate overflow-auto"
+                    sx={{
+                      "& .MuiTableCell-root": {
+                        borderBottom: "1px dashed #0000001f",
+                      },
+                    }}
+                  >
+                    <TableBody>
+                      {order.orderItems.map((item, idx) => (
+                        <TableRow key={item._id || idx}>
+                          <TableCell>
+                            <Box className="flex items-center gap-2">
+                              {item.image && (
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="w-14 h-14 object-cover"
+                                />
+                              )}
+                              <Typography className="font-public-sans capitalize">
+                                {item.name}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            className="font-barlow font-medium whitespace-nowrap min-w-fit px-3"
+                          >
+                            {formatPrice(item.price)}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            className="font-barlow font-medium whitespace-nowrap min-w-fit px-3"
+                          >
+                            x{item.quantity}
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            className="font-barlow font-semibold whitespace-nowrap min-w-fit px-3"
+                          >
+                            {formatPrice(item.price * item.quantity)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </SimpleBar>
               </TableContainer>
             </Box>
 
             <Box className="space-y-5 py-2">
               <Box className="flex justify-between">
-                <Typography className="font-public-sans text-[#637381] text-sm">{t("orders.subtotal")}</Typography>
+                <Typography className="font-public-sans text-[#637381] text-sm">
+                  {t("orders.subtotal")}
+                </Typography>
                 <Typography className="font-public-sans font-medium">
                   {formatPrice(order.itemsPrice)}
                 </Typography>
               </Box>
 
               <Box className="flex justify-between">
-                <Typography className="font-public-sans text-[#637381] text-sm">{t("orders.shipping")}</Typography>
+                <Typography className="font-public-sans text-[#637381] text-sm">
+                  {t("orders.shipping")}
+                </Typography>
                 <Typography className="font-public-sans font-medium">
                   {formatPrice(order.shippingPrice)}
                 </Typography>
@@ -420,7 +428,9 @@ const OrderDetailPage = () => {
               )}
 
               <Box className="flex justify-between font-bold">
-                <Typography className="font-public-sans text-[#637381] text-sm">{t("orders.total")}</Typography>
+                <Typography className="font-public-sans text-[#637381] text-sm">
+                  {t("orders.total")}
+                </Typography>
                 <Typography className="font-public-sans font-medium">
                   {formatPrice(order.totalPrice)}
                 </Typography>
