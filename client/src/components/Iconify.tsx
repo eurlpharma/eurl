@@ -1602,29 +1602,121 @@ export const IconTimes: FC<IconifyProps> = ({ ...props }) => {
   );
 };
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconPrintBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M17.121 2.879C16.242 2 14.828 2 12 2s-4.243 0-5.122.879c-.492.492-.708 1.153-.804 2.136C6.634 5 7.252 5 7.93 5h8.142c.677 0 1.295 0 1.854.015c-.095-.983-.312-1.644-.804-2.136M18 15.5c0 2.828 0 4.743-.879 5.621C16.243 22 14.828 22 12 22s-4.243 0-5.121-.879C6 20.243 6 18.328 6 15.5z"
+      ></path>
+      <path
+        fill="currentColor"
+        d="M16 6H8c-2.828 0-4.243 0-5.121.879C2 7.757 2 9.172 2 12s0 4.243.879 5.121c.494.495 1.158.711 2.149.806C5 17.204 5 16.352 5 15.5a.5.5 0 0 1 0-1h14a.5.5 0 0 1 0 1c0 .852 0 1.704-.028 2.427c.99-.095 1.655-.311 2.15-.806C22 16.243 22 14.828 22 12s0-4.243-.879-5.121C20.243 6 18.828 6 16 6"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        d="M9 10.75a.75.75 0 0 0 0-1.5H6a.75.75 0 0 0 0 1.5zm9-.75a1 1 0 1 1-2 0a1 1 0 0 1 2 0"
+      ></path>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconPrint: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none">
+        <path
+          stroke="currentColor"
+          strokeWidth={1.5}
+          d="M6 17.983c-1.553-.047-2.48-.22-3.121-.862C2 16.243 2 14.828 2 12s0-4.243.879-5.121C3.757 6 5.172 6 8 6h8c2.828 0 4.243 0 5.121.879C22 7.757 22 9.172 22 12s0 4.243-.879 5.121c-.641.642-1.567.815-3.121.862"
+        ></path>
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth={1.5}
+          d="M9 10H6"
+          opacity={0.5}
+        ></path>
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth={1.5}
+          d="M19 15H5m13 0v1c0 2.828 0 4.243-.879 5.121C16.243 22 14.828 22 12 22s-4.243 0-5.121-.879C6 20.243 6 18.828 6 16v-1"
+        ></path>
+        <path
+          stroke="currentColor"
+          strokeWidth={1.5}
+          d="M17.983 6c-.047-1.553-.22-2.48-.862-3.121C16.243 2 14.828 2 12 2s-4.243 0-5.121.879C6.237 3.52 6.064 4.447 6.017 6"
+          opacity={0.5}
+        ></path>
+        <circle
+          cx={17}
+          cy={10}
+          r={1}
+          fill="currentColor"
+          opacity={0.5}
+        ></circle>
+      </g>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconEye: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <path
+          d="M3.275 15.296C2.425 14.192 2 13.639 2 12c0-1.64.425-2.191 1.275-3.296C4.972 6.5 7.818 4 12 4s7.028 2.5 8.725 4.704C21.575 9.81 22 10.361 22 12c0 1.64-.425 2.191-1.275 3.296C19.028 17.5 16.182 20 12 20s-7.028-2.5-8.725-4.704Z"
+          opacity={0.5}
+        ></path>
+        <path d="M15 12a3 3 0 1 1-6 0a3 3 0 0 1 6 0Z"></path>
+      </g>
+    </svg>
   );
-}; */
+};
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
+export const IconEyeBold: FC<IconifyProps> = ({ ...props }) => {
   return (
-
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M2 12c0 1.64.425 2.191 1.275 3.296C4.972 17.5 7.818 20 12 20s7.028-2.5 8.725-4.704C21.575 14.192 22 13.639 22 12c0-1.64-.425-2.191-1.275-3.296C19.028 6.5 16.182 4 12 4S4.972 6.5 3.275 8.704C2.425 9.81 2 10.361 2 12"
+        opacity={0.5}
+      ></path>
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M8.25 12a3.75 3.75 0 1 1 7.5 0a3.75 3.75 0 0 1-7.5 0m1.5 0a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0"
+        clipRule="evenodd"
+      ></path>
+    </svg>
   );
-}; */
+};
 
 /* export const MyIcon: FC<IconifyProps> = ({...props}) => {
   return (

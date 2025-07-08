@@ -4,7 +4,6 @@ import TableProducts from "@/components/tables/TableProducts";
 const ProductsPage = () => {
   return (
     <Box className="p-4 h-[calc(100vh-14rem)]">
-      {/* Tabla de productos */}
       <TableProducts
         isFilter
         isPagination

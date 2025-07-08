@@ -443,6 +443,7 @@
     "country": "country"
   },
   "admin": {
+    "contactSettings": "Contact Settings",
     "NewProduct": "New Product",
     "newPricePlaceholder": "New Price",
     "subDescription": "Sub Description",

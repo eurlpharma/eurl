@@ -9,8 +9,9 @@ interface UIChipProps extends HTMLAttributes<HTMLElement> {
   endContent?: ReactNode;
   startContent?: ReactNode;
   classNames?: {
-    startContent?: string;
     endContent?: string;
+    startContent?: string;
+    centerContent?: string;
   };
   size?: "sm" | "md" | "lg";
   variant?: "filled" | "outlined" | "soft";
@@ -93,11 +94,11 @@ const UIChip: FC<UIChipProps> = ({
   return (
     <ButtonBase
       className={clsx(
-        "flex items-center select-none",
+        className,
+        "flex items-center select-none px-1",
         "py-1 text-[13px] font-public-sans",
         radiusClasses[radius],
-        isDisabled && "opacity-50",
-        className
+        isDisabled && "opacity-50"
       )}
       style={{
         ...getStyles(),
@@ -107,15 +108,11 @@ const UIChip: FC<UIChipProps> = ({
       {...props}
     >
       {startContent && (
-        <span className={clsx("ps-1", classNames?.startContent)}>
-          {startContent}
-        </span>
+        <span className={classNames?.startContent}>{startContent}</span>
       )}
-      <span className={clsx("px-1")}>{children}</span>
+      <span className={classNames?.centerContent}>{children}</span>
       {endContent && (
-        <span className={clsx("pe-1", classNames?.endContent)}>
-          {endContent}
-        </span>
+        <span className={classNames?.endContent}>{endContent}</span>
       )}
     </ButtonBase>
   );

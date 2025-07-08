@@ -31,7 +31,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   IconCheckCircle,
   IconPenBold,
-  IconTime,
+  IconTimeBold,
   IconTrashBold,
 } from "../Iconify";
 import SimpleBar from "simplebar-react";
@@ -455,14 +455,14 @@ const TableProducts: FC<TableProductsProps> = ({
                                 <UIChip
                                   variant="soft"
                                   radius="full"
-                                  classNames={{ startContent: "ps-0" }}
+                                  className="ps-0"
                                   color={
                                     product.isFeatured ? "secondary" : "primary"
                                   }
                                   size="sm"
                                   startContent={
                                     product.isFeatured ? (
-                                      <IconTime />
+                                      <IconTimeBold />
                                     ) : (
                                       <IconCheckCircle />
                                     )

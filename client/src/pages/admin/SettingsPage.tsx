@@ -138,10 +138,10 @@ const SettingsPage = () => {
       >
         <form onSubmit={handleSubmit}>
           <div className="space-y-4 md:space-y-6 lg:space-y-8">
-            {/* General Settings info */}
+            {/* General info, Name, Description, Logo */}
             <FormLayout
               title={t("admin.generalSettings")}
-              subTitle="Name, description, rich..."
+              subTitle="Name, description, Logo"
             >
               <TextField
                 fullWidth
@@ -159,6 +159,31 @@ const SettingsPage = () => {
                 multiline
                 rows={2}
               />
+              <Box display="flex" alignItems="center" gap={2}>
+                {formData.siteLogo && (
+                  <img
+                    src={formData.siteLogo}
+                    alt="Site Logo"
+                    style={{ maxHeight: 60, borderRadius: 8 }}
+                  />
+                )}
+                <Button variant="outlined" component="label">
+                  {t("admin.siteLogo") || "Site Logo"}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={handleLogoChange}
+                  />
+                </Button>
+              </Box>
+            </FormLayout>
+
+            {/* Contact info */}
+            <FormLayout
+              title={t("admin.contactSettings")}
+              subTitle="Email, Phone, Address..."
+            >
               <TextField
                 fullWidth
                 label={t("admin.contactEmail")}
@@ -189,32 +214,14 @@ const SettingsPage = () => {
                 name="googleMapUrl"
                 value={formData.googleMapUrl}
                 onChange={handleChange}
-                placeholder="https://www.google.com/maps/embed?..."
+                placeholder="https://google.com/maps/embed?..."
               />
-              <Box display="flex" alignItems="center" gap={2}>
-                {formData.siteLogo && (
-                  <img
-                    src={formData.siteLogo}
-                    alt="Site Logo"
-                    style={{ maxHeight: 60, borderRadius: 8 }}
-                  />
-                )}
-                <Button variant="outlined" component="label">
-                  {t("admin.siteLogo") || "Site Logo"}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={handleLogoChange}
-                  />
-                </Button>
-              </Box>
             </FormLayout>
 
             {/* Social Media */}
             <FormLayout
               title={t("admin.socialMedia")}
-              subTitle="Additional functions and attributes..."
+              subTitle="Facebook, Twitter, Insta..."
             >
               <TextField
                 fullWidth
@@ -242,7 +249,7 @@ const SettingsPage = () => {
             {/* Policies */}
             <FormLayout
               title={t("admin.policies")}
-              subTitle="Price related inputs"
+              subTitle="Shipping, Return, Privacy..."
             >
               <TextField
                 fullWidth
@@ -285,7 +292,7 @@ const SettingsPage = () => {
             {/* More Settings */}
             <FormLayout
               title={t("admin.storeSettings")}
-              subTitle="Price related inputs"
+              subTitle="Currency, Tax, ammount..."
             >
               <FormControlLabel
                 control={
