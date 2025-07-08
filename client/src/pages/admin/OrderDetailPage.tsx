@@ -157,7 +157,7 @@ const OrderDetailPage = () => {
     }
   };
 
-  const getCurrentStep = (status?: string) => {
+  /* const getCurrentStep = (status?: string) => {
     if (!status) return 0;
     switch (status.toLowerCase()) {
       case "pending":
@@ -173,7 +173,7 @@ const OrderDetailPage = () => {
       default:
         return 0;
     }
-  };
+  }; */
 
   const getWilayaNameById = (wilayaId: string) => {
     const wilaya = willayatData.find((w: any) => w.wilaya_id === wilayaId);
@@ -240,9 +240,9 @@ const OrderDetailPage = () => {
     );
   }
 
-  const currentStep = getCurrentStep(order.status);
-  const shippingAddress = order.shippingAddress || {};
-  const deliveryType = shippingAddress.deliveryType || "office";
+  // const currentStep = getCurrentStep(order.status);
+  // const shippingAddress = order.shippingAddress || {};
+  // const deliveryType = shippingAddress.deliveryType || "office";
 
   return (
     <Container maxWidth="lg" className="p-4">
