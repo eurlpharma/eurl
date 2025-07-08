@@ -120,7 +120,6 @@ const ProductFormPage = () => {
     dispatch(getCategories());
   }, [dispatch]);
 
-
   useEffect(() => {
     if (isEditMode && id) {
       dispatch(getProductDetails(id));
@@ -625,7 +624,6 @@ const ProductFormPage = () => {
             </FormLayout>
 
             <div className="flex items-center justify-between gap-3">
-
               <FormField
                 control={form.control}
                 name="isFeatured"

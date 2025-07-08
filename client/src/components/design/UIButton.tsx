@@ -1,8 +1,8 @@
-import { ButtonBase } from "@mui/material";
+import { ButtonBase, ButtonBaseProps } from "@mui/material";
 import clsx from "clsx";
-import { FC, HTMLAttributes, ReactNode, ElementType } from "react";
+import { FC, ReactNode, ElementType } from "react";
 
-interface UIButtonProps extends HTMLAttributes<HTMLElement> {
+interface UIButtonProps extends ButtonBaseProps {
   children: ReactNode;
   radius?: "sm" | "md" | "lg" | "full" | "none";
   size?: "sm" | "md" | "lg";
@@ -77,7 +77,7 @@ const UIButton: FC<UIButtonProps> = ({
   radius = "md",
   size = "md",
   variant = "filled",
-  color = "info",
+  color = "grey",
   className,
   isDisabled,
   isLoading,
