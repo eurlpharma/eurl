@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import avatarPerson from "../../assets/avatars/avatar-girl.png";
 import {
   Box,
   Typography,
@@ -24,6 +25,7 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Avatar,
 } from "@mui/material";
 import {
   ArrowLeftIcon,
@@ -49,7 +51,7 @@ import Preloader from "@/components/global/Preloader";
 import moment from "moment";
 import UIButton from "@/components/design/UIButton";
 import { IconPrintBold } from "@/components/Iconify";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, PlusIcon } from "lucide-react";
 import UIChip from "@/components/design/UIChip";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
@@ -397,45 +399,47 @@ const OrderDetailPage = () => {
               </TableContainer>
             </Box>
 
-            <Box className="space-y-5 py-2">
-              <Box className="flex justify-between">
-                <Typography className="font-public-sans text-[#637381] text-sm">
-                  {t("orders.subtotal")}
-                </Typography>
-                <Typography className="font-public-sans font-medium">
-                  {formatPrice(order.itemsPrice)}
-                </Typography>
-              </Box>
-
-              <Box className="flex justify-between">
-                <Typography className="font-public-sans text-[#637381] text-sm">
-                  {t("orders.shipping")}
-                </Typography>
-                <Typography className="font-public-sans font-medium">
-                  {formatPrice(order.shippingPrice)}
-                </Typography>
-              </Box>
-
-              {order.discount > 0 && (
-                <Box className="flex justify-between text-green-600">
-                  <Typography variant="body1">
-                    {t("orders.discount")}
-                  </Typography>
+            <div className="flex w-full justify-end">
+              <Box className="space-y-5 w-[70%] md:w-[60%] lg:w-[50%] py-2 self-end">
+                <Box className="flex justify-between">
                   <Typography className="font-public-sans text-[#637381] text-sm">
-                    -{formatPrice(order.discount)}
+                    {t("orders.subtotal")}
+                  </Typography>
+                  <Typography className="font-public-sans font-medium">
+                    {formatPrice(order.itemsPrice)}
                   </Typography>
                 </Box>
-              )}
 
-              <Box className="flex justify-between font-bold">
-                <Typography className="font-public-sans text-[#637381] text-sm">
-                  {t("orders.total")}
-                </Typography>
-                <Typography className="font-public-sans font-medium">
-                  {formatPrice(order.totalPrice)}
-                </Typography>
+                <Box className="flex justify-between">
+                  <Typography className="font-public-sans text-[#637381] text-sm">
+                    {t("orders.shipping")}
+                  </Typography>
+                  <Typography className="font-public-sans font-medium">
+                    {formatPrice(order.shippingPrice)}
+                  </Typography>
+                </Box>
+
+                {order.discount > 0 && (
+                  <Box className="flex justify-between text-green-600">
+                    <Typography variant="body1">
+                      {t("orders.discount")}
+                    </Typography>
+                    <Typography className="font-public-sans text-[#637381] text-sm">
+                      -{formatPrice(order.discount)}
+                    </Typography>
+                  </Box>
+                )}
+
+                <Box className="flex justify-between font-bold">
+                  <Typography className="font-public-sans text-[#637381] text-sm">
+                    {t("orders.total")}
+                  </Typography>
+                  <Typography className="font-public-sans font-medium">
+                    {formatPrice(order.totalPrice)}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
+            </div>
           </Paper>
         </Grid>
 
@@ -445,49 +449,102 @@ const OrderDetailPage = () => {
             className="p-6"
             classes={{ root: "shadow-lighter rounded-xl" }}
           >
-            <Typography variant="h6" className="mb-4">
-              {t("orders.orderSummary")}
-            </Typography>
-
-            <Divider className="my-4" />
-
             <Box>
-              <Typography variant="subtitle2" className="font-medium">
+              <Typography className="font-medium font-public-sans text-lg lg:text-xl">
                 {t("orders.customerInfo")}
               </Typography>
-              <Box className="mt-2 space-y-1">
-                <Typography variant="body2">
-                  {t("orders.name")}:{" "}
-                  {order.guestInfo?.name ||
-                    (isUserData(order.user) ? order.user.name : "-")}
-                </Typography>
-                <Typography variant="body2">
-                  {t("orders.phone")}:{" "}
-                  {order.guestInfo?.phone ||
-                    (isUserData(order.user) ? order.user.phone : "-")}
-                </Typography>
+              <Box className="mt-6 space-y-1">
+                <div className="flex items-start gap-3">
+                  <Avatar src={avatarPerson} />
+                  <div className="info space-y-3">
+                    <div className="space-y-1">
+                      <Typography variant="body2" className="font-medium">
+                        {order.guestInfo?.name ||
+                          (isUserData(order.user) ? order.user.name : "-")}
+                      </Typography>
+                      <Typography variant="body2" className="text-[#637381]">
+                        {order.guestInfo?.phone ||
+                          (isUserData(order.user) ? order.user.phone : "-")}
+                      </Typography>
+
+                      <Typography variant="body2">
+                        {t("IP address")}:{" "}
+                        <span className="text-[#637381]">192.168.1.5</span>
+                      </Typography>
+                    </div>
+
+                    <UIButton
+                      startIcon={<PlusIcon />}
+                      color="error"
+                      size="sm"
+                      variant="link"
+                    >
+                      Add to blacklist
+                    </UIButton>
+                  </div>
+                </div>
+              </Box>
+            </Box>
+
+            <Divider />
+
+            <Box>
+              <Typography className="font-medium font-public-sans text-lg lg:text-xl">
+                {t("Delivery")}
+              </Typography>
+              <Box className="mt-6 space-y-1">
+                <div className="space-y-2 font-public-sans">
+                  <div className="flex items-center">
+                    <div className="w-[40%] text-[#637381] text-sm capitalize">
+                      Ship By
+                    </div>
+                    <div className="capitalize text-sm">Yalidine</div>
+                  </div>
+
+                  <div className="flex items-center">
+                    <div className="w-[40%] text-[#637381] text-sm capitalize">
+                      Speedy
+                    </div>
+                    <div className="capitalize text-sm">standard</div>
+                  </div>
+
+                  <div className="flex items-center">
+                    <div className="w-[40%] text-[#637381] text-sm capitalize">
+                      Tracking NO
+                    </div>
+                    <div className="capitalize text-sm underline">
+                      SPX037739199373
+                    </div>
+                  </div>
+                </div>
               </Box>
             </Box>
 
             <Divider className="my-4" />
 
-            <Box>
-              <Typography variant="subtitle2" className="font-medium">
-                {t("orders.shippingAddress")}
+            <Box className="space-y-4">
+              <Typography className="font-medium font-public-sans text-lg lg:text-xl">
+                {t("Shipping")}
               </Typography>
-              <Box className="mt-2 space-y-1">
-                <Typography variant="body2">
-                  {order.shippingAddress.country}
-                </Typography>
+              <Box className="mt-2 space-y-2">
+                <div className="flex items-center gap-3">
+                  <div className="capitalize w-[30%] text-sm text-[#637381]">country</div>
+                  <div className="text-sm line-clamp-1">{order.shippingAddress.country}</div>
+                </div>
 
-                <Typography variant="body2">
-                  {getWilayaNameById(order.shippingAddress.city)},{" "}
-                  {order.shippingAddress.dairaName ||
-                    getDairaNameByPostCode(order.shippingAddress.postalCode)}
-                </Typography>
-                <Typography variant="body2">
-                  {order.shippingAddress.address}
-                </Typography>
+                <div className="flex items-center gap-3">
+                  <div className="capitalize w-[30%] text-sm text-[#637381]">city</div>
+                  <div className="text-sm line-clamp-1">
+                    {getWilayaNameById(order.shippingAddress.city)},{" "}
+                    {order.shippingAddress.dairaName ||
+                      getDairaNameByPostCode(order.shippingAddress.postalCode)}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="capitalize w-[30%] text-sm text-[#637381]">address</div>
+                  <div className="text-sm line-clamp-1">{order.shippingAddress.address}</div>
+                </div>
               </Box>
             </Box>
 
