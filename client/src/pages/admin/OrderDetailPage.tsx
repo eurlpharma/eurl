@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import avatarPerson from "../../assets/avatars/avatar-girl.png";
+import unDrawError from "../../assets/undraw/bug_fix.svg";
+import unDrawEmpty from "../../assets/undraw/empty.svg";
 import {
   Box,
   Typography,
@@ -9,7 +11,6 @@ import {
   Grid,
   Paper,
   Divider,
-  Alert,
   Table,
   TableBody,
   TableCell,
@@ -67,7 +68,7 @@ const OrderDetailPage = () => {
   const navigate = useNavigate();
   const { success, error: showError } = useNotification();
 
-  const [order, setOrder] = useState<Order | null>(null);
+  const [order, setOrder] = useState<Order>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
@@ -190,53 +191,52 @@ const OrderDetailPage = () => {
     return daira.name;
   };
 
-  if (
-    !order ||
-    !order.orderItems ||
-    !Array.isArray(order.orderItems) ||
-    order.orderItems.length === 0 ||
-    !order.shippingAddress ||
-    !order.status ||
-    (!order.guestInfo && !order.user)
-  ) {
+  if (loading || !order) {
+    return <Preloader />;
+  }
+
+  if (error) {
     return (
-      <Container maxWidth="lg" className="py-8">
-        <Alert severity="error" className="mb-4">
-          {t("orders.incompleteOrderData") ||
-            "بيانات الطلب غير مكتملة أو الطلب قديم ولا يحتوي على جميع الحقول المطلوبة."}
-        </Alert>
-        <AIButton
-          variant="solid"
-          startContent={<ArrowLeftIcon className="w-5 h-5" />}
+      <Container
+        maxWidth="lg"
+        className="py-8 flex flex-col items-center justify-center gap-4"
+      >
+        <img src={unDrawError} className="lg:w-[50%]" />
+
+        <div className="font-paris text-2xl text-girl-secondary font-semibold">
+          {error || t("orders.notFound")}
+        </div>
+        <UIButton
+          variant="soft"
+          radius="full"
+          startIcon={<ArrowLeftIcon className="w-5 h-5" />}
           onClick={handleBack}
         >
           {t("orders.backToOrders")}
-        </AIButton>
+        </UIButton>
       </Container>
     );
   }
 
-  if (loading) {
+  if (!loading && !order) {
     return (
-      <Box className="flex justify-center items-center h-64">
-        <Preloader />
-      </Box>
-    );
-  }
+      <Container
+        maxWidth="lg"
+        className="py-8 flex flex-col items-center justify-center gap-4"
+      >
+        <img src={unDrawEmpty} className="lg:w-[50%]" />
 
-  if (error || !order) {
-    return (
-      <Container maxWidth="lg" className="py-8">
-        <Alert severity="error" className="mb-4">
-          {error || t("orders.notFound")}
-        </Alert>
-        <AIButton
-          variant="solid"
-          startContent={<ArrowLeftIcon className="w-5 h-5" />}
+        <div className="font-paris text-2xl text-girl-secondary font-semibold">
+          {t("orders.incompleteOrderData")}
+        </div>
+        <UIButton
+          variant="soft"
+          radius="full"
+          startIcon={<ArrowLeftIcon className="w-5 h-5" />}
           onClick={handleBack}
         >
           {t("orders.backToOrders")}
-        </AIButton>
+        </UIButton>
       </Container>
     );
   }
@@ -444,9 +444,7 @@ const OrderDetailPage = () => {
 
         {/* Order Info */}
         <Grid item xs={12} lg={4}>
-          <Paper
-            classes={{ root: "shadow-lighter rounded-xl" }}
-          >
+          <Paper classes={{ root: "shadow-lighter rounded-xl" }}>
             <Box className="p-6 space-y-4">
               <Typography className="font-medium font-public-sans lg:text-lg">
                 {t("orders.customerInfo")}
@@ -645,8 +643,8 @@ const OrderDetailPage = () => {
 
             {order.status === "delivered" && order.deliveredAt && (
               <>
-                <Divider className="my-4" />
-                <Box>
+                <Divider />
+                <Box className="p-6 space-y-4">
                   <Typography variant="subtitle2" className="font-medium">
                     {t("orders.deliveredOn")}
                   </Typography>
