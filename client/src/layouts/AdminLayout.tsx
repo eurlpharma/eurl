@@ -35,6 +35,7 @@ import {
   IconWidgetBold,
 } from "@/components/Iconify";
 import clsx from "clsx";
+import LogoIcon from "../assets/logo/LogoThree";
 
 const drawerWidth = 280;
 
@@ -135,13 +136,8 @@ const AdminLayout = () => {
 
   const drawer = (
     <Box>
-      <Box className="p-4 flex items-center justify-between">
-        <Typography
-          variant="h6"
-          className="text-girl-secondary font-paris capitalize font-semibold text-xl"
-        >
-          pharma eurl
-        </Typography>
+      <Box className="p-4 flex items-center justify-start">
+        <LogoIcon className="h-12 w-fit" />
       </Box>
       <List className="lg:px-3">
         {menuItems.map((item) => (
@@ -247,7 +243,7 @@ const AdminLayout = () => {
             component="div"
             className="font-semibold font-paris flex-grow text-girl-secondary"
           >
-            Pharma
+            Pharm
           </Typography>
 
           <div className="">

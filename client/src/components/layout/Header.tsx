@@ -56,7 +56,7 @@ import {
   IconWhatsapp,
 } from "../Iconify";
 
-import LogoOne from "../../assets/logo/LogoOne"
+import LogoOne from "../../assets/logo/LogoThree"
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -279,7 +279,7 @@ const Header = () => {
     >
       <Box className="flex justify-between items-center h-20 px-3">
         <div className="text-2xl font-paris text-girl-secondary capitalize font-semibold">
-          <LogoOne className="w-10 h-10" />
+          <LogoOne className="w-14 h-14" />
         </div>
         <IconButton onClick={toggleMobileMenu}>
           <XMarkIcon className="w-6 h-6" />
@@ -442,7 +442,7 @@ const Header = () => {
                 to="/"
                 className="text-girl-primary font-bold font-paris text-2xl no-underline flex items-center"
               >
-                <LogoOne className="w-10 h-10" />
+                <LogoOne className="w-14 h-14" />
               </Typography>
 
 
