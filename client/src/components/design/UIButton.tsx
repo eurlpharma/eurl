@@ -166,15 +166,12 @@ const UIButton: FC<UIButtonProps> = ({
       {...ComponentProps}
       {...props}
     >
-      {isLoading ? (
+      {isLoading && (
         <Spinner color={variant === "filled" ? "#fff" : baseColor} />
-      ) : (
-        <>
-          {startIcon && <span className="mr-2">{startIcon}</span>}
-          <span>{children}</span>
-          {endIcon && <span className="ml-2">{endIcon}</span>}
-        </>
       )}
+      {startIcon && <span className="mr-2">{startIcon}</span>}
+      <span>{children}</span>
+      {endIcon && <span className="ml-2">{endIcon}</span>}
     </ButtonBase>
   );
 };

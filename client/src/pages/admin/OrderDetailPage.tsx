@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import avatarPerson from "../../assets/avatars/avatar-girl.png";
 import unDrawError from "../../assets/undraw/bug_fix.svg";
 import unDrawEmpty from "../../assets/undraw/empty.svg";
+import tracks from "../../data/yalidineTrack.json";
 import {
   Box,
   Typography,
@@ -55,6 +56,8 @@ import { ChevronLeft, PlusIcon } from "lucide-react";
 import UIChip from "@/components/design/UIChip";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
+import OrderInfoBox from "@/components/order/OrderInfoBox";
+import UITimelineItem from "@/components/design/Timelines/UITimelineItem";
 
 type Order = OrderBase & { id?: string };
 
@@ -244,6 +247,8 @@ const OrderDetailPage = () => {
   // const currentStep = getCurrentStep(order.status);
   // const shippingAddress = order.shippingAddress || {};
   // const deliveryType = shippingAddress.deliveryType || "office";
+
+  console.log(order)
 
   return (
     <Container maxWidth="lg" className="p-4">
@@ -440,89 +445,101 @@ const OrderDetailPage = () => {
               </Box>
             </div>
           </Paper>
+
+          <Paper
+            className="p-6 mb-4"
+            classes={{ root: "shadow-lighter rounded-xl" }}
+          >
+            <Box className="mb-4">
+              <Typography variant="h6" className="font-public-sans">
+                {t("History")}
+              </Typography>
+            </Box>
+
+            {/* Tracks product */}
+            <div className="track-product">
+              {tracks.map(({ status, location, timestamp }, index) => (
+                <UITimelineItem
+                  isCurrent="completed"
+                  isComplete="completed"
+                  key={index}
+                  title={location}
+                  date={timestamp}
+                  description={status}
+                />
+              ))}
+            </div>
+          </Paper>
         </Grid>
 
         {/* Order Info */}
         <Grid item xs={12} lg={4}>
           <Paper classes={{ root: "shadow-lighter rounded-xl" }}>
-            <Box className="p-6 space-y-4">
-              <Typography className="font-medium font-public-sans lg:text-lg">
-                {t("orders.customerInfo")}
-              </Typography>
-              <Box className="space-y-1">
-                <div className="flex items-start gap-3">
-                  <Avatar src={avatarPerson} />
-                  <div className="info space-y-3">
-                    <div className="space-y-1">
-                      <Typography variant="body2" className="font-medium">
-                        {order.guestInfo?.name ||
-                          (isUserData(order.user) ? order.user.name : "-")}
-                      </Typography>
-                      <Typography variant="body2" className="text-[#637381]">
-                        {order.guestInfo?.phone ||
-                          (isUserData(order.user) ? order.user.phone : "-")}
-                      </Typography>
+            <OrderInfoBox title="Customer">
+              <div className="flex items-start gap-3">
+                <Avatar src={avatarPerson} />
+                <div className="info space-y-3">
+                  <div className="space-y-1">
+                    <Typography variant="body2" className="font-medium">
+                      {order.guestInfo?.name ||
+                        (isUserData(order.user) ? order.user.name : "-")}
+                    </Typography>
+                    <Typography variant="body2" className="text-[#637381]">
+                      {order.guestInfo?.phone ||
+                        (isUserData(order.user) ? order.user.phone : "-")}
+                    </Typography>
 
-                      <Typography variant="body2">
-                        {t("IP address")}:{" "}
-                        <span className="text-[#637381]">192.168.1.5</span>
-                      </Typography>
-                    </div>
-
-                    <UIButton
-                      startIcon={<PlusIcon />}
-                      color="error"
-                      size="sm"
-                      variant="link"
-                    >
-                      Add to blacklist
-                    </UIButton>
+                    <Typography variant="body2">
+                      {t("IP address")}:{" "}
+                      <span className="text-[#637381]">192.168.1.5</span>
+                    </Typography>
                   </div>
+
+                  <UIButton
+                    startIcon={<PlusIcon />}
+                    color="error"
+                    size="sm"
+                    variant="link"
+                  >
+                    Add to blacklist
+                  </UIButton>
                 </div>
-              </Box>
-            </Box>
+              </div>
+            </OrderInfoBox>
 
             <Divider />
 
-            <Box className="p-6 space-y-4">
-              <Typography className="font-medium font-public-sans lg:text-lg">
-                {t("Delivery")}
-              </Typography>
-              <Box className="space-y-1">
-                <div className="space-y-2 font-public-sans">
-                  <div className="flex items-center">
-                    <div className="w-[40%] text-[#637381] text-sm capitalize">
-                      Ship By
-                    </div>
-                    <div className="capitalize text-sm">Yalidine</div>
+            <OrderInfoBox title="Delivery">
+              <div className="space-y-2 font-public-sans">
+                <div className="flex items-center">
+                  <div className="w-[40%] text-[#637381] text-sm capitalize">
+                    Ship By
                   </div>
+                  <div className="capitalize text-sm">Yalidine</div>
+                </div>
 
-                  <div className="flex items-center">
-                    <div className="w-[40%] text-[#637381] text-sm capitalize">
-                      Speedy
-                    </div>
-                    <div className="capitalize text-sm">standard</div>
+                <div className="flex items-center">
+                  <div className="w-[40%] text-[#637381] text-sm capitalize">
+                    Speedy
                   </div>
+                  <div className="capitalize text-sm">standard</div>
+                </div>
 
-                  <div className="flex items-center">
-                    <div className="w-[40%] text-[#637381] text-sm capitalize">
-                      Tracking NO
-                    </div>
-                    <div className="capitalize text-sm underline">
-                      SPX037739199373
-                    </div>
+                <div className="flex items-center">
+                  <div className="w-[40%] text-[#637381] text-sm capitalize">
+                    Tracking NO
+                  </div>
+                  <div className="capitalize text-sm underline">
+                    SPX037739199373
                   </div>
                 </div>
-              </Box>
-            </Box>
+              </div>
+            </OrderInfoBox>
 
             <Divider />
 
-            <Box className="p-6 space-y-4">
-              <Typography className="font-medium font-public-sans lg:text-lg">
-                {t("Shipping")}
-              </Typography>
-              <Box className="space-y-2 font-public-sans">
+            <OrderInfoBox title="Shipping">
+              <div className="space-y-2 font-public-sans">
                 <div className="flex items-center gap-3">
                   <div className="capitalize w-[30%] text-sm text-[#637381]">
                     country
@@ -551,16 +568,13 @@ const OrderDetailPage = () => {
                     {order.shippingAddress.address}
                   </div>
                 </div>
-              </Box>
-            </Box>
+              </div>
+            </OrderInfoBox>
 
             <Divider />
 
-            <Box className="p-6 space-y-4">
-              <Typography className="font-medium font-public-sans lg:text-lg">
-                {t("orders.paymentStatus")}
-              </Typography>
-              <Box className="space-y-3">
+            <OrderInfoBox title="orders.paymentStatus">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between gap-3 w-full">
                   <UIChip
                     radius="full"
@@ -638,23 +652,22 @@ const OrderDetailPage = () => {
                     {t("orders.paid")} ({formatDate(order.paidAt)})
                   </UIChip>
                 )}
-              </Box>
-            </Box>
+              </div>
+            </OrderInfoBox>
 
             {order.status === "delivered" && order.deliveredAt && (
               <>
                 <Divider />
-                <Box className="p-6 space-y-4">
-                  <Typography variant="subtitle2" className="font-medium">
-                    {t("orders.deliveredOn")}
-                  </Typography>
-                  <Box className="flex items-center mt-2">
-                    <CheckCircleIcon className="w-4 h-4 mr-1 text-green-600" />
-                    <Typography variant="body2" className="text-green-600">
-                      {formatDate(order.deliveredAt)}
-                    </Typography>
-                  </Box>
-                </Box>
+                <OrderInfoBox title="Delivred on">
+                  <UIChip
+                    color="success"
+                    className="gap-2 px-0"
+                    variant="link"
+                    startContent={<CheckCircleIcon className="w-4 h-4" />}
+                  >
+                    {formatDate(order.deliveredAt)}
+                  </UIChip>
+                </OrderInfoBox>
               </>
             )}
           </Paper>
