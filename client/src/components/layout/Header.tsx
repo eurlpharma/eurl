@@ -56,6 +56,8 @@ import {
   IconWhatsapp,
 } from "../Iconify";
 
+import LogoOne from "../../assets/logo/LogoOne"
+
 const Header = () => {
   const { t, i18n } = useTranslation();
   const { isAuthenticated, user, logout, loading } = useAuth();
@@ -277,7 +279,7 @@ const Header = () => {
     >
       <Box className="flex justify-between items-center h-20 px-3">
         <div className="text-2xl font-paris text-girl-secondary capitalize font-semibold">
-          new logo
+          <LogoOne className="w-10 h-10" />
         </div>
         <IconButton onClick={toggleMobileMenu}>
           <XMarkIcon className="w-6 h-6" />
@@ -440,10 +442,9 @@ const Header = () => {
                 to="/"
                 className="text-girl-primary font-bold font-paris text-2xl no-underline flex items-center"
               >
-                {/* <HeartIcon className="w-7 h-7 mr-2 text-girl-primary" /> */}
-                {/* Healthy */}
-                New Logo
+                <LogoOne className="w-10 h-10" />
               </Typography>
+
 
               {/* Desktop Navigation */}
               {!isMobile && (
