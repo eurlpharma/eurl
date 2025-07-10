@@ -11,5 +11,6 @@ yarn-error.log*
 dist/
 build/
 
+client/dist
 # System
 .DS_Store
