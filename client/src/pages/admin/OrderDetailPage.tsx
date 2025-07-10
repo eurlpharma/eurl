@@ -46,7 +46,6 @@ import { formatDate, formatPrice } from "@/utils/formatters";
 import AIButton from "@/components/buttons/AIButton";
 import willayatData from "@/data/willayat.json";
 import i18n from "@/i18n";
-import clsx from "clsx";
 import Preloader from "@/components/global/Preloader";
 import moment from "moment";
 import UIButton from "@/components/design/UIButton";
@@ -405,7 +404,7 @@ const OrderDetailPage = () => {
                   <Typography className="font-public-sans text-[#637381] text-sm">
                     {t("orders.subtotal")}
                   </Typography>
-                  <Typography className="font-public-sans font-medium">
+                  <Typography className="font-barlow font-semibold">
                     {formatPrice(order.itemsPrice)}
                   </Typography>
                 </Box>
@@ -414,7 +413,7 @@ const OrderDetailPage = () => {
                   <Typography className="font-public-sans text-[#637381] text-sm">
                     {t("orders.shipping")}
                   </Typography>
-                  <Typography className="font-public-sans font-medium">
+                  <Typography className="font-barlow font-semibold">
                     {formatPrice(order.shippingPrice)}
                   </Typography>
                 </Box>
@@ -424,7 +423,7 @@ const OrderDetailPage = () => {
                     <Typography variant="body1">
                       {t("orders.discount")}
                     </Typography>
-                    <Typography className="font-public-sans text-[#637381] text-sm">
+                    <Typography className="font-barlow text-[#637381] text-sm">
                       -{formatPrice(order.discount)}
                     </Typography>
                   </Box>
@@ -434,7 +433,7 @@ const OrderDetailPage = () => {
                   <Typography className="font-public-sans text-[#637381] text-sm">
                     {t("orders.total")}
                   </Typography>
-                  <Typography className="font-public-sans font-medium">
+                  <Typography className="font-barlow font-semibold">
                     {formatPrice(order.totalPrice)}
                   </Typography>
                 </Box>
@@ -446,14 +445,13 @@ const OrderDetailPage = () => {
         {/* Order Info */}
         <Grid item xs={12} lg={4}>
           <Paper
-            className="p-6"
             classes={{ root: "shadow-lighter rounded-xl" }}
           >
-            <Box>
-              <Typography className="font-medium font-public-sans text-lg lg:text-xl">
+            <Box className="p-6 space-y-4">
+              <Typography className="font-medium font-public-sans lg:text-lg">
                 {t("orders.customerInfo")}
               </Typography>
-              <Box className="mt-6 space-y-1">
+              <Box className="space-y-1">
                 <div className="flex items-start gap-3">
                   <Avatar src={avatarPerson} />
                   <div className="info space-y-3">
@@ -488,11 +486,11 @@ const OrderDetailPage = () => {
 
             <Divider />
 
-            <Box>
-              <Typography className="font-medium font-public-sans text-lg lg:text-xl">
+            <Box className="p-6 space-y-4">
+              <Typography className="font-medium font-public-sans lg:text-lg">
                 {t("Delivery")}
               </Typography>
-              <Box className="mt-6 space-y-1">
+              <Box className="space-y-1">
                 <div className="space-y-2 font-public-sans">
                   <div className="flex items-center">
                     <div className="w-[40%] text-[#637381] text-sm capitalize">
@@ -520,20 +518,26 @@ const OrderDetailPage = () => {
               </Box>
             </Box>
 
-            <Divider className="my-4" />
+            <Divider />
 
-            <Box className="space-y-4">
-              <Typography className="font-medium font-public-sans text-lg lg:text-xl">
+            <Box className="p-6 space-y-4">
+              <Typography className="font-medium font-public-sans lg:text-lg">
                 {t("Shipping")}
               </Typography>
-              <Box className="mt-2 space-y-2">
+              <Box className="space-y-2 font-public-sans">
                 <div className="flex items-center gap-3">
-                  <div className="capitalize w-[30%] text-sm text-[#637381]">country</div>
-                  <div className="text-sm line-clamp-1">{order.shippingAddress.country}</div>
+                  <div className="capitalize w-[30%] text-sm text-[#637381]">
+                    country
+                  </div>
+                  <div className="text-sm line-clamp-1">
+                    {order.shippingAddress.country}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="capitalize w-[30%] text-sm text-[#637381]">city</div>
+                  <div className="capitalize w-[30%] text-sm text-[#637381]">
+                    city
+                  </div>
                   <div className="text-sm line-clamp-1">
                     {getWilayaNameById(order.shippingAddress.city)},{" "}
                     {order.shippingAddress.dairaName ||
@@ -542,54 +546,56 @@ const OrderDetailPage = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="capitalize w-[30%] text-sm text-[#637381]">address</div>
-                  <div className="text-sm line-clamp-1">{order.shippingAddress.address}</div>
+                  <div className="capitalize w-[30%] text-sm text-[#637381]">
+                    address
+                  </div>
+                  <div className="text-sm line-clamp-1">
+                    {order.shippingAddress.address}
+                  </div>
                 </div>
               </Box>
             </Box>
 
-            <Divider className="my-4" />
+            <Divider />
 
-            <Box>
-              <Typography variant="subtitle2" className="font-medium">
+            <Box className="p-6 space-y-4">
+              <Typography className="font-medium font-public-sans lg:text-lg">
                 {t("orders.paymentStatus")}
               </Typography>
-              <Box className=" mt-2 space-y-3">
+              <Box className="space-y-3">
                 <div className="flex items-center justify-between gap-3 w-full">
-                  <div className="flex items-center gap-1">
-                    {order.isPaid ? (
-                      <CheckCircleIcon className="w-4 h-4 mr-1 text-green-600" />
-                    ) : (
-                      <XCircleIcon className="w-4 h-4 mr-1 text-red-500" />
-                    )}
-                    <Typography
-                      variant="body2"
-                      className={clsx(
-                        order.isPaid ? "text-green-500" : "text-red-500"
-                      )}
-                    >
-                      {order.isPaid ? t("orders.paid") : t("orders.notPaid")}
-                    </Typography>
-                  </div>
-                  <AIButton
-                    variant="outlined"
-                    className="ml-3 text-tiny py-[2px] px-1.5"
+                  <UIChip
                     radius="full"
+                    variant="link"
+                    color={order.isPaid ? "success" : "error"}
+                    className="gap-2"
+                    startContent={
+                      order.isPaid ? (
+                        <CheckCircleIcon className="w-4 h-4" />
+                      ) : (
+                        <XCircleIcon className="w-4 h-4" />
+                      )
+                    }
+                  >
+                    {order.isPaid ? t("orders.paid") : t("orders.notPaid")}
+                  </UIChip>
+
+                  <UIButton
+                    variant="soft"
+                    radius="full"
+                    className="ml-3 text-tiny py-[2px] px-1.5"
+                    color={order.isPaid ? "error" : "success"}
                     onClick={async () => {
                       const orderId = order.id ?? order._id;
                       if (!orderId) return;
                       setLoading(true);
-                      // حفظ الحالة الأصلية قبل الدفع
                       const originalStatus = order.status;
                       try {
                         if (order.isPaid) {
-                          // تراجع عن الدفع
                           await updateOrderToUnpaid(orderId);
                         } else {
-                          // تعيين كمدفوع
                           await updateOrderToPaid(orderId, {});
                         }
-                        // جلب الطلب بعد التحديث
                         const updatedOrder = await getOrderById(orderId);
                         const normalizedOrder = {
                           ...updatedOrder,
@@ -599,7 +605,6 @@ const OrderDetailPage = () => {
                                 quantity: item.quantity ?? item.qty,
                               }))
                             : [],
-                          // إذا أعاد السيرفر status = 'processing' بعد الدفع، احتفظ بالحالة الأصلية
                           status:
                             updatedOrder.status === "processing" &&
                             originalStatus !== "processing"
@@ -609,34 +614,31 @@ const OrderDetailPage = () => {
                         setOrder(normalizedOrder);
                         success(
                           order.isPaid
-                            ? t("orders.markedAsUnpaid") ||
-                                "تم التراجع عن الدفع"
-                            : t("orders.markedAsPaid") ||
-                                "تم تعيين الطلب كمدفوع"
+                            ? t("orders.markedAsUnpaid")
+                            : t("orders.markedAsPaid")
                         );
                       } catch (err) {
-                        showError(
-                          t("orders.updateStatusError") ||
-                            "حدث خطأ أثناء التحديث"
-                        );
+                        showError(t("orders.updateStatusError"));
                       } finally {
                         setLoading(false);
                       }
                     }}
                   >
                     {order.isPaid
-                      ? t("orders.markAsUnpaid") || "تراجع عن الدفع"
-                      : t("orders.markAsPaid") || "تعيين كمدفوع"}
-                  </AIButton>
+                      ? t("orders.markAsUnpaid")
+                      : t("orders.markAsPaid")}
+                  </UIButton>
                 </div>
 
                 {order.isPaid && (
-                  <div className="flex items-center gap-2">
-                    <CheckCircleIcon className="w-4 h-4 mr-1 text-green-600" />
-                    <Typography variant="body2" className="text-green-600">
-                      {t("orders.paid")} ({formatDate(order.paidAt)})
-                    </Typography>
-                  </div>
+                  <UIChip
+                    color="success"
+                    variant="link"
+                    className="gap-2"
+                    startContent={<CheckCircleIcon className="w-4 h-4" />}
+                  >
+                    {t("orders.paid")} ({formatDate(order.paidAt)})
+                  </UIChip>
                 )}
               </Box>
             </Box>

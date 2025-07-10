@@ -14,7 +14,7 @@ interface UIChipProps extends HTMLAttributes<HTMLElement> {
     centerContent?: string;
   };
   size?: "sm" | "md" | "lg";
-  variant?: "filled" | "outlined" | "soft";
+  variant?: "filled" | "outlined" | "soft" | "link";
   radius?: "sm" | "md" | "lg" | "full" | "none";
   color?:
     | "primary"
@@ -82,6 +82,12 @@ const UIChip: FC<UIChipProps> = ({
           color: baseColor,
           height: baseSize,
         };
+      case "link":
+        return {
+          color: baseColor,
+          height: baseSize,
+          backgroundColor: "transparent"
+        }
       default:
         return {
           backgroundColor: baseColor,
