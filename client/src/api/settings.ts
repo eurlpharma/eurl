@@ -30,29 +30,17 @@ export interface AppSettings {
   };
 }
 
-/**
- * تنظيف وتوحيد البيانات المستلمة من الخادم
- * @param rawData البيانات الخام من الخادم
- * @returns AppSettings البيانات المنظفة
- */
+
 const normalizeSettings = (rawData: any): AppSettings => {
-  console.log('🔄 تنظيف البيانات المستلمة:', rawData);
   
   const settings: AppSettings = {};
   
-  // إزالة الحقول غير المرغوبة
   const { success, updated, ...cleanData } = rawData;
   
-  // معالجة اسم الموقع
   settings.title = cleanData.siteName || cleanData.site_name || cleanData.title;
-  
-  // معالجة وصف الموقع
   settings.desc = cleanData.siteDescription || cleanData.site_description || cleanData.desc;
-  
-  // معالجة الشعار
   settings.logo = cleanData.siteLogo || cleanData.logo;
   
-  // معالجة معلومات الاتصال
   settings.contact = {
     email: cleanData.contactEmail || cleanData.contact_email || cleanData.email,
     phone: cleanData.contactPhone || cleanData.contact_phone || cleanData.phone,
@@ -60,7 +48,6 @@ const normalizeSettings = (rawData: any): AppSettings => {
     map: cleanData.googleMapUrl || cleanData.map
   };
   
-  // معالجة وسائل التواصل الاجتماعي
   if (cleanData.socialMedia) {
     try {
       const socialData = typeof cleanData.socialMedia === 'string' 
@@ -77,7 +64,6 @@ const normalizeSettings = (rawData: any): AppSettings => {
     }
   }
   
-  // معالجة السياسات
   settings.policies = {
     shipping: cleanData.shippingPolicy || cleanData.shipping,
     return: cleanData.returnPolicy || cleanData.return,
@@ -85,7 +71,6 @@ const normalizeSettings = (rawData: any): AppSettings => {
     terms: cleanData.termsAndConditions || cleanData.terms
   };
   
-  // معالجة إعدادات المتجر
   settings.store = {
     maintenance: cleanData.maintenanceMode === 'true' || cleanData.maintenance === true,
     currency: cleanData.currency,
@@ -94,14 +79,12 @@ const normalizeSettings = (rawData: any): AppSettings => {
     taxRate: Number(cleanData.taxRate) || 0
   };
   
-  // إزالة القيم الفارغة
   Object.keys(settings).forEach(key => {
     if (settings[key as keyof AppSettings] === undefined || settings[key as keyof AppSettings] === null) {
       delete settings[key as keyof AppSettings];
     }
   });
   
-  // تنظيف الكائنات الفرعية
   if (settings.contact) {
     Object.keys(settings.contact).forEach(key => {
       if (!settings.contact![key as keyof typeof settings.contact] || 
@@ -150,41 +133,26 @@ const normalizeSettings = (rawData: any): AppSettings => {
     }
   }
   
-  console.log('✅ البيانات المنظفة:', settings);
   return settings;
 };
 
-/**
- * جلب إعدادات الموقع من الخادم
- * @returns Promise<AppSettings>
- */
+
 export const fetchAppSettings = async (): Promise<AppSettings> => {
   try {
-    const response = await instance.get('/api/settings');
-    console.log('🔧 تم جلب إعدادات الموقع بنجاح:', response.data);
-    
-    // تنظيف وتوحيد البيانات
+    const response = await instance.get('/api/settings');    
     const normalizedSettings = normalizeSettings(response.data);
     
     return normalizedSettings;
   } catch (error) {
-    console.error('❌ خطأ في جلب إعدادات الموقع:', error);
     throw error;
   }
 };
 
-/**
- * تحديث إعدادات الموقع (للمدير فقط)
- * @param settings الإعدادات الجديدة
- * @returns Promise<any>
- */
 export const updateAppSettings = async (settings: Partial<AppSettings>): Promise<any> => {
   try {
     const response = await instance.put('/api/settings', settings);
-    console.log('✅ تم تحديث إعدادات الموقع بنجاح:', response.data);
     return response.data;
   } catch (error) {
-    console.error('❌ خطأ في تحديث إعدادات الموقع:', error);
     throw error;
   }
 }; 

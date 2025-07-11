@@ -248,7 +248,6 @@ const OrderDetailPage = () => {
   // const shippingAddress = order.shippingAddress || {};
   // const deliveryType = shippingAddress.deliveryType || "office";
 
-  console.log(order)
 
   return (
     <Container maxWidth="lg" className="p-4">

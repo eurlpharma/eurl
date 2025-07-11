@@ -30,6 +30,7 @@ import { AppDispatch, RootState } from "@/store";
 import {
   getProductDetails,
   getFeaturedProducts,
+  getProducts,
 } from "@/store/slices/productSlice";
 import { addToCart } from "@/store/slices/cartSlice";
 import { useNotification } from "@/hooks/useNotification";
@@ -89,6 +90,7 @@ const ProductDetailPage = () => {
   const [activeImage, setActiveImage] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -106,6 +108,25 @@ const ProductDetailPage = () => {
   useEffect(() => {
     setActiveImage(0);
   }, [product]);
+
+  useEffect(() => {
+    if (product) {
+      const categoryId =
+        typeof product.category === 'string'
+          ? product.category
+          : product.category?._id || product.category?.id;
+      if (categoryId) {
+        // جلب المنتجات ذات نفس التصنيف (باستثناء المنتج الحالي)
+        dispatch(getProducts({ category: categoryId, limit: 8 })).then((res: any) => {
+          if (res.payload && res.payload.products) {
+            setRelatedProducts(res.payload.products.filter((p: any) => p.id !== product.id));
+          }
+        });
+      } else {
+        setRelatedProducts([]);
+      }
+    }
+  }, [dispatch, product]);
 
   if (!id || (!product && !loading)) {
     return (
@@ -147,7 +168,6 @@ const ProductDetailPage = () => {
         error(t("products.failedToAddToCart"));
       }
     } catch (err) {
-      console.log(err);
       error(t("common.errorOccurred"));
     }
   };
@@ -510,14 +530,13 @@ const ProductDetailPage = () => {
         </Paper>
 
         {/* Related Products */}
-        {(featuredProducts?.length ?? 0) > 0 && (
+        {(relatedProducts?.length ?? 0) > 0 && (
           <Box className="mt-12">
-            <Typography variant="h5" className="font-bold mb-6">
+            <Typography variant="h5" className="font-semibold font-josefin mb-6">
               {t("products.relatedProducts")}
             </Typography>
             <Grid container spacing={3}>
-              {featuredProducts
-                .filter((p: any) => p.id !== product.id)
+              {relatedProducts
                 .slice(0, 4)
                 .map((product: any) => (
                   <Grid item xs={6} sm={6} md={3} key={product.id}>
