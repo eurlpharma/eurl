@@ -3,6 +3,8 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { CacheProvider } from "@emotion/react";
 import { useAuth } from "@/hooks/useAuth";
+import { usePageTitle } from "@/hooks/usePageTitle";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Preloader from "./components/global/Preloader";
 import MainLayout from "@/layouts/MainLayout";
@@ -42,6 +44,12 @@ const AboutPage = lazy(() => import("@/pages/AboutPage"));
 const App = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
+
+  // إدارة عنوان الصفحة الديناميكي
+  usePageTitle();
+  
+  // إدارة وصف الصفحة الديناميكي
+  usePageMeta();
 
   // Analytics
   useEffect(() => {

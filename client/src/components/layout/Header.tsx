@@ -10,12 +10,12 @@ import { useAuth } from "@/hooks/useAuth";
 // import { useTheme } from "@/hooks/useTheme";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { useAppSettings } from '@/hooks/useAppSettings';
 
 // MUI Components
 import {
   AppBar,
   Toolbar,
-  Typography,
   IconButton,
   Badge,
   Menu,
@@ -73,6 +73,7 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [isScrolled, setIsScrolled] = useState(false);
+  const { logo } = useAppSettings();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -435,15 +436,14 @@ const Header = () => {
           {/* Bottom Navbar */}
           <Container maxWidth="xl" className="btm">
             <Toolbar disableGutters className="content">
-              {/* Logo */}
-              <Typography
-                variant="h6"
-                component={RouterLink}
-                to="/"
-                className="text-girl-primary font-bold font-paris text-2xl no-underline flex items-center"
-              >
-                <LogoOne className="w-14 h-14" />
-              </Typography>
+              {/* شعار الموقع */}
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {logo ? (
+                  <img src={logo} alt="Site Logo" style={{ height: 56, width: 'auto', borderRadius: 8, objectFit: 'contain' }} />
+                ) : (
+                  <LogoOne className="w-14 h-14" />
+                )}
+              </Box>
 
 
               {/* Desktop Navigation */}

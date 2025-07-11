@@ -7,6 +7,11 @@ import {
   MapPinIcon,
 } from "@heroicons/react/24/outline";
 import { IconDelivery, IconExchange, IconPhone, IconSupport } from "../Iconify";
+import { useAppSettings } from '@/hooks/useAppSettings';
+import { useSelector } from 'react-redux';
+import { getLocalizedCategoryName } from "@/utils/formatters";
+import { CategoryData } from "@/types/category";
+import { RootState } from "@/store";
 
 const itemsTopFooter = [
   {
@@ -35,8 +40,10 @@ const itemsTopFooter = [
 ];
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const currentYear = new Date().getFullYear();
+  const { contact, desc } = useAppSettings();
+  const { categories } = useSelector((state: RootState) => state.categories);
 
   return (
     <Box component="footer" className="pb-4 relative">
@@ -76,24 +83,24 @@ const Footer = () => {
                 </Typography>
               </Box>
               <Typography variant="body2" className="mb-4 text-girl-typograph">
-                {t("footer.companyDescription")}
+                {desc || t("footer.companyDescription")}
               </Typography>
               <Box className="flex items-center mb-2">
                 <PhoneIcon className="w-5 h-5 text-girl-secondary mr-2" />
                 <Typography variant="body2" className="text-girl-typograph">
-                  +212 123 456 789
+                  {contact?.phone || "+212 123 456 789"}
                 </Typography>
               </Box>
               <Box className="flex items-center mb-2">
                 <EnvelopeIcon className="w-5 h-5 text-girl-secondary mr-2" />
                 <Typography variant="body2" className="text-girl-typograph">
-                  contact@healthy-medical.com
+                  {contact?.email || "contact@healthy-medical.com"}
                 </Typography>
               </Box>
               <Box className="flex items-center">
                 <MapPinIcon className="w-5 h-5 text-girl-secondary mr-2" />
                 <Typography variant="body2" className="text-girl-typograph">
-                  Algerien, Alger, Street 123
+                  {contact?.address || "Algerien, Alger, Street 123"}
                 </Typography>
               </Box>
             </Grid>
@@ -131,15 +138,6 @@ const Footer = () => {
                     {t("footer.about")}
                   </Link>
                 </Box>
-                <Box component="li" className="mb-2">
-                  <Link
-                    component={RouterLink}
-                    to="/contact"
-                    className="text-girl-typograph hover:text-girl-primary no-underline"
-                  >
-                    {t("footer.contact")}
-                  </Link>
-                </Box>
               </Box>
             </Grid>
 
@@ -149,87 +147,24 @@ const Footer = () => {
                 {t("footer.categories")}
               </div>
               <Box component="ul" className="p-0 m-0 list-none">
-                <Box component="li" className="mb-2">
-                  <Link
-                    component={RouterLink}
-                    to="/products?category=vitamins"
-                    className="text-girl-typograph hover:text-girl-primary no-underline"
-                  >
-                    {t("categories.vitamins")}
-                  </Link>
-                </Box>
-                <Box component="li" className="mb-2">
-                  <Link
-                    component={RouterLink}
-                    to="/products?category=supplements"
-                    className="text-girl-typograph hover:text-girl-primary no-underline"
-                  >
-                    {t("categories.supplements")}
-                  </Link>
-                </Box>
-                <Box component="li" className="mb-2">
-                  <Link
-                    component={RouterLink}
-                    to="/products?category=equipment"
-                    className="text-girl-typograph hover:text-girl-primary no-underline"
-                  >
-                    {t("categories.equipment")}
-                  </Link>
-                </Box>
-                <Box component="li" className="mb-2">
-                  <Link
-                    component={RouterLink}
-                    to="/products?category=devices"
-                    className="text-girl-typograph hover:text-girl-primary no-underline"
-                  >
-                    {t("categories.devices")}
-                  </Link>
-                </Box>
-              </Box>
-            </Grid>
-
-            {/* Customer Service */}
-            <Grid item xs={12} sm={6} md={2}>
-              <div className="mb-4 text-girl-secondary font-josefin text-xl">
-                {t("footer.customerService")}
-              </div>
-              <Box component="ul" className="p-0 m-0 list-none">
-                <Box component="li" className="mb-2">
-                  <Link
-                    component={RouterLink}
-                    to="/faq"
-                    className="text-girl-typograph hover:text-girl-primary no-underline"
-                  >
-                    {t("footer.faq")}
-                  </Link>
-                </Box>
-                <Box component="li" className="mb-2">
-                  <Link
-                    component={RouterLink}
-                    to="/shipping"
-                    className="text-girl-typograph hover:text-girl-primary no-underline"
-                  >
-                    {t("footer.shipping")}
-                  </Link>
-                </Box>
-                <Box component="li" className="mb-2">
-                  <Link
-                    component={RouterLink}
-                    to="/returns"
-                    className="text-girl-typograph hover:text-girl-primary no-underline"
-                  >
-                    {t("footer.returns")}
-                  </Link>
-                </Box>
-                <Box component="li" className="mb-2">
-                  <Link
-                    component={RouterLink}
-                    to="/privacy"
-                    className="text-girl-typograph hover:text-girl-primary no-underline"
-                  >
-                    {t("footer.privacy")}
-                  </Link>
-                </Box>
+                {categories && categories.length > 0 &&
+                  categories.slice(-4).map((cat: CategoryData) => {
+                    const catId = cat._id || cat.id;
+                    return (
+                      <Box component="li" className="mb-2" key={catId}>
+                        <Link
+                          component={RouterLink}
+                          to={`/products?category=${catId}`}
+                          className="text-girl-typograph hover:text-girl-primary no-underline"
+                        >
+                          {cat.icon && (
+                            <img src={cat.icon} alt="icon" style={{ width: 18, height: 18, marginRight: 6, display: 'inline-block', verticalAlign: 'middle' }} />
+                          )}
+                          {getLocalizedCategoryName(cat, i18n.language)}
+                        </Link>
+                      </Box>
+                    );
+                  })}
               </Box>
             </Grid>
 

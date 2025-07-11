@@ -9,6 +9,7 @@ import AIButton from "@/components/buttons/AIButton";
 import Breadcrumb from "@/components/global/Breadcrumb";
 import girlLinear from "@/assets/images/icons/icon-girl-linear.png";
 import imageAboutSection from "@/assets/images/about/about-section.png";
+import { useAppSettings } from '@/hooks/useAppSettings';
 
 const contactItems = [
   {
@@ -30,6 +31,8 @@ const contactItems = [
 const AboutPage = () => {
 
   const navigate = useNavigate()
+  const { contact } = useAppSettings();
+  const mapUrl = contact?.map || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12787.660185080798!2d2.876540930308276!3d36.74861018529617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fbb2def044d51%3A0xcde2ad68272e29aa!2sStaoueli!5e0!3m2!1sen!2sdz!4v1750767278879!5m2!1sen!2sdz";
 
   return (
     <div className="about">
@@ -79,7 +82,7 @@ const AboutPage = () => {
           <div className="details">
             <div className="side start">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12787.660185080798!2d2.876540930308276!3d36.74861018529617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fbb2def044d51%3A0xcde2ad68272e29aa!2sStaoueli!5e0!3m2!1sen!2sdz!4v1750767278879!5m2!1sen!2sdz"
+                src={mapUrl}
                 width="600"
                 height="450"
                 style={{ border: "0" }}

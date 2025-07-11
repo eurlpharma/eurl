@@ -1,6 +1,7 @@
 // Category types for category management and display
 
 export interface CategoryData {
+  id?: string; // <-- Added for compatibility
   _id?: string;
   nameAr: string;
   nameEn: string;

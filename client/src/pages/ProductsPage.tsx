@@ -28,6 +28,8 @@ import ProductCardList from "@/components/products/ProductCardList";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { IconSearch } from "@/components/Iconify";
 import { getLocalizedCategoryName } from "@/utils/formatters";
+import { ResetTvOutlined } from "@mui/icons-material";
+import defaultCategoryIcon from '@/assets/icons/default/default-user.png';
 
 const ProductsPage = () => {
   const { t, i18n } = useTranslation();
@@ -51,7 +53,8 @@ const ProductsPage = () => {
     searchParams.get("category") ? searchParams.get("category")!.split(",") : []
   );
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
-  const [maxPrice, setMaxPrice] = useState<number>(0);
+  const [, setMaxPrice] = useState<number>(0);
+  const [absoluteMaxPrice, setAbsoluteMaxPrice] = useState<number>(0);
   const [sortBy, setSortBy] = useState(
     searchParams.get("sortBy") || "createdAt"
   );
@@ -115,22 +118,47 @@ const ProductsPage = () => {
     if (selectedCategories.length > 0)
       params.category = selectedCategories.join(",");
     if (priceRange[0] > 0) params.minPrice = priceRange[0].toString();
-    if (priceRange[1] > 0 && priceRange[1] < 1000000)
+    if (priceRange[1] > 0 && priceRange[1] < absoluteMaxPrice)
       params.maxPrice = priceRange[1].toString();
     if (sortBy !== "createdAt") params.sortBy = sortBy;
     if (page > 1) params.page = page.toString();
 
     setSearchParams(params);
-  }, [dispatch, searchState, limit]);
+  }, [dispatch, searchState, limit, absoluteMaxPrice]);
 
   useEffect(() => {
-    if (products && products.length > 0) {
+    if (products && products.length > 0 && absoluteMaxPrice === 0) {
       const maxProductPrice = Math.max(
         ...products.map((p: ProductData) => p.price)
       );
+      setAbsoluteMaxPrice(maxProductPrice);
       setMaxPrice(maxProductPrice);
     }
-  }, [products]);
+  }, [products, absoluteMaxPrice]);
+
+  useEffect(() => {
+    // عند تغير باراميترات الرابط، حدث الفلاتر
+    const categoryParam = searchParams.get("category");
+    const keywordParam = searchParams.get("keyword") || "";
+    const minPriceParam = Number(searchParams.get("minPrice")) || 0;
+    const maxPriceParam = Number(searchParams.get("maxPrice")) || absoluteMaxPrice;
+    const sortByParam = searchParams.get("sortBy") || "createdAt";
+    const pageParam = Number(searchParams.get("page")) || 1;
+
+    setSelectedCategories(categoryParam ? categoryParam.split(",") : []);
+    setKeywordInput(keywordParam);
+    setPriceRange([minPriceParam, maxPriceParam]);
+    setSortBy(sortByParam);
+    setPage(pageParam);
+
+    setSearchState({
+      keyword: keywordParam,
+      selectedCategories: categoryParam ? categoryParam.split(",") : [],
+      priceRange: [minPriceParam, maxPriceParam],
+      sortBy: sortByParam,
+      page: pageParam,
+    });
+  }, [searchParams, absoluteMaxPrice]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -187,17 +215,20 @@ const ProductsPage = () => {
   const handleClearFilters = () => {
     setKeywordInput("");
     setSelectedCategories([]);
-    setPriceRange([0, 0]);
+    setPriceRange([0, absoluteMaxPrice]);
+    setMaxPrice(absoluteMaxPrice); // إعادة تعيين maxPrice للسلايدر
     setSortBy("createdAt");
     setPage(1);
 
     setSearchState({
       keyword: "",
       selectedCategories: [],
-      priceRange: [0, 0],
+      priceRange: [0, absoluteMaxPrice],
       sortBy: "createdAt",
       page: 1,
     });
+
+    setSearchParams({}); // مسح باراميترات البحث من الرابط
   };
 
   const toggleFilters = () => {
@@ -237,25 +268,34 @@ const ProductsPage = () => {
         <Box className="space-y-2">
           {categories &&
             categories.length > 0 &&
-            categories.map((cat: CategoryData, index: number) => {
-              const catId = cat._id || `category-${index}`;
-              return (
-                <Box
-                  key={catId}
-                  onClick={() => handleCategoryChange(catId)}
-                  className={`
-                    font-josefin text-lg capitalize py-2  rounded-lg cursor-pointer transition-all duration-200
-                    ${
-                      selectedCategories.includes(catId)
-                        ? " text-girl-secondary"
-                        : " text-gray-700"
-                    }
-                  `}
-                >
-                  {getLocalizedCategoryName(cat, i18n.language)}
-                </Box>
-              );
-            })}
+            categories
+              .filter((cat: CategoryData) => !!(cat._id || cat.id))
+              .map((cat: CategoryData) => {
+                const catId = cat._id || cat.id;
+                return (
+                  <Box
+                    key={catId}
+                    onClick={() => catId && handleCategoryChange(catId)}
+                    className={`
+                      font-josefin text-lg capitalize py-2  rounded-lg cursor-pointer transition-all duration-200
+                      ${
+                        catId && selectedCategories.includes(catId)
+                          ? " text-girl-secondary"
+                          : " text-gray-700"
+                      }
+                    `}
+                  >
+                    <>
+                      <img
+                        src={cat.icon || cat.image || defaultCategoryIcon}
+                        alt="icon"
+                        style={{ width: 22, height: 22, display: "inline-block", marginRight: 8, verticalAlign: "middle" }}
+                      />
+                      {getLocalizedCategoryName(cat, i18n.language)}
+                    </>
+                  </Box>
+                );
+              })}
         </Box>
       </Box>
 
@@ -264,20 +304,31 @@ const ProductsPage = () => {
           <PriceRangeFilter
             onPriceChange={handlePriceChange}
             onPriceChangeCommitted={handlePriceChangeCommitted}
-            maxPrice={maxPrice}
+            maxPrice={absoluteMaxPrice}
           />
         </Box>
       </Box>
 
-      <Box className="flex space-x-2 mt-2">
+      <Box className="flex flex-col items-center gap-2 mt-2">
         <AIButton
           variant="solid"
           radius="full"
+          fullWidth
           onClick={handleSearch}
           className="flex-1"
           startContent={<MagnifyingGlassIcon className="w-5 h-5" />}
         >
           {t("products.search")}
+        </AIButton>
+        <AIButton
+          startContent={<ResetTvOutlined />}
+          variant="outlined"
+          radius="full"
+          fullWidth
+          onClick={handleClearFilters}
+          className="flex-1"
+        >
+          {t("products.clearFilters")}
         </AIButton>
       </Box>
     </Box>

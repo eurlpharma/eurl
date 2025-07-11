@@ -10,6 +10,7 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import "./styles/index.css";
 import "animate.css";
+import AppProvider from "./contexts/AppContext";
 
 if (typeof window !== "undefined" && !window.global) {
   (window as any).global = window;
@@ -53,9 +54,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <BrowserRouter {...routerOptions}>
         <I18nextProvider i18n={i18n}>
-          <ThemeProvider >
+          <ThemeProvider>
             <AuthProvider>
-              <App />
+              <AppProvider>
+                <App />
+              </AppProvider>
             </AuthProvider>
           </ThemeProvider>
         </I18nextProvider>

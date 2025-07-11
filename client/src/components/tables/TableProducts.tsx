@@ -422,6 +422,7 @@ const TableProducts: FC<TableProductsProps> = ({
                                   <UIProgress
                                     className="max-w-20"
                                     variant="soft"
+                                    size="sm"
                                     progress={percent}
                                     color={
                                       percent <= 0
@@ -456,6 +457,7 @@ const TableProducts: FC<TableProductsProps> = ({
                                   variant="soft"
                                   radius="full"
                                   className="ps-0"
+                                  
                                   color={
                                     product.isFeatured ? "secondary" : "primary"
                                   }
