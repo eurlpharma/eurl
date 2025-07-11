@@ -80,7 +80,6 @@ const ProductDetailPage = () => {
 
   const {
     product,
-    featuredProducts,
     loading,
     error: apiError,
   } = useSelector((state: RootState) => state.products);
