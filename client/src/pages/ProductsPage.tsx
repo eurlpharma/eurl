@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
@@ -24,11 +24,13 @@ import { setProductFilters } from "@/store/slices/uiSlice";
 import NotFoundProduct from "../assets/undraw/not_found.svg";
 import PriceRangeFilter from "@/components/PriceRangeFilter";
 import { getCategories } from "@/store/slices/categorySlice";
-import ProductCardList from "@/components/products/ProductCardList";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { IconReset, IconSearch } from "@/components/Iconify";
 import { getLocalizedCategoryName } from "@/utils/formatters";
 import defaultCategoryIcon from "@/assets/icons/default/default-user.png";
+const ProductCardList = React.lazy(
+  () => import("@/components/products/ProductCardList")
+);
 
 const ProductsPage = () => {
   const { t, i18n } = useTranslation();
@@ -374,9 +376,9 @@ const ProductsPage = () => {
             {isMobile && (
               <Box className="flex items-center justify-between w-full mb-4 md:mb-0">
                 <div>
-                  <p className="capitalize font-poppins text-xl text-gray-800">
+                  <h1 className="capitalize font-poppins text-xl text-gray-800">
                     Products
-                  </p>
+                  </h1>
                   <p className="text-tiny text-gray-600">
                     Find your best products
                   </p>
@@ -404,7 +406,9 @@ const ProductsPage = () => {
                 {loading ? (
                   Array.from(new Array(limit)).map((_, index) => (
                     <Grid item xs={6} sm={6} md={4} lg={3} key={index}>
-                      <ProductCardList product={null} isLoading={true} />
+                      <Suspense fallback={<ProductCardList product={null} />}>
+                        <ProductCardList product={null} isLoading={true} />
+                      </Suspense>
                     </Grid>
                   ))
                 ) : products && products.length > 0 ? (
@@ -417,7 +421,9 @@ const ProductsPage = () => {
                       lg={3}
                       key={product.id || product._id || `product-${index}`}
                     >
-                      <ProductCardList product={product} />
+                      <Suspense fallback={<ProductCardList product={null} />}>
+                        <ProductCardList product={product} />
+                      </Suspense>
                     </Grid>
                   ))
                 ) : (

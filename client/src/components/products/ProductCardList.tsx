@@ -150,17 +150,12 @@ const ProductCardList: FC<ProductCardListProps> = ({
           alt={`${product.name}`}
           {...{ fetchpriority: "high" }}
           srcSet={`
-    ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_400")} 400w,
-    ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_600")} 600w,
-    ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_800")} 800w
-  `}
-
+            ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_400")} 400w,
+            ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_600")} 600w,
+            ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_800")} 800w
+          `}
           className="image aspect-square"
         />
-
-
-
-
 
         {!isMobile && <div className="over-mode"></div>}
 
