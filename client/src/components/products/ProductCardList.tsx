@@ -154,8 +154,11 @@ const ProductCardList: FC<ProductCardListProps> = ({
             ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_600")} 600w,
             ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_800")} 800w
           `}
+          sizes="(max-width: 600px) 400px, (max-width: 900px) 600px, 800px"
           className="image aspect-square"
         />
+
+        
 
         {!isMobile && <div className="over-mode"></div>}
 
