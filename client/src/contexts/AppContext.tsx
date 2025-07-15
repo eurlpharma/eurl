@@ -29,7 +29,6 @@ const AppProvider = ({children}: {children: ReactNode}) => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'خطأ غير معروف في جلب الإعدادات'
       setError(errorMessage)
-      console.error('❌ فشل في جلب إعدادات الموقع:', errorMessage)
       
       setValues({
         title: 'RS Pharm',

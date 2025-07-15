@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, HTMLAttributes, FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -27,6 +27,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  CardHeader,
 } from "@mui/material";
 import { MagnifyingGlassIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import { Order, OrderStatus, OrdersResponse } from "@/types/order";
@@ -38,11 +39,11 @@ import { updateOrderStatus as storeUpdateOrderStatus } from "@/store/slices/orde
 import { showNotification } from "@/store/slices/uiSlice";
 import { UpdateOrderStatusData } from "@/types/order";
 import { AppDispatch } from "@/store";
-import AIButton from "@/components/buttons/AIButton";
 import UIChip from "../design/UIChip";
 import { IconPrintBold, IconTrashBold } from "../Iconify";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
+import UIButton from "../design/UIButton";
 
 const shortenOrderId = (id: string) => {
   return id.slice(-6).toUpperCase();
@@ -77,9 +78,25 @@ const cells = [
   { key: "common.actions" },
 ];
 
-const OrdersTable = () => {
+/* Test */
+
+interface OrdersTableProps extends HTMLAttributes<HTMLElement> {
+  header?: string;
+  subHeader?: string;
+  isFilter?: boolean;
+  isPagination?: boolean;
+  isViewAll?: "all" | "add" | null;
+}
+
+const OrdersTable: FC<OrdersTableProps> = ({
+  isViewAll,
+  header,
+  subHeader,
+  isFilter,
+  isPagination,
+}) => {
   const { t } = useTranslation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { success, error: showError } = useNotification();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -262,84 +279,110 @@ const OrdersTable = () => {
   }
 
   return (
-    <Box className="shadow-lighter p-0 pb-4 rounded-xl">
-      <Paper className="p-4 mb-4" classes={{ root: "shadow-none" }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder={t("orders.searchPlaceholder")}
-              value={search}
-              onChange={handleSearchChange}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MagnifyingGlassIcon className="w-5 h-5" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>{t("orders.filterByStatus")}</InputLabel>
-              <Select
-                value={statusFilter}
-                onChange={(e) =>
-                  setStatusFilter(e.target.value as OrderStatus | "")
-                }
-                label={t("orders.filterByStatus")}
+    <div className="shadow-lighter p-0 pb-4 rounded-xl">
+      <CardHeader
+        className="font-public-sans"
+        title={header && t(header)}
+        subheader={subHeader && t(`admin.${subHeader}`)}
+        classes={{
+          title: "font-public-sans text-medium lg:text-lg xl:text-xl",
+        }}
+        action={
+          isViewAll && (
+            <>
+              <UIButton
+                color="grey"
+                variant="link"
+                component={Link}
+                to={isViewAll === "all" ? "/admin/orders" : "/admin/orders"}
               >
-                <MenuItem value="">{t("common.all")}</MenuItem>
-                {[
-                  "pending",
-                  "processing",
-                  "shipped",
-                  "delivered",
-                  "cancelled",
-                ].map((status) => (
-                  <MenuItem key={status} value={status}>
-                    {t(`orders.status.${status}`)}
+                {t(isViewAll === "all" ? "common.viewAll" : "New order")}
+              </UIButton>
+            </>
+          )
+        }
+      />
+
+      {isFilter && (
+        <Paper className="p-4 mb-4" classes={{ root: "shadow-none" }}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={3}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder={t("orders.searchPlaceholder")}
+                value={search}
+                onChange={handleSearchChange}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MagnifyingGlassIcon className="w-5 h-5" />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel>{t("orders.filterByStatus")}</InputLabel>
+                <Select
+                  value={statusFilter}
+                  onChange={(e) =>
+                    setStatusFilter(e.target.value as OrderStatus | "")
+                  }
+                  label={t("orders.filterByStatus")}
+                >
+                  <MenuItem value="">{t("common.all")}</MenuItem>
+                  {[
+                    "pending",
+                    "processing",
+                    "shipped",
+                    "delivered",
+                    "cancelled",
+                  ].map((status) => (
+                    <MenuItem key={status} value={status}>
+                      {t(`orders.status.${status}`)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel>
+                  {t("orders.filterByPayment") || "Payment Status"}
+                </InputLabel>
+                <Select
+                  value={paymentFilter}
+                  onChange={(e) =>
+                    setPaymentFilter(
+                      e.target.value as "all" | "paid" | "unpaid"
+                    )
+                  }
+                  label={t("orders.filterByPayment") || "Payment Status"}
+                >
+                  <MenuItem value="all">{t("common.all")}</MenuItem>
+                  <MenuItem value="paid">{t("orders.paid") || "Paid"}</MenuItem>
+                  <MenuItem value="unpaid">
+                    {t("orders.unpaid") || "Unpaid"}
                   </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>
-                {t("orders.filterByPayment") || "Payment Status"}
-              </InputLabel>
-              <Select
-                value={paymentFilter}
-                onChange={(e) =>
-                  setPaymentFilter(e.target.value as "all" | "paid" | "unpaid")
-                }
-                label={t("orders.filterByPayment") || "Payment Status"}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <UIButton
+                radius="lg"
+                variant="soft"
+                onClick={handleFilter}
+                className="py-3.5 w-full"
+                startIcon={<FunnelIcon className="w-5 h-5" />}
               >
-                <MenuItem value="all">{t("common.all")}</MenuItem>
-                <MenuItem value="paid">{t("orders.paid") || "Paid"}</MenuItem>
-                <MenuItem value="unpaid">
-                  {t("orders.unpaid") || "Unpaid"}
-                </MenuItem>
-              </Select>
-            </FormControl>
+                {t("common.filter")}
+              </UIButton>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={3}>
-            <AIButton
-              fullWidth
-              variant="outlined"
-              className="py-3.5"
-              radius="lg"
-              startContent={<FunnelIcon className="w-5 h-5" />}
-              onClick={handleFilter}
-            >
-              {t("common.filter")}
-            </AIButton>
-          </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      )}
 
       <TableContainer component={Paper} className="shadow-none">
         <SimpleBar style={{ maxHeight: "70vh" }}>
@@ -369,7 +412,7 @@ const OrdersTable = () => {
                   <TableCell className="font-public-sans">
                     {order.id ? (
                       <Link
-                        to={`/admin/orders/${order._id}`}
+                        to={`/admin/orders/${order.id}`}
                         className="text-primary-600 hover:underline"
                       >
                         #{shortenOrderId(order._id || order.id || "")}
@@ -378,7 +421,9 @@ const OrdersTable = () => {
                       <span>-</span>
                     )}
                   </TableCell>
-                  <TableCell onClick={() => navigate(`/admin/orders/${order.id}`)}>
+                  <TableCell
+                    onClick={() => navigate(`/admin/orders/${order.id}`)}
+                  >
                     <Box>
                       <Typography className="whitespace-nowrap font-public-sans">
                         {order.guestInfo?.name ||
@@ -388,7 +433,9 @@ const OrdersTable = () => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell onClick={() => navigate(`/admin/orders/${order.id}`)}>
+                  <TableCell
+                    onClick={() => navigate(`/admin/orders/${order.id}`)}
+                  >
                     <Typography className="whitespace-nowrap font-barlow">
                       {order.guestInfo?.phone ||
                         (typeof order.user === "object" && order.user?.phone
@@ -412,8 +459,8 @@ const OrdersTable = () => {
                       size="sm"
                       radius="full"
                       variant="soft"
-                      className="lowercase px-1"
-                      color={order.isPaid ? "primary" : "error"}
+                      className="capitalize px-2"
+                      color={order.isPaid ? "success" : "error"}
                     >
                       {order.isPaid ? t("orders.paid") : t("orders.unpaid")}
                     </UIChip>
@@ -423,7 +470,7 @@ const OrdersTable = () => {
                       size="sm"
                       radius="full"
                       variant="soft"
-                      className="lowercase px-1"
+                      className="capitalize px-2"
                       color={getStatusColor(order.status)}
                       onClick={(e) =>
                         handleOpenMenu(e, order._id || order.id || "")
@@ -519,18 +566,19 @@ const OrdersTable = () => {
         </SimpleBar>
       </TableContainer>
 
-      <Box className="flex justify-center mt-4">
-        <Pagination
-          count={pages}
-          page={page}
-          onChange={(_, value) => setPage(value)}
-          color="primary"
-          showFirstButton
-          showLastButton
-        />
-      </Box>
+      {isPagination && (
+        <Box className="flex justify-center mt-4">
+          <Pagination
+            count={pages}
+            page={page}
+            onChange={(_, value) => setPage(value)}
+            color="primary"
+            showFirstButton
+            showLastButton
+          />
+        </Box>
+      )}
 
-      {/* Delete Confirmation Dialog */}
       <Dialog
         open={deleteDialogOpen}
         onClose={handleDeleteCancel}
@@ -593,7 +641,7 @@ const OrdersTable = () => {
           {t("orders.status.cancelled")}
         </MenuItem>
       </Menu>
-    </Box>
+    </div>
   );
 };
 

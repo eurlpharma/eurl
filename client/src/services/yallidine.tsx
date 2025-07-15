@@ -30,7 +30,6 @@ export async function createShipment(order: any) {
     const res = await axios.post(`${YALIDINE_API_URL}/shipments`, payload, { headers });
     return res.data;
   } catch (error: any) {
-    console.error("Yalidine error:", error.response?.data || error.message);
     throw error;
   }
 }
