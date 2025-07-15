@@ -204,7 +204,7 @@ main {
 }
 
 .top-cats .content .cats .box {
-  @apply flex flex-col items-center justify-center gap-6 cursor-pointer;
+  @apply flex flex-col items-center justify-center gap-2 md:gap-4 lg:gap-6 cursor-pointer;
 }
 
 .top-cats .content .cats .box .icon {
@@ -217,7 +217,7 @@ main {
 }
 
 .top-cats .content .cats .box .name {
-  @apply capitalize transition-colors text-xl text-[#313131];
+  @apply capitalize transition-colors text-base lg:text-lg xl:text-xl text-[#313131];
 }
 
 .top-cats .content .cats .box:hover .icon {
