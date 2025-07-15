@@ -24,6 +24,7 @@
     "@mui/lab": "^5.0.0-alpha.134",
     "@mui/material": "^5.17.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/is-hotkey": "^0.1.10",
     "animate.css": "^4.1.1",
     "aos": "^2.3.4",

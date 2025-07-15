@@ -131,6 +131,12 @@ const ProductCardList: FC<ProductCardListProps> = ({
     }
   }, [localStorage]);
 
+  const optimizeImage = (url: string, options = "f_auto,q_auto:eco,w_600") => {
+    if (!url.includes("res.cloudinary.com")) return url;
+    const parts = url.split("/upload/");
+    return `${parts[0]}/upload/${options}/${parts[1]}`;
+  };
+
   return (
     <div className="product" data-aos="fade-up" {...props}>
       <div
@@ -140,11 +146,22 @@ const ProductCardList: FC<ProductCardListProps> = ({
         <img
           loading="eager"
           decoding="async"
-          className="image"
-          src={product.images[0]}
+          src={optimizeImage(product.images[0], "f_auto,q_auto:eco,w_600")}
           alt={`${product.name}`}
           {...{ fetchpriority: "high" }}
+          srcSet={`
+    ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_400")} 400w,
+    ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_600")} 600w,
+    ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_800")} 800w
+  `}
+
+          className="image aspect-square"
         />
+
+
+
+
+
         {!isMobile && <div className="over-mode"></div>}
 
         {product.isFeatured && <div className="over sale">{"Featured"}</div>}

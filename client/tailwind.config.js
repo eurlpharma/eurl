@@ -158,7 +158,9 @@ module.exports = {
       }
     },
   },
-  plugins: [heroui()],
+  plugins: [heroui(), 
+    require('@tailwindcss/aspect-ratio'),
+  ],
   corePlugins: {
     preflight: true,
   },
