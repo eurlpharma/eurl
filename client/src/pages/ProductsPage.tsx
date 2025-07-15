@@ -26,9 +26,8 @@ import PriceRangeFilter from "@/components/PriceRangeFilter";
 import { getCategories } from "@/store/slices/categorySlice";
 import ProductCardList from "@/components/products/ProductCardList";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { IconSearch } from "@/components/Iconify";
+import { IconReset, IconSearch } from "@/components/Iconify";
 import { getLocalizedCategoryName } from "@/utils/formatters";
-import { ResetTvOutlined } from "@mui/icons-material";
 import defaultCategoryIcon from "@/assets/icons/default/default-user.png";
 
 const ProductsPage = () => {
@@ -312,7 +311,7 @@ const ProductsPage = () => {
         </Box>
       </Box>
 
-      <Box className="flex flex-col items-center gap-2 mt-2">
+      <Box className="flex items-center gap-2 mt-2">
         <AIButton
           variant="solid"
           radius="full"
@@ -324,15 +323,13 @@ const ProductsPage = () => {
           {t("products.search")}
         </AIButton>
         <AIButton
-          startContent={<ResetTvOutlined />}
-          variant="outlined"
+          startContent={<IconReset />}
+          variant="solid"
           radius="full"
-          fullWidth
           onClick={handleClearFilters}
-          className="flex-1"
-        >
-          {t("products.clearFilters")}
-        </AIButton>
+          className=" w-fit"
+          isIconOnly
+        ></AIButton>
       </Box>
     </Box>
   );
@@ -426,7 +423,11 @@ const ProductsPage = () => {
                 ) : (
                   <Grid item xs={12}>
                     <Box className="flex flex-col items-center justify-center gap-3 lg:gap-4 py-3 md:py-6 lg:py-16">
-                      <img className="mx-auto" src={NotFoundProduct} alt="Not Found Product" />
+                      <img
+                        className="mx-auto"
+                        src={NotFoundProduct}
+                        alt="Not Found Product"
+                      />
                       <Typography
                         variant="h6"
                         className="mb-2 font-paris text-3xl font-semibold text-girl-secondary capitalize"
