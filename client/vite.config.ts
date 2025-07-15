@@ -5,30 +5,13 @@ import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   base: "/",
-  plugins: [
-    react(),
-    tsconfigPaths(),
-    visualizer({ open: true, gzipSize: true, brotliSize: true }),
-  ],
+  plugins: [react(), tsconfigPaths(), visualizer({ open: true })],
   resolve: {},
   build: {
     outDir: "dist",
-    target: "esnext",
-    sourcemap: false,
-    chunkSizeWarningLimit: 600,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            if (id.includes("react")) return "vendor-react";
-            if (id.includes("i18next")) return "vendor-i18n";
-            if (id.includes("@mui")) return "vendor-mui";
-            return "vendor";
-          }
-        },
-      },
-    },
+    target: 'esnext'
   },
+  
   server: {
     host: "0.0.0.0",
     port: 3000,
