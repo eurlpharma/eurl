@@ -144,21 +144,18 @@ const ProductCardList: FC<ProductCardListProps> = ({
         onClick={() => navigate(`/products/${product.id}`)}
       >
         <img
-          loading="eager"
+          loading="lazy"
           decoding="async"
-          src={optimizeImage(product.images[0], "f_auto,q_auto:eco,w_600")}
-          alt={`${product.name}`}
-          {...{ fetchpriority: "high" }}
+          src={optimizeImage(product.images[0], "f_auto,q_auto:eco,w_400")}
+          alt={product.name}
           srcSet={`
             ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_400")} 400w,
             ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_600")} 600w,
             ${optimizeImage(product.images[0], "f_auto,q_auto:eco,w_800")} 800w
           `}
-          sizes="(max-width: 600px) 400px, (max-width: 900px) 600px, 800px"
+          sizes="(max-width: 600px) 50vw, (max-width: 1024px) 33vw, 25vw"
           className="image aspect-square"
         />
-
-        
 
         {!isMobile && <div className="over-mode"></div>}
 
