@@ -15,7 +15,7 @@ interface ProductCardListProps extends HTMLAttributes<HTMLElement> {
   product: ProductCartType | null;
   isSale?: boolean;
   place?: "top" | "bottom";
-  isLoading?: boolean
+  isLoading?: boolean;
 }
 
 interface ProductOnCart {
@@ -27,7 +27,11 @@ interface ProductOnCart {
   quantity: number;
 }
 
-const ProductCardList: FC<ProductCardListProps> = ({ product, isLoading=false, ...props }) => {
+const ProductCardList: FC<ProductCardListProps> = ({
+  product,
+  isLoading = false,
+  ...props
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +45,10 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, isLoading=false, .
   if (!product || isLoading) {
     return (
       <div>
-        <Skeleton variant="rectangular" className="rounded-lg h-[14rem] lg:h-72 pb-3" />
+        <Skeleton
+          variant="rectangular"
+          className="rounded-lg h-[14rem] lg:h-72 pb-3"
+        />
         <Skeleton variant="text" className="w-2/3" />
         <Skeleton variant="text" className="w-1/2" />
       </div>
@@ -153,14 +160,6 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, isLoading=false, .
             </IconButton>
           </div>
         )}
-
-        {/* {product.countInStock > 0 && (
-          <div className="over pink">
-            <i className="fi fi-rr-thumbtack flex items-center justify-center"></i>
-            <IconPinBold />
-          </div>
-        )} */}
-
       </div>
 
       <div className={clsx("info", "flex flex-col-reverse items-start")}>
@@ -171,13 +170,20 @@ const ProductCardList: FC<ProductCardListProps> = ({ product, isLoading=false, .
           >
             {product.oldPrice && product.oldPrice > product.price ? (
               <div className="space-x-2">
-                <span className="text-girl-secondary">DA {product.price}</span>
+                <span className="text-girl-secondary">
+                  <span>{product.price}</span>
+                  <span>{t("ammount.da")}</span>
+                </span>
                 <span className="line-through text-sm text-gray-600">
-                  DA {product.oldPrice}
+                  <span>{product.oldPrice}</span>
+                  <span>{t("ammount.da")}</span>
                 </span>
               </div>
             ) : (
-              <span>DA {product.price}</span>
+              <span>
+                <span>{product.price}</span>
+                <span>{t("ammount.da")}</span>
+              </span>
             )}
           </div>
 

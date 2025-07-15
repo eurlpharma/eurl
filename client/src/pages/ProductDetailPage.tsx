@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import unDrawEmpty from "../assets/undraw/not_found.svg";
+import unDrawError from "../assets/undraw/server_down.svg";
 
 import {
   Box,
@@ -17,7 +19,8 @@ import {
   Tab,
   IconButton,
   Skeleton,
-  Button,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   ShoppingCartIcon,
@@ -34,8 +37,8 @@ import {
 } from "@/store/slices/productSlice";
 import { addToCart } from "@/store/slices/cartSlice";
 import { useNotification } from "@/hooks/useNotification";
-const  { Swiper, SwiperSlide } = await import("swiper/react");
-const  { Thumbs, Zoom, FreeMode } = await import("swiper/modules");
+const { Swiper, SwiperSlide } = await import("swiper/react");
+const { Thumbs, Zoom, FreeMode } = await import("swiper/modules");
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -46,6 +49,7 @@ import "@/styles/swiper-custom.css";
 import "react-photo-view/dist/react-photo-view.css";
 import ProductCardList from "@/components/products/ProductCardList";
 import AIButton from "@/components/buttons/AIButton";
+import Breadcrumb from "@/components/global/Breadcrumb";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -84,12 +88,14 @@ const ProductDetailPage = () => {
     error: apiError,
   } = useSelector((state: RootState) => state.products);
 
+  const theme = useTheme();
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
   const [activeImage, setActiveImage] = useState(0);
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
     if (id) {
@@ -111,16 +117,19 @@ const ProductDetailPage = () => {
   useEffect(() => {
     if (product) {
       const categoryId =
-        typeof product.category === 'string'
+        typeof product.category === "string"
           ? product.category
           : product.category?._id || product.category?.id;
       if (categoryId) {
-        // جلب المنتجات ذات نفس التصنيف (باستثناء المنتج الحالي)
-        dispatch(getProducts({ category: categoryId, limit: 8 })).then((res: any) => {
-          if (res.payload && res.payload.products) {
-            setRelatedProducts(res.payload.products.filter((p: any) => p.id !== product.id));
+        dispatch(getProducts({ category: categoryId, limit: 8 })).then(
+          (res: any) => {
+            if (res.payload && res.payload.products) {
+              setRelatedProducts(
+                res.payload.products.filter((p: any) => p.id !== product.id)
+              );
+            }
           }
-        });
+        );
       } else {
         setRelatedProducts([]);
       }
@@ -129,27 +138,44 @@ const ProductDetailPage = () => {
 
   if (!id || (!product && !loading)) {
     return (
-      <Container maxWidth="lg" className="py-8">
-        <Typography variant="h5" className="text-center py-16">
+      <Container
+        maxWidth="lg"
+        className="py-8 flex flex-col items-center justify-center gap-6"
+      >
+        <img src={unDrawEmpty} className="mx-auto" />
+        <Typography
+          variant="h5"
+          className="text-center font-paris capitalize text-girl-secondary font-semibold"
+        >
           {t("products.productNotFound")}
         </Typography>
+        <Link to={"/products"} className="capitalize underline">
+          Continue Shopping
+        </Link>
       </Container>
     );
   }
 
   if (apiError) {
     return (
-      <Container maxWidth="lg" className="py-8">
-        <Typography color="error" align="center" className="mb-4">
+      <Container
+        maxWidth="lg"
+        className="py-8 flex flex-col items-center justify-center gap-6"
+      >
+        <img src={unDrawError} className="mx-auto lg:max-w-[80%]" />
+        <Typography
+          variant="h5"
+          className="text-center font-paris capitalize text-girl-secondary font-semibold"
+        >
           {t("common.errorOccurred")}
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
+
+        <AIButton
+          variant="liner"
           onClick={() => dispatch(getProductDetails(id!))}
         >
           {t("common.retry")}
-        </Button>
+        </AIButton>
       </Container>
     );
   }
@@ -220,46 +246,55 @@ const ProductDetailPage = () => {
 
   if (loading && !product) {
     return (
-      <Container maxWidth="lg" className="py-8 pt-28 lg:pt-48">
-        <Box className="mb-4">
-          <Skeleton variant="text" width={300} height={30} />
-        </Box>
+      <div>
+        {!isMobile && <Breadcrumb pageName="Product Details" />}
+        <Container maxWidth="lg" className="py-8">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <Skeleton variant="rectangular" height={400} />
+              <Box className="flex mt-2 gap-2">
+                {[1, 2, 3, 4].map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    variant="rectangular"
+                    width={80}
+                    height={80}
+                  />
+                ))}
+              </Box>
+            </Grid>
 
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            <Skeleton variant="rectangular" height={400} />
-            <Box className="flex mt-2 gap-2">
-              {[1, 2, 3, 4].map((_, index) => (
-                <Skeleton
-                  key={index}
-                  variant="rectangular"
-                  width={80}
-                  height={80}
-                />
-              ))}
-            </Box>
+            <Grid item xs={12} md={6}>
+              <Skeleton variant="text" height={40} width="80%" />
+              <Skeleton
+                variant="text"
+                height={24}
+                width="40%"
+                className="mt-2"
+              />
+              <Skeleton
+                variant="text"
+                height={24}
+                width="60%"
+                className="mt-2"
+              />
+              <Skeleton variant="rectangular" height={100} className="mt-4" />
+              <Skeleton variant="rectangular" height={50} className="mt-4" />
+              <Skeleton variant="rectangular" height={50} className="mt-2" />
+            </Grid>
           </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Skeleton variant="text" height={40} width="80%" />
-            <Skeleton variant="text" height={24} width="40%" className="mt-2" />
-            <Skeleton variant="text" height={24} width="60%" className="mt-2" />
-            <Skeleton variant="rectangular" height={100} className="mt-4" />
-            <Skeleton variant="rectangular" height={50} className="mt-4" />
-            <Skeleton variant="rectangular" height={50} className="mt-2" />
-          </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </div>
     );
   }
 
   return (
     <div>
-      {/* {<Breadcrumb pageName="Product Details" />} */}
+      {!isMobile && <Breadcrumb pageName="Product Details" />}
       <Container maxWidth="lg" className="py-8">
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
-            <Box className="relative product-swiper-container">
+            <Box className="relative h-[26rem] md:h-[30rem] lg:h-[34rem] product-swiper-container">
               {product.isFeatured && (
                 <Chip
                   label={t("products.featured")}
@@ -283,7 +318,7 @@ const ProductDetailPage = () => {
                           : null,
                     }}
                     zoom={true}
-                    className="product-swiper"
+                    className="product-swiper h-full"
                     onSlideChange={(swiper) =>
                       setActiveImage(swiper.activeIndex)
                     }
@@ -294,7 +329,7 @@ const ProductDetailPage = () => {
                         <div className="swiper-zoom-container">
                           <PhotoView src={image}>
                             <img
-                              className="object-cover"
+                              className="h-full bg-product-1"
                               src={image}
                               alt={`${product.name} - ${index + 1}`}
                               onError={(e) => {
@@ -308,7 +343,6 @@ const ProductDetailPage = () => {
                     ))}
                   </Swiper>
 
-                  {/* الصور المصغرة */}
                   {productImages.length > 1 && (
                     <Swiper
                       modules={[Thumbs, FreeMode]}
@@ -348,16 +382,15 @@ const ProductDetailPage = () => {
 
           {/* Product Info */}
           <Grid item xs={12} md={6}>
-            <Typography
-              variant="h4"
-              component="h1"
-              className=" mb-2 font-josefin"
-            >
+            <Typography className="mb-2 font-josefin text-2xl lg:text-3xl text-gray-600">
               {product.name}
             </Typography>
 
             {product.brand && (
-              <Typography variant="subtitle1" className="text-gray-600 mb-2">
+              <Typography
+                variant="subtitle1"
+                className="text-girl-secondary mb-2"
+              >
                 {product.brand}
               </Typography>
             )}
@@ -370,11 +403,7 @@ const ProductDetailPage = () => {
               {product?.price !== undefined ? product.price.toFixed(2) : "0.00"}
             </Typography>
 
-            <Typography
-              variant="body1"
-              className="mb-6 font-cairo"
-              dir="auto"
-            >
+            <Typography variant="body1" className="mb-6 font-cairo" dir="auto">
               {product?.description || t("products.noDescription")}
             </Typography>
 
@@ -382,11 +411,11 @@ const ProductDetailPage = () => {
 
             {/* Stock Status */}
             {product.countInStock > 0 ? (
-              <Typography className="mb-4 text-green-600">
+              <Typography className="mb-4 text-green-600 uppercase">
                 {t("products.inStock")} {t("products.available")}
               </Typography>
             ) : (
-              <Typography className="mb-4 text-red-600">
+              <Typography className="mb-4 text-red-600 uppercase">
                 {t("products.outOfStock")}
               </Typography>
             )}
@@ -505,7 +534,6 @@ const ProductDetailPage = () => {
                       {t("products.category")}:
                     </Box>
                     <Box component="dd" className="w-2/3">
-                      {/* Here you would display category name */}
                       {t("products.medical")}
                     </Box>
                   </Box>
@@ -518,7 +546,7 @@ const ProductDetailPage = () => {
                     </Box>
                     <Box component="dd" className="w-2/3">
                       {product?.countInStock > 0
-                        ? `${t("products.inStock")} (${product.countInStock})`
+                        ? `${t("products.inStock")}`
                         : t("products.outOfStock")}
                     </Box>
                   </Box>
@@ -531,17 +559,18 @@ const ProductDetailPage = () => {
         {/* Related Products */}
         {(relatedProducts?.length ?? 0) > 0 && (
           <Box className="mt-12">
-            <Typography variant="h5" className="font-semibold font-josefin mb-6">
+            <Typography
+              variant="h5"
+              className="font-semibold font-josefin mb-6"
+            >
               {t("products.relatedProducts")}
             </Typography>
             <Grid container spacing={3}>
-              {relatedProducts
-                .slice(0, 4)
-                .map((product: any) => (
-                  <Grid item xs={6} sm={6} md={3} key={product.id}>
-                    <ProductCardList product={product} />
-                  </Grid>
-                ))}
+              {relatedProducts.slice(0, 4).map((product: any) => (
+                <Grid item xs={6} sm={6} md={3} key={product.id}>
+                  <ProductCardList product={product} />
+                </Grid>
+              ))}
             </Grid>
           </Box>
         )}

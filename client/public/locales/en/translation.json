@@ -86,6 +86,7 @@
     "subscribe": "Subscribe"
   },
   "products": {
+    "productNotFound": "Product Not Found",
     "removedFromCart": "Removed from cart",
     "maxAvailable": "Max available",
     "minAvailable": "Min available",

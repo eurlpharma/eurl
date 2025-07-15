@@ -233,7 +233,7 @@ main {
 /* Product Card Start */
 .product {
   @apply w-[98%] border border-solid border-transparent rounded-lg
-    transition-all lg:hover:border-girl-secondary overflow-hidden;
+    transition-all overflow-hidden;
 }
 
 .product .thumbs {
@@ -243,7 +243,8 @@ main {
 .product .thumbs .image {
   /* background: linear-gradient(to bottom, #e0e0e0, #c0c0c0, #a8a8a8); to bottom */
   background: radial-gradient(circle, #ffffff 0%, #cecece 60%, #b2b2b2 100%);
-  @apply w-full rounded-lg h-[14rem] py-2.5 lg:h-72 object-contain transition duration-300 ease-in-out;
+  @apply w-full rounded-lg h-[14rem] lg:h-72 object-contain transition 
+    duration-300 ease-in-out;
 }
 
 .bg-product-1 {
@@ -256,10 +257,6 @@ main {
 
 .product .thumbs .over-mode {
   @apply absolute top-0 left-0 w-full h-full bg-transparent opacity-0 z-30 transition;
-}
-
-.product:hover .thumbs .over-mode {
-  @apply lg:bg-[#ffffff80] lg:opacity-100;
 }
 
 .product .thumbs .over {
@@ -289,11 +286,12 @@ main {
 }
 
 .product .info {
-  @apply pt-2 md:pt-4 lg:pt-6 ps-0 md:ps-2 lg:ps-3 flex flex-col items-center justify-center gap-2;
+  @apply pt-2 md:pt-4 lg:pt-6 ps-0 md:ps-2 lg:ps-3 flex flex-col 
+    items-center justify-center gap-1 lg:gap-2;
 }
 
 .product .info .price {
-  @apply flex items-center gap-1 font-poppins lg:text-lg;
+  @apply flex items-center gap-1 font-poppins text-sm lg:text-medium;
 }
 
 .product .info .price .rem-price {
@@ -305,7 +303,7 @@ main {
 }
 
 .product .info .name {
-  @apply capitalize lg:text-lg text-[#1e1e1e] line-clamp-1;
+  @apply capitalize text-sm lg:text-medium text-[#1e1e1e] line-clamp-1;
 }
 
 /* Product Card End */

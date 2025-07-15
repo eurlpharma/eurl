@@ -29,7 +29,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { IconSearch } from "@/components/Iconify";
 import { getLocalizedCategoryName } from "@/utils/formatters";
 import { ResetTvOutlined } from "@mui/icons-material";
-import defaultCategoryIcon from '@/assets/icons/default/default-user.png';
+import defaultCategoryIcon from "@/assets/icons/default/default-user.png";
 
 const ProductsPage = () => {
   const { t, i18n } = useTranslation();
@@ -61,7 +61,6 @@ const ProductsPage = () => {
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
   const [limit] = useState(12);
 
-  // Search state (values used for actual filtering)
   const [searchState, setSearchState] = useState({
     keyword: searchParams.get("keyword") || "",
     selectedCategories: searchParams.get("category")
@@ -75,12 +74,10 @@ const ProductsPage = () => {
     page: Number(searchParams.get("page")) || 1,
   });
 
-  // Load categories on initial load
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
 
-  // Load products when search state changes
   useEffect(() => {
     const { keyword, selectedCategories, priceRange, sortBy, page } =
       searchState;
@@ -137,11 +134,11 @@ const ProductsPage = () => {
   }, [products, absoluteMaxPrice]);
 
   useEffect(() => {
-    // عند تغير باراميترات الرابط، حدث الفلاتر
     const categoryParam = searchParams.get("category");
     const keywordParam = searchParams.get("keyword") || "";
     const minPriceParam = Number(searchParams.get("minPrice")) || 0;
-    const maxPriceParam = Number(searchParams.get("maxPrice")) || absoluteMaxPrice;
+    const maxPriceParam =
+      Number(searchParams.get("maxPrice")) || absoluteMaxPrice;
     const sortByParam = searchParams.get("sortBy") || "createdAt";
     const pageParam = Number(searchParams.get("page")) || 1;
 
@@ -216,7 +213,7 @@ const ProductsPage = () => {
     setKeywordInput("");
     setSelectedCategories([]);
     setPriceRange([0, absoluteMaxPrice]);
-    setMaxPrice(absoluteMaxPrice); // إعادة تعيين maxPrice للسلايدر
+    setMaxPrice(absoluteMaxPrice);
     setSortBy("createdAt");
     setPage(1);
 
@@ -228,7 +225,7 @@ const ProductsPage = () => {
       page: 1,
     });
 
-    setSearchParams({}); // مسح باراميترات البحث من الرابط
+    setSearchParams({});
   };
 
   const toggleFilters = () => {
@@ -289,7 +286,13 @@ const ProductsPage = () => {
                       <img
                         src={cat.icon || cat.image || defaultCategoryIcon}
                         alt="icon"
-                        style={{ width: 22, height: 22, display: "inline-block", marginRight: 8, verticalAlign: "middle" }}
+                        style={{
+                          width: 22,
+                          height: 22,
+                          display: "inline-block",
+                          marginRight: 8,
+                          verticalAlign: "middle",
+                        }}
                       />
                       {getLocalizedCategoryName(cat, i18n.language)}
                     </>
@@ -339,8 +342,12 @@ const ProductsPage = () => {
     activeFilters.push({ label: searchState.keyword, key: "keyword" });
   if (searchState.selectedCategories.length > 0) {
     searchState.selectedCategories.forEach((catId) => {
-      const category = categories.find((c: any) => c._id === catId || c.id === catId);
-      const categoryName = category ? getLocalizedCategoryName(category, i18n.language) : catId;
+      const category = categories.find(
+        (c: any) => c._id === catId || c.id === catId
+      );
+      const categoryName = category
+        ? getLocalizedCategoryName(category, i18n.language)
+        : catId;
       activeFilters.push({ label: categoryName, key: `category-${catId}` });
     });
   }
@@ -350,8 +357,6 @@ const ProductsPage = () => {
       key: "price",
     });
   }
-
-
 
   return (
     <div className="bg-girl-white">
@@ -420,8 +425,8 @@ const ProductsPage = () => {
                   ))
                 ) : (
                   <Grid item xs={12}>
-                    <Box className="text-center py-3 md:py-6 lg:py-16 space-y-3">
-                      <img src={NotFoundProduct} alt="Not Found Product" />
+                    <Box className="flex flex-col items-center justify-center gap-3 lg:gap-4 py-3 md:py-6 lg:py-16">
+                      <img className="mx-auto" src={NotFoundProduct} alt="Not Found Product" />
                       <Typography
                         variant="h6"
                         className="mb-2 font-paris text-3xl font-semibold text-girl-secondary capitalize"
