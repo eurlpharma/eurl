@@ -13,7 +13,7 @@ export default defineConfig({
   resolve: {},
   build: {
     outDir: "dist",
-    target: "es2020",
+    target: "esnext",
     sourcemap: false,
     chunkSizeWarningLimit: 600,
     rollupOptions: {
