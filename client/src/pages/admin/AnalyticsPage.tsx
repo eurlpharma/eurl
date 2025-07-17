@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -14,6 +14,7 @@ import {
   MenuItem,
   SelectChangeEvent,
   useTheme,
+  Skeleton,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
@@ -24,8 +25,30 @@ import {
   getVisitorStats,
   getProductStats,
 } from "@/store/slices/adminSlice";
-import Preloader from "@/components/global/Preloader";
-import AIButton from "@/components/buttons/AIButton";
+import UIButton from "@/components/design/UIButton";
+
+interface CardChartProps {
+  title: string;
+  children: ReactNode;
+}
+
+const CardChart: FC<CardChartProps> = ({ title, children }) => {
+  const { t } = useTranslation();
+
+  return (
+    <Card classes={{ root: "shadow-lighter p-0 rounded-xl" }}>
+      <CardHeader
+        title={t(title)}
+        className="font-public-sans"
+        classes={{
+          title: "font-public-sans text-medium lg:text-lg xl:text-xl",
+        }}
+      />
+      <Divider />
+      <CardContent>{children}</CardContent>
+    </Card>
+  );
+};
 
 const AnalyticsPage = () => {
   const { t } = useTranslation();
@@ -114,7 +137,8 @@ const AnalyticsPage = () => {
         enabled: false,
       },
     },
-    colors: [theme.palette.primary.main, theme.palette.success.main],
+    // colors: [theme.palette.primary.main, theme.palette.success.main],
+    colors: ["#4A90E2", "#50E3C2"],
     dataLabels: {
       enabled: false,
     },
@@ -180,6 +204,13 @@ const AnalyticsPage = () => {
       position: "top" as const,
       horizontalAlign: "right" as const,
     },
+
+    grid: {
+      show: true,
+      borderColor: "rgba(0,0,0,0.1)",
+      strokeDashArray: 4,
+    },
+    fontFamily: "Public Sans, Poppins, Cairo, Tajawal, sans-serif",
   };
 
   const salesChartSeries = [
@@ -426,19 +457,15 @@ const AnalyticsPage = () => {
     stockStatusSeries.length > 0 &&
     stockStatusSeries.every((item) => typeof item === "number" && !isNaN(item));
 
-  if (loading) {
-    return <Preloader />;
-  }
-
-  if (error) {
+  if (!error) {
     return (
       <Box className="flex flex-col items-center justify-center h-full p-6 space-y-3">
         <img src={unDrawError} />
         <Typography className="mb-4 font-paris text-girl-secondary text-2xl font-semibold capitalize">
           {t("common.errorOccurred")}
         </Typography>
-        <AIButton
-          variant="solid"
+        <UIButton
+          variant="soft"
           radius="full"
           onClick={() => {
             dispatch(getSalesStats(period));
@@ -447,7 +474,7 @@ const AnalyticsPage = () => {
           }}
         >
           {t("common.refreshPage")}
-        </AIButton>
+        </UIButton>
       </Box>
     );
   }
@@ -455,7 +482,7 @@ const AnalyticsPage = () => {
   return (
     <Box className="p-4">
       <Box className="flex justify-between mb-6">
-        <Typography variant="h4" component="h1" className="mb-6 font-josefin">
+        <Typography variant="h6" component="h1" className="font-public-sans">
           {t("admin.analytics")}
         </Typography>
         <FormControl variant="outlined" size="small" className="min-w-[200px]">
@@ -474,94 +501,116 @@ const AnalyticsPage = () => {
         </FormControl>
       </Box>
 
-      <Grid container spacing={3} className="mb-6">
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardHeader title={t("admin.salesOverTime")} />
-            <Divider />
-            <CardContent>
-              <ReactApexChart
-                options={salesChartOptions}
-                series={salesChartSeries}
-                type="area"
-                height={350}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
+      {loading ? (
+        <>
+          <Grid container spacing={3} className="mb-6">
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.salesOverTime">
+                <Skeleton variant="rounded" className="w-full h-80" />
+              </CardChart>
+            </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardHeader title={t("admin.visitorStats")} />
-            <Divider />
-            <CardContent>
-              <ReactApexChart
-                options={visitorChartOptions}
-                series={visitorChartSeries}
-                type="area"
-                height={350}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.visitorStats">
+                <Skeleton variant="rounded" className="w-full h-80" />
+              </CardChart>
+            </Grid>
+          </Grid>
 
-      <Grid container spacing={3} className="mb-6">
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardHeader title={t("admin.topCategories")} />
-            <Divider />
-            <CardContent>
-              {isValidCategorySeries ? (
+          <Grid container spacing={3} className="mb-6">
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.topCategories">
+                <Skeleton variant="rounded" className="w-full h-80" />
+              </CardChart>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.productPerformance">
+                <Skeleton variant="rounded" className="w-full h-80" />
+              </CardChart>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.stockStatus">
+                <Skeleton variant="rounded" className="w-full h-80" />
+              </CardChart>
+            </Grid>
+          </Grid>
+        </>
+      ) : (
+        <>
+          <Grid container spacing={3} className="mb-6">
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.salesOverTime">
                 <ReactApexChart
-                  options={categoryChartOptions}
-                  series={categoryChartSeries}
-                  type="pie"
+                  options={salesChartOptions}
+                  series={salesChartSeries}
+                  type="area"
                   height={350}
                 />
-              ) : (
-                <Typography>لا توجد بيانات للفترة المختارة</Typography>
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
+              </CardChart>
+            </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardHeader title={t("admin.productPerformance")} />
-            <Divider />
-            <CardContent>
-              <ReactApexChart
-                options={productPerformanceOptions}
-                series={productPerformanceSeries}
-                type="bar"
-                height={350}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardHeader title={t("admin.stockStatus")} />
-            <Divider />
-            <CardContent>
-              {isValidStockStatusSeries ? (
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.visitorStats">
                 <ReactApexChart
-                  options={stockStatusOptions}
-                  series={stockStatusSeries}
-                  type="donut"
+                  options={visitorChartOptions}
+                  series={visitorChartSeries}
+                  type="area"
                   height={350}
                 />
-              ) : (
-                <Typography>لا توجد بيانات للفترة المختارة</Typography>
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+              </CardChart>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={3} className="mb-6">
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.topCategories">
+                {isValidCategorySeries ? (
+                  <ReactApexChart
+                    options={categoryChartOptions}
+                    series={categoryChartSeries}
+                    type="pie"
+                    height={350}
+                  />
+                ) : (
+                  <Typography>لا توجد بيانات للفترة المختارة</Typography>
+                )}
+              </CardChart>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.productPerformance">
+                <ReactApexChart
+                  options={productPerformanceOptions}
+                  series={productPerformanceSeries}
+                  type="bar"
+                  height={350}
+                />
+              </CardChart>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <CardChart title="admin.stockStatus">
+                {isValidStockStatusSeries ? (
+                  <ReactApexChart
+                    options={stockStatusOptions}
+                    series={stockStatusSeries}
+                    type="donut"
+                    height={350}
+                  />
+                ) : (
+                  <Typography>لا توجد بيانات للفترة المختارة</Typography>
+                )}
+              </CardChart>
+            </Grid>
+          </Grid>
+        </>
+      )}
     </Box>
   );
 };
