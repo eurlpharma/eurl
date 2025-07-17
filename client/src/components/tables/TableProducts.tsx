@@ -344,7 +344,11 @@ const TableProducts: FC<TableProductsProps> = ({
                     component={Link}
                     size="sm"
                     className="text-tiny lg:text-sm"
-                    startIcon={isViewAll==="new" && <PlusIcon className="w-4 md:w-5 lg:w-6" />}
+                    startIcon={
+                      isViewAll === "new" && (
+                        <PlusIcon className="w-4 md:w-5 lg:w-6" />
+                      )
+                    }
                     to={
                       isViewAll === "all"
                         ? "/admin/products"
@@ -359,7 +363,7 @@ const TableProducts: FC<TableProductsProps> = ({
                   </UIButton>
                 )}
 
-                <UIButton 
+                <UIButton
                   startIcon={<IconExcel className="w-4 h-4" />}
                   onClick={handleExportExcel}
                   size="sm"
@@ -394,7 +398,7 @@ const TableProducts: FC<TableProductsProps> = ({
         )}
         <CardContent className="p-0">
           <TableContainer component={Paper} className="shadow-none">
-            <SimpleBar style={{ maxHeight: "66vh" }}>
+            <SimpleBar style={{maxHeight: "66vh"}}>
               <Table
                 sx={{
                   "& .MuiTableCell-root": {
