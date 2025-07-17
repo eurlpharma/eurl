@@ -30,6 +30,7 @@ import i18n from "@/i18n";
 import { Link, useNavigate } from "react-router-dom";
 import {
   IconCheckCircle,
+  IconExcel,
   IconPenBold,
   IconTimeBold,
   IconTrashBold,
@@ -49,6 +50,9 @@ import { AppDispatch } from "@/store";
 import { deleteProduct, getProducts } from "@/store/slices/productSlice";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import UIButton from "../design/UIButton";
+
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 interface TableProductsProps extends HTMLAttributes<HTMLElement> {
   isPagination?: boolean;
@@ -104,6 +108,16 @@ const cells = [
   },
 ];
 
+const columnsMap: Record<string, string> = {
+  name: "Name",
+  price: "Price",
+  oldPrice: "Old Price",
+  countInStock: "Stock",
+  isFeatured: "Featured",
+  isVisible: "Visible",
+  createdAt: "Created At",
+};
+
 const TableProducts: FC<TableProductsProps> = ({
   isPagination,
   isViewAll,
@@ -120,11 +134,17 @@ const TableProducts: FC<TableProductsProps> = ({
   const { success } = useNotification();
   const dispatch = useDispatch<AppDispatch>();
   const [maxQuant, setMaxQuant] = useState<number>(0);
-  const { products, loading, error, totalProducts }: {
-    products: ProductData[], loading: boolean, error: any, totalProducts: number
-  } = useSelector(
-    (state: any) => state.products
-  );
+  const {
+    products,
+    loading,
+    error,
+    totalProducts,
+  }: {
+    products: ProductData[];
+    loading: boolean;
+    error: any;
+    totalProducts: number;
+  } = useSelector((state: any) => state.products);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -260,8 +280,49 @@ const TableProducts: FC<TableProductsProps> = ({
 
   const limited = isRecent ?? Infinity;
 
+  const handleExportExcel = () => {
+    const filteredProducts = products.map((product) => {
+      const filtered: Record<string, any> = {};
+      Object.keys(columnsMap).forEach((key) => {
+        let value = product[key as keyof typeof product];
 
-  
+        if (key === "createdAt" && typeof value === "string") {
+          const date = new Date(value);
+          value = date.toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          });
+        }
+
+        filtered[columnsMap[key]] = value;
+      });
+      return filtered;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(filteredProducts);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const today = new Date();
+    const dateStr = `${today.getDate()}-${
+      today.getMonth() + 1
+    }-${today.getFullYear()}`;
+
+    const data = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    saveAs(data, `products-${dateStr}.xlsx`);
+  };
 
   return (
     <div {...props}>
@@ -275,12 +336,15 @@ const TableProducts: FC<TableProductsProps> = ({
               title: "font-public-sans text-medium lg:text-lg xl:text-xl",
             }}
             action={
-              isViewAll && (
-                <>
+              <div className="flex items-center gap-3">
+                {isViewAll && (
                   <UIButton
                     color="grey"
                     variant="link"
                     component={Link}
+                    size="sm"
+                    className="text-tiny lg:text-sm"
+                    startIcon={isViewAll==="new" && <PlusIcon className="w-4 md:w-5 lg:w-6" />}
                     to={
                       isViewAll === "all"
                         ? "/admin/products"
@@ -293,8 +357,18 @@ const TableProducts: FC<TableProductsProps> = ({
                         : "admin.NewProduct"
                     )}
                   </UIButton>
-                </>
-              )
+                )}
+
+                <UIButton 
+                  startIcon={<IconExcel className="w-4 h-4" />}
+                  onClick={handleExportExcel}
+                  size="sm"
+                  variant="light"
+                  className="text-tiny lg:text-sm"
+                >
+                  Export
+                </UIButton>
+              </div>
             }
           />
         )}
@@ -466,18 +540,16 @@ const TableProducts: FC<TableProductsProps> = ({
                                   </div>
                                 </Box>
                               </TableCell>
-                              
+
                               <TableCell className="font-barlow">
                                 <UIChip
                                   variant="soft"
                                   radius="full"
                                   className=""
-                                  
                                   color={
                                     product.isVisible ? "primary" : "error"
                                   }
                                   size="sm"
-                                 
                                 >
                                   {t(
                                     `common.${
@@ -494,7 +566,6 @@ const TableProducts: FC<TableProductsProps> = ({
                                   variant="soft"
                                   radius="full"
                                   className="ps-0"
-                                  
                                   color={
                                     product.isFeatured ? "secondary" : "primary"
                                   }
