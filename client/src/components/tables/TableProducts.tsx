@@ -493,8 +493,8 @@ const TableProducts: FC<TableProductsProps> = ({
                                 )}
                               </TableCell>
 
-                              <TableCell className="font-public-sans whitespace-nowrap capitalize">
-                                <div>{product.name}</div>
+                              <TableCell className="font-public-sans capitalize">
+                                <div className="min-w-[10rem] max-w-[14rem] line-clamp-1">{product.name}</div>
                                 <div className="text-gray-500">
                                   {product.category
                                     ? getLocalizedCategoryName(

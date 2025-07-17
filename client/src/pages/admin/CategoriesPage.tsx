@@ -411,7 +411,8 @@ const CategoriesPage = () => {
         fullWidth
         className="backdrop-blur-sm bg-white/10 transit"
         classes={{
-          paper: "shadow-lighter rounded-xl min-w-[96%] lg:min-w-fit lg:max-w-[18rem]",
+          paper:
+            "shadow-lighter rounded-xl min-w-[96%] lg:min-w-fit lg:max-w-[18rem]",
         }}
       >
         <DialogTitle className="font-public-sans">
@@ -514,18 +515,22 @@ const CategoriesPage = () => {
         </DialogActions>
       </Dialog>
 
-      <Dialog 
+      <Dialog
         container={document.getElementById("root")}
-        open={deleteDialogOpen} 
+        open={deleteDialogOpen}
         onClose={handleCloseDeleteDialog}
         className="backdrop-blur-sm bg-white/10 transition-transform-background duration-500"
         classes={{
           paper: "shadow-lighter rounded-xl",
         }}
       >
-        <DialogTitle className="font-public-sans">{t("admin.deleteCategory")}</DialogTitle>
+        <DialogTitle className="font-public-sans">
+          {t("admin.deleteCategory")}
+        </DialogTitle>
         <DialogContent>
-          <Typography className="font-public-sans">{t("admin.deleteCategoryConfirm")}</Typography>
+          <Typography className="font-public-sans">
+            {t("admin.deleteCategoryConfirm")}
+          </Typography>
         </DialogContent>
         <DialogActions>
           <UIButton variant="soft" size="sm" onClick={handleCloseDeleteDialog}>

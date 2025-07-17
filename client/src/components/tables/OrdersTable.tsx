@@ -28,6 +28,7 @@ import {
   DialogContentText,
   DialogActions,
   CardHeader,
+  Skeleton,
 } from "@mui/material";
 import { MagnifyingGlassIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import { Order, OrderStatus, OrdersResponse } from "@/types/order";
@@ -40,10 +41,13 @@ import { showNotification } from "@/store/slices/uiSlice";
 import { UpdateOrderStatusData } from "@/types/order";
 import { AppDispatch } from "@/store";
 import UIChip from "../design/UIChip";
-import { IconPrintBold, IconTrashBold } from "../Iconify";
+import { IconFilter, IconPrintBold, IconTrashBold } from "../Iconify";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import UIButton from "../design/UIButton";
+import unDrawError from "../../assets/undraw/bug_fix.svg";
+import clsx from "clsx";
+import { PlusIcon } from "lucide-react";
 
 const shortenOrderId = (id: string) => {
   return id.slice(-6).toUpperCase();
@@ -78,8 +82,6 @@ const cells = [
   { key: "common.actions" },
 ];
 
-/* Test */
-
 interface OrdersTableProps extends HTMLAttributes<HTMLElement> {
   header?: string;
   subHeader?: string;
@@ -105,6 +107,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
   const [pages, setPages] = useState(1);
   const [_, setTotal] = useState(0);
   const [search, setSearch] = useState("");
+  const [openFilter, setOpenFilter] = useState<boolean>(false);
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "">("");
   const [paymentFilter, setPaymentFilter] = useState<"all" | "paid" | "unpaid">(
     "all"
@@ -262,24 +265,23 @@ const OrdersTable: FC<OrdersTableProps> = ({
     setOrderToDelete(null);
   };
 
-  if (loading) {
-    return (
-      <Box className="flex justify-center items-center h-64">
-        <Typography>{t("common.loading")}</Typography>
-      </Box>
-    );
-  }
-
   if (error) {
     return (
-      <Box className="flex justify-center items-center h-64">
-        <Typography color="error">{error}</Typography>
+      <Box className="flex justify-center items-center flex-col gap-4">
+        <img
+          src={unDrawError}
+          alt="Error Orders Page"
+          className="w-full lg:w-[50%]"
+        />
+        <div className="capitalize font-paris text-2xl lg:text-3xl font-semibold text-girl-secondary">
+          {t("common.errorOccurred")}
+        </div>
       </Box>
     );
   }
 
   return (
-    <div className="shadow-lighter p-0 pb-4 rounded-xl">
+    <div className="shadow-lighter mx-4 my-8 rounded-xl">
       <CardHeader
         className="font-public-sans"
         title={header && t(header)}
@@ -288,23 +290,44 @@ const OrdersTable: FC<OrdersTableProps> = ({
           title: "font-public-sans text-medium lg:text-lg xl:text-xl",
         }}
         action={
-          isViewAll && (
-            <>
+          <div className="flex items-center gap-3">
+            <UIButton
+              startIcon={<IconFilter className="w-4 h-4" />}
+              onClick={() => setOpenFilter(!openFilter)}
+              className="capitalize text-sm"
+              variant="link"
+            >
+              filter
+            </UIButton>
+
+            {isViewAll && (
               <UIButton
                 color="grey"
-                variant="link"
+                variant="soft"
                 component={Link}
+                startIcon={
+                  isViewAll === "add" && <PlusIcon className="w-4 h-4" />
+                }
                 to={isViewAll === "all" ? "/admin/orders" : "/admin/orders"}
+                className="text-sm"
               >
-                {t(isViewAll === "all" ? "common.viewAll" : "New order")}
+                {t(isViewAll === "all" ? "common.viewAll" : "Order")}
               </UIButton>
-            </>
-          )
+            )}
+          </div>
         }
       />
 
       {isFilter && (
-        <Paper className="p-4 mb-4" classes={{ root: "shadow-none" }}>
+        <Paper
+          className={clsx(
+            "overflow-hidden transition-all duration-300",
+            openFilter
+              ? "p-4 mb-4 h-fit opacity-100"
+              : "p-0 m-0 h-0 overflow-hidden opacity-0"
+          )}
+          classes={{ root: "shadow-none" }}
+        >
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={3}>
               <TextField
@@ -322,6 +345,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
                 }}
               />
             </Grid>
+
             <Grid item xs={12} md={3}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel>{t("orders.filterByStatus")}</InputLabel>
@@ -347,6 +371,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
                 </Select>
               </FormControl>
             </Grid>
+
             <Grid item xs={12} md={3}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel>
@@ -369,6 +394,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
                 </Select>
               </FormControl>
             </Grid>
+
             <Grid item xs={12} md={3}>
               <UIButton
                 radius="lg"
@@ -403,176 +429,212 @@ const OrdersTable: FC<OrdersTableProps> = ({
                 ))}
               </TableRow>
             </TableHead>
+
             <TableBody>
-              {orders.map((order, idx) => (
-                <TableRow
-                  key={order._id || order.id || idx}
-                  className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
-                >
-                  <TableCell className="font-public-sans">
-                    {order.id ? (
-                      <Link
-                        to={`/admin/orders/${order.id}`}
-                        className="text-primary-600 hover:underline"
-                      >
-                        #{shortenOrderId(order._id || order.id || "")}
-                      </Link>
-                    ) : (
-                      <span>-</span>
-                    )}
-                  </TableCell>
-                  <TableCell
-                    onClick={() => navigate(`/admin/orders/${order.id}`)}
-                  >
-                    <Box>
-                      <Typography className="whitespace-nowrap font-public-sans">
-                        {order.guestInfo?.name ||
-                          (typeof order.user === "object" && order.user?.name
-                            ? order.user.name
-                            : "-")}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell
-                    onClick={() => navigate(`/admin/orders/${order.id}`)}
-                  >
-                    <Typography className="whitespace-nowrap font-barlow">
-                      {order.guestInfo?.phone ||
-                        (typeof order.user === "object" && order.user?.phone
-                          ? order.user.phone
-                          : "-")}
-                    </Typography>
-                  </TableCell>
-                  <TableCell className="font-poppins">
-                    {order.createdAt
-                      ? new Date(order.createdAt).toLocaleDateString()
-                      : "-"}
-                  </TableCell>
-                  <TableCell>
-                    <Typography className="whitespace-nowrap flex items-center gap-1 font-barlow font-medium">
-                      {order.totalPrice.toFixed(2)}{" "}
-                      {t("ammount.da").toUpperCase()}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <UIChip
-                      size="sm"
-                      radius="full"
-                      variant="soft"
-                      className="capitalize px-2"
-                      color={order.isPaid ? "success" : "error"}
+              {loading
+                ? Array.from(Array(6)).map((_, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Skeleton variant="text" component="h2" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" component="h2" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton />
+                      </TableCell>
+                      <TableCell>
+                        <Box className="flex justify-end items-center gap-2">
+                          <Skeleton variant="circular" className="w-6 h-6" />
+                          <Skeleton variant="circular" className="w-6 h-6" />
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                : orders.map((order, idx) => (
+                    <TableRow
+                      key={order._id || order.id || idx}
+                      className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
                     >
-                      {order.isPaid ? t("orders.paid") : t("orders.unpaid")}
-                    </UIChip>
-                  </TableCell>
-                  <TableCell>
-                    <UIChip
-                      size="sm"
-                      radius="full"
-                      variant="soft"
-                      className="capitalize px-2"
-                      color={getStatusColor(order.status)}
-                      onClick={(e) =>
-                        handleOpenMenu(e, order._id || order.id || "")
-                      }
-                    >
-                      {t(`orders.status.${order.status?.toLowerCase?.()}`)}
-                    </UIChip>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center">
-                      <Box display="flex" alignItems="center">
-                        {order.orderItems && order.orderItems.length > 0 ? (
-                          order.orderItems
-                            .slice(0, 1)
-                            .map((item: any, idx: number) => (
-                              <img
-                                className="min-w-8 min-h-8 w-8 h-8"
-                                alt={item.name}
-                                key={item._id || item.productId || idx}
-                                src={
-                                  item.image ||
-                                  (item.product && item.product.image) ||
-                                  "/images/product-placeholder.svg"
-                                }
-                                style={{
-                                  width: 32,
-                                  height: 32,
-                                  objectFit: "cover",
-                                  marginRight: 4,
-                                  borderRadius: 4,
-                                }}
-                              />
-                            ))
+                      <TableCell className="font-public-sans">
+                        {order.id ? (
+                          <Link
+                            to={`/admin/orders/${order.id}`}
+                            className="text-primary-600 hover:underline"
+                          >
+                            #{shortenOrderId(order._id || order.id || "")}
+                          </Link>
                         ) : (
                           <span>-</span>
                         )}
-                      </Box>
-
-                      <Box>
-                        {order.orderItems && order.orderItems.length > 0 ? (
-                          order.orderItems
-                            .slice(0, 2)
-                            .map((item: any, idx: number) => (
-                              <Typography
-                                key={item._id || item.productId || idx}
-                                variant="caption"
-                                display="block"
-                                className="whitespace-nowrap"
-                              >
-                                {item.name}
-                              </Typography>
-                            ))
-                        ) : (
-                          <span>Unknown</span>
-                        )}
-                      </Box>
-                    </div>
-
-                    <Box>
-                      {order.orderItems && order.orderItems.length > 2 && (
-                        <Typography variant="caption" color="textSecondary">
-                          +{order.orderItems.length - 1} more
+                      </TableCell>
+                      <TableCell
+                        onClick={() => navigate(`/admin/orders/${order.id}`)}
+                      >
+                        <Box>
+                          <Typography className="whitespace-nowrap font-public-sans">
+                            {order.guestInfo?.name ||
+                              (typeof order.user === "object" &&
+                              order.user?.name
+                                ? order.user.name
+                                : "-")}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell
+                        onClick={() => navigate(`/admin/orders/${order.id}`)}
+                      >
+                        <Typography className="whitespace-nowrap font-barlow">
+                          {order.guestInfo?.phone ||
+                            (typeof order.user === "object" && order.user?.phone
+                              ? order.user.phone
+                              : "-")}
                         </Typography>
-                      )}
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end">
-                      <IconButton
-                        onClick={() =>
-                          handlePrintInvoice(order._id || order.id || "")
-                        }
-                        color="secondary"
-                        title={t("orders.printInvoice")}
-                      >
-                        <IconPrintBold />
-                      </IconButton>
-                      <IconButton
-                        onClick={() =>
-                          handleDeleteClick(order._id || order.id || "")
-                        }
-                        color="error"
-                        title={t("common.delete")}
-                      >
-                        <IconTrashBold />
-                      </IconButton>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      </TableCell>
+                      <TableCell className="font-poppins">
+                        {order.createdAt
+                          ? new Date(order.createdAt).toLocaleDateString()
+                          : "-"}
+                      </TableCell>
+                      <TableCell>
+                        <Typography className="whitespace-nowrap flex items-center gap-1 font-barlow font-medium">
+                          {order.totalPrice.toFixed(2)}{" "}
+                          {t("ammount.da").toUpperCase()}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <UIChip
+                          size="sm"
+                          radius="full"
+                          variant="soft"
+                          className="capitalize px-2"
+                          color={order.isPaid ? "success" : "error"}
+                        >
+                          {order.isPaid ? t("orders.paid") : t("orders.unpaid")}
+                        </UIChip>
+                      </TableCell>
+                      <TableCell>
+                        <UIChip
+                          size="sm"
+                          radius="full"
+                          variant="soft"
+                          className="capitalize px-2"
+                          color={getStatusColor(order.status)}
+                          onClick={(e) =>
+                            handleOpenMenu(e, order._id || order.id || "")
+                          }
+                        >
+                          {t(`orders.status.${order.status?.toLowerCase?.()}`)}
+                        </UIChip>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          <Box display="flex" alignItems="center">
+                            {order.orderItems && order.orderItems.length > 0 ? (
+                              order.orderItems
+                                .slice(0, 1)
+                                .map((item: any, idx: number) => (
+                                  <img
+                                    className="min-w-8 min-h-8 w-8 h-8"
+                                    alt={item.name}
+                                    key={item._id || item.productId || idx}
+                                    src={
+                                      item.image ||
+                                      (item.product && item.product.image) ||
+                                      "/images/product-placeholder.svg"
+                                    }
+                                    style={{
+                                      width: 32,
+                                      height: 32,
+                                      objectFit: "cover",
+                                      marginRight: 4,
+                                      borderRadius: 4,
+                                    }}
+                                  />
+                                ))
+                            ) : (
+                              <span>-</span>
+                            )}
+                          </Box>
+
+                          <Box>
+                            {order.orderItems && order.orderItems.length > 0 ? (
+                              order.orderItems
+                                .slice(0, 2)
+                                .map((item: any, idx: number) => (
+                                  <Typography
+                                    key={item._id || item.productId || idx}
+                                    variant="caption"
+                                    display="block"
+                                    className="min-w-[10rem] max-w-[14rem] line-clamp-1"
+                                  >
+                                    {item.name}
+                                  </Typography>
+                                ))
+                            ) : (
+                              <span>Unknown</span>
+                            )}
+                          </Box>
+                        </div>
+
+                        <Box>
+                          {order.orderItems && order.orderItems.length > 2 && (
+                            <Typography variant="caption" color="textSecondary">
+                              +{order.orderItems.length - 1} more
+                            </Typography>
+                          )}
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center justify-end">
+                          <IconButton
+                            onClick={() =>
+                              handlePrintInvoice(order._id || order.id || "")
+                            }
+                            color="secondary"
+                            title={t("orders.printInvoice")}
+                          >
+                            <IconPrintBold />
+                          </IconButton>
+                          <IconButton
+                            onClick={() =>
+                              handleDeleteClick(order._id || order.id || "")
+                            }
+                            color="error"
+                            title={t("common.delete")}
+                          >
+                            <IconTrashBold />
+                          </IconButton>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
             </TableBody>
           </Table>
         </SimpleBar>
       </TableContainer>
 
       {isPagination && (
-        <Box className="flex justify-center mt-4">
+        <Box className="flex justify-center py-4">
           <Pagination
             count={pages}
             page={page}
             onChange={(_, value) => setPage(value)}
-            color="primary"
             showFirstButton
             showLastButton
           />
