@@ -46,7 +46,6 @@ const ProductsPage = () => {
   );
   const { categories } = useSelector((state: RootState) => state.categories);
 
-  // Local state for displayed filters (form values)
   const [keywordInput, setKeywordInput] = useState(
     searchParams.get("keyword") || ""
   );
@@ -259,7 +258,7 @@ const ProductsPage = () => {
       </form>
 
       <Box className="mb-4 font-josefin">
-        <Typography variant="h6" className="mb-3 font-josefin">
+        <Typography variant="h6" className="mb-3 font-public-sans">
           {t("products.category")}
         </Typography>
 
@@ -275,7 +274,7 @@ const ProductsPage = () => {
                     key={catId}
                     onClick={() => catId && handleCategoryChange(catId)}
                     className={`
-                      font-josefin text-lg capitalize py-2  rounded-lg cursor-pointer transition-all duration-200
+                      font-public-sans capitalize py-2  rounded-lg cursor-pointer transition-all duration-200
                       ${
                         catId && selectedCategories.includes(catId)
                           ? " text-girl-secondary"

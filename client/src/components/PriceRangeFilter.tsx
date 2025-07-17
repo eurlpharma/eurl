@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Slider, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import numeral from "numeral";
 
 interface PriceRangeFilterProps {
   onPriceChange: (min: number, max: number) => void;
@@ -32,7 +33,7 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
       <Typography
         variant="subtitle1"
         gutterBottom
-        className="font-josefin text-lg"
+        className="font-public-sans text-lg"
       >
         {t("products.priceRange")}
       </Typography>
@@ -43,7 +44,31 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
         valueLabelDisplay="auto"
         min={0}
         max={maxPrice}
-        valueLabelFormat={(value) => `${value} ${t("common.currency")}`}
+        valueLabelFormat={(value) => `${numeral(value).format('0,0.00')} ${t("ammount.da")}`}
+        sx={{
+          color: "#ed1b6f", // لون السلايدر والخط النشط
+          height: 6,
+          "& .MuiSlider-thumb": {
+            width: 16,
+            height: 16,
+            borderRadius: 2, // مربع خفيف
+            backgroundColor: "#fff",
+            border: "2px solid #ed1b6f",
+            "&:hover, &.Mui-focusVisible, &.Mui-active": {
+              boxShadow: "0px 0px 0px 6px rgba(255, 0, 102, 0.16)",
+            },
+          },
+          "& .MuiSlider-rail": {
+            color: "#ccc", // لون الخلفية
+          },
+          "& .MuiSlider-track": {
+            color: "#ed1b6f", // لون التراك الفعال
+          },
+          "& .MuiSlider-valueLabel": {
+            backgroundColor: "#ed1b6f",
+            borderRadius: "4px",
+          },
+        }}
       />
     </Box>
   );
