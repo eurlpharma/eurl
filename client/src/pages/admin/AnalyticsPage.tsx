@@ -457,7 +457,7 @@ const AnalyticsPage = () => {
     stockStatusSeries.length > 0 &&
     stockStatusSeries.every((item) => typeof item === "number" && !isNaN(item));
 
-  if (!error) {
+  if (error) {
     return (
       <Box className="flex flex-col items-center justify-center h-full p-6 space-y-3">
         <img src={unDrawError} />
