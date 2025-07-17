@@ -44,14 +44,16 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
         valueLabelDisplay="auto"
         min={0}
         max={maxPrice}
-        valueLabelFormat={(value) => `${numeral(value).format('0,0.00')} ${t("ammount.da")}`}
+        valueLabelFormat={(value) =>
+          `${numeral(value).format("0,0")} ${t("ammount.da")}`
+        }
         sx={{
-          color: "#ed1b6f", // لون السلايدر والخط النشط
+          color: "#ed1b6f",
           height: 6,
           "& .MuiSlider-thumb": {
             width: 16,
             height: 16,
-            borderRadius: 2, // مربع خفيف
+            borderRadius: 2,
             backgroundColor: "#fff",
             border: "2px solid #ed1b6f",
             "&:hover, &.Mui-focusVisible, &.Mui-active": {
@@ -59,10 +61,10 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
             },
           },
           "& .MuiSlider-rail": {
-            color: "#ccc", // لون الخلفية
+            color: "#ccc",
           },
           "& .MuiSlider-track": {
-            color: "#ed1b6f", // لون التراك الفعال
+            color: "#ed1b6f",
           },
           "& .MuiSlider-valueLabel": {
             backgroundColor: "#ed1b6f",

@@ -258,7 +258,7 @@ const ProductsPage = () => {
       </form>
 
       <Box className="mb-4 font-josefin">
-        <Typography variant="h6" className="mb-3 font-public-sans">
+        <Typography className="mb-3 font-public-sans text-lg">
           {t("products.category")}
         </Typography>
 
