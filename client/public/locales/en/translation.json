@@ -204,6 +204,8 @@
     "acceptTerms": "You must accept the terms and conditions"
   },
   "common": {
+    "published": "Published",
+    "unpublished": "Un Published",
     "featured": "Featured",
     "available": "Available",
     "EmptyProducts": "Empty Product",

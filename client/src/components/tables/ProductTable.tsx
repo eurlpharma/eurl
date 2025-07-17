@@ -63,8 +63,11 @@ const cellsTableProducts = [
   },
 ];
 
+
 const ProductTable: FC<ProductTableProps> = ({ products, ...props }) => {
   const { t } = useTranslation();
+
+
 
   return (
     <div {...props}>

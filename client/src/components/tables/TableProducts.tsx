@@ -86,6 +86,12 @@ const cells = [
   },
 
   {
+    key: "Published",
+    label: "Published",
+    align: "left" as const,
+  },
+
+  {
     key: "products.featured",
     label: "featured",
     align: "left" as const,
@@ -114,7 +120,9 @@ const TableProducts: FC<TableProductsProps> = ({
   const { success } = useNotification();
   const dispatch = useDispatch<AppDispatch>();
   const [maxQuant, setMaxQuant] = useState<number>(0);
-  const { products, loading, error, totalProducts } = useSelector(
+  const { products, loading, error, totalProducts }: {
+    products: ProductData[], loading: boolean, error: any, totalProducts: number
+  } = useSelector(
     (state: any) => state.products
   );
 
@@ -251,6 +259,9 @@ const TableProducts: FC<TableProductsProps> = ({
   };
 
   const limited = isRecent ?? Infinity;
+
+
+  
 
   return (
     <div {...props}>
@@ -403,6 +414,7 @@ const TableProducts: FC<TableProductsProps> = ({
                                   />
                                 )}
                               </TableCell>
+
                               <TableCell className="font-public-sans whitespace-nowrap capitalize">
                                 <div>{product.name}</div>
                                 <div className="text-gray-500">
@@ -414,9 +426,11 @@ const TableProducts: FC<TableProductsProps> = ({
                                     : "-"}
                                 </div>
                               </TableCell>
+
                               <TableCell className="font-barlow lg:text-lg whitespace-nowrap">
                                 {product.price} {t("ammount.da")}
                               </TableCell>
+
                               <TableCell className="font-barlow lg:text-lg">
                                 <Box>
                                   <UIProgress
@@ -452,6 +466,29 @@ const TableProducts: FC<TableProductsProps> = ({
                                   </div>
                                 </Box>
                               </TableCell>
+                              
+                              <TableCell className="font-barlow">
+                                <UIChip
+                                  variant="soft"
+                                  radius="full"
+                                  className=""
+                                  
+                                  color={
+                                    product.isVisible ? "primary" : "error"
+                                  }
+                                  size="sm"
+                                 
+                                >
+                                  {t(
+                                    `common.${
+                                      product.isVisible
+                                        ? "published"
+                                        : "unpublished"
+                                    }`
+                                  )}
+                                </UIChip>
+                              </TableCell>
+
                               <TableCell className="font-barlow">
                                 <UIChip
                                   variant="soft"
@@ -479,6 +516,7 @@ const TableProducts: FC<TableProductsProps> = ({
                                   )}
                                 </UIChip>
                               </TableCell>
+
                               <TableCell>
                                 <div className="flex items-center justify-end">
                                   <IconButton

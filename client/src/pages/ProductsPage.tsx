@@ -60,7 +60,7 @@ const ProductsPage = () => {
     searchParams.get("sortBy") || "createdAt"
   );
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
-  const [limit] = useState(12);
+  const [limit] = useState(20);
 
   const [searchState, setSearchState] = useState({
     keyword: searchParams.get("keyword") || "",
@@ -91,7 +91,7 @@ const ProductsPage = () => {
           : undefined,
       minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
       maxPrice:
-        priceRange[1] > 0 && priceRange[1] < 1000000
+        priceRange[1] > 0 && priceRange[1] < absoluteMaxPrice
           ? priceRange[1]
           : undefined,
       sortBy,

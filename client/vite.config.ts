@@ -18,6 +18,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "https://pharma-api-e5sd.onrender.com",
+        // target: "https://pharma-api-e5sd.onrender.com",
         changeOrigin: true,
         secure: false,
       },
