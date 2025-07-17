@@ -7,9 +7,8 @@ import cloudinary from '../utils/cloudinary.js';
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  console.log('Received query params:', req.query);
   
-  const pageSize = 10;
+  const pageSize = Number(req.query.limit) || 10;
   const page = Number(req.query.page) || 1;
   const keyword = req.query.keyword || '';
   const categoryIds = req.query.category ? req.query.category.split(',').map(id => id.trim()) : [];
