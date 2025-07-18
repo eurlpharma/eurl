@@ -10,9 +10,9 @@ import { useAuth } from "@/hooks/useAuth";
 // import { useTheme } from "@/hooks/useTheme";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { useAppSettings } from '@/hooks/useAppSettings';
+import { useAppSettings } from "@/hooks/useAppSettings";
+import avatar from "../../assets/avatars/avatar-user.png";
 
-// MUI Components
 import {
   AppBar,
   Toolbar,
@@ -32,31 +32,31 @@ import {
 
 // Icons
 import {
-  ShoppingCartIcon,
   Bars3Icon,
   XMarkIcon,
   // SunIcon,
   // MoonIcon,
   Cog6ToothIcon,
-  ArrowRightOnRectangleIcon,
-  LanguageIcon,
 } from "@heroicons/react/24/outline";
 import {
+  IconCart,
   IconEmail,
   IconFacebook,
   IconFlagDZ,
   IconFlagFR,
   IconFlagUS,
-  IconHome,
-  IconInfo,
+  IconHomeBold,
+  IconInfoBold,
   IconInstagram,
   IconPhone,
-  IconStore,
+  IconStoreBold,
   IconTime,
+  IconTranslate,
   IconWhatsapp,
 } from "../Iconify";
 
-import LogoOne from "../../assets/logo/LogoThree"
+import LogoOne from "../../assets/logo/LogoThree";
+import { ArrowRightIcon } from "lucide-react";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -110,7 +110,7 @@ const Header = () => {
     }
 
     handleLangMenuClose();
-    // window.location.reload()
+    window.location.reload()
   };
 
   const handleLogout = () => {
@@ -152,7 +152,7 @@ const Header = () => {
           )}
           <Divider />
           <MenuItem onClick={handleLogout}>
-            <ArrowRightOnRectangleIcon className="w-5 h-5 mr-2" />
+            <ArrowRightIcon className="w-5 h-5 mr-2" />
             {t("header.logout")}
           </MenuItem>
         </>
@@ -193,19 +193,19 @@ const Header = () => {
         onClick={() => handleLanguageChange("fr")}
         selected={i18n.language === "fr"}
       >
-        Français
+        {t("lang.french")}
       </MenuItem>
       <MenuItem
         onClick={() => handleLanguageChange("en")}
         selected={i18n.language === "en"}
       >
-        English
+        {t("lang.english")}
       </MenuItem>
       <MenuItem
         onClick={() => handleLanguageChange("ar")}
         selected={i18n.language === "ar"}
       >
-        Arabic
+        {t("lang.arabic")}
       </MenuItem>
     </Menu>
   );
@@ -251,19 +251,19 @@ const Header = () => {
     {
       key: "/",
       label: "home",
-      icon: IconHome,
+      icon: IconHomeBold,
     },
 
     {
       key: "/products",
       label: "products",
-      icon: IconStore,
+      icon: IconStoreBold,
     },
 
     {
       key: "/about",
       label: "about_us",
-      icon: IconInfo,
+      icon: IconInfoBold,
     },
   ];
 
@@ -296,7 +296,7 @@ const Header = () => {
             onClick={() => handleLanguageChange(link.key)}
             className="flex items-center gap-3"
           >
-            <link.icon />
+            <link.icon className="text-gray-600" />
             <p className="capitalize font-poppins">
               {t(`header.${link.label}`)}
             </p>
@@ -365,9 +365,9 @@ const Header = () => {
       const currentY = window.scrollY;
 
       if (currentY > lastScrollY && currentY > 100) {
-        setShowHeader(false); // Scroll Down
+        setShowHeader(false);
       } else {
-        setShowHeader(true); // Scroll Up
+        setShowHeader(true);
       }
 
       setLastScrollY(currentY);
@@ -437,32 +437,40 @@ const Header = () => {
           <Container maxWidth="xl" className="btm">
             <Toolbar disableGutters className="content">
               {/* شعار الموقع */}
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
                 {logo ? (
-                  <img src={logo} alt="Site Logo" style={{ height: 56, width: 'auto', borderRadius: 8, objectFit: 'contain' }} />
+                  <img
+                    src={logo}
+                    alt="Site Logo"
+                    style={{
+                      height: 56,
+                      width: "auto",
+                      borderRadius: 8,
+                      objectFit: "contain",
+                    }}
+                  />
                 ) : (
                   <LogoOne className="w-14 h-14" />
                 )}
               </Box>
 
-
               {/* Desktop Navigation */}
               {!isMobile && (
-                <Box className="flex items-center space-x-8 text-lg">
+                <Box className="flex items-center gap-6 text-lg">
                   {links.map((link) => (
                     <Link
-                      className="capitalize text-girl-black transition hover:text-girl-primary"
+                      className="capitalize text-base text-girl-black transition hover:text-girl-primary font-public-sans"
                       key={link.label}
                       to={link.href}
                     >
-                      {link.label}
+                      {t(`header.${link.label}`)}
                     </Link>
                   ))}
                 </Box>
               )}
 
               {/* Actions */}
-              <Box className="flex items-center space-x-2 text-girl-black">
+              <Box className="flex items-center gap-4 text-girl-black">
                 {/* <IconButton onClick={toggleTheme} color="inherit">
                   {mode === "dark" ? (
                     <SunIcon className="w-5 h-5" />
@@ -480,7 +488,7 @@ const Header = () => {
                     onClick={handleLangMenuOpen}
                     color="inherit"
                   >
-                    <LanguageIcon className="w-5 h-5" />
+                    <IconTranslate className="text-gray-800" />
                   </IconButton>
                 )}
 
@@ -491,27 +499,25 @@ const Header = () => {
                   color="inherit"
                 >
                   <Badge badgeContent={items.length} color="secondary">
-                    <ShoppingCartIcon className="w-5 h-5" />
+                    <IconCart className="text-gray-700" />
                   </Badge>
                 </IconButton>
 
                 {isAuthenticated && !loading && (
-                  <IconButton
-                    edge="end"
+                  <div
                     aria-label="account"
                     aria-controls={menuId}
-                    aria-haspopup="true"
                     onClick={handleProfileMenuOpen}
-                    color="inherit"
+                    className="cursor-pointer"
                   >
                     <Avatar
-                      className="w-6 h-6"
+                      src={avatar}
                       alt={user?.name}
                       sx={{ bgcolor: "primary.main" }}
                     >
                       {user?.name?.charAt(0)?.toUpperCase() || "U"}
                     </Avatar>
-                  </IconButton>
+                  </div>
                 )}
 
                 {loading && (
@@ -527,7 +533,7 @@ const Header = () => {
                     aria-label="menu"
                     onClick={toggleMobileMenu}
                   >
-                    <Bars3Icon className="w-6 h-6" />
+                    <Bars3Icon className="w-7 h-7" />
                   </IconButton>
                 )}
               </Box>

@@ -181,7 +181,7 @@ const ProductCardList: FC<ProductCardListProps> = ({
             onClick={() => navigate(`/products/${product.id}`)}
           >
             {product.oldPrice && product.oldPrice > product.price ? (
-              <div className="space-x-2">
+              <div className="flex items-center gap-2">
                 <span className="text-girl-secondary">
                   <span>{product.price}</span>
                   <span>{t("ammount.da")}</span>
@@ -212,6 +212,7 @@ const ProductCardList: FC<ProductCardListProps> = ({
         </div>
 
         <div
+          dir="auto"
           className="name"
           onClick={() => navigate(`/products/${product.id}`)}
         >

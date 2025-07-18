@@ -94,7 +94,6 @@ const Navbar: FC<NavbarProps> = ({ isBlur, isTransparent, ...props }) => {
               ))}
             </div>
           </div>
-
         </Container>
       </div>
     </nav>

@@ -274,7 +274,10 @@ const ProductsPage = () => {
                     key={catId}
                     onClick={() => catId && handleCategoryChange(catId)}
                     className={`
-                      font-public-sans capitalize py-2  rounded-lg cursor-pointer transition-all duration-200
+                      font-public-sans capitalize py-2  
+                      rounded-lg cursor-pointer 
+                      transition-all duration-200 
+                      flex items-center gap-3.5
                       ${
                         catId && selectedCategories.includes(catId)
                           ? " text-girl-secondary"
@@ -287,10 +290,9 @@ const ProductsPage = () => {
                         src={cat.icon || cat.image || defaultCategoryIcon}
                         alt="icon"
                         style={{
-                          width: 22,
-                          height: 22,
+                          width: 24,
+                          height: 24,
                           display: "inline-block",
-                          marginRight: 8,
                           verticalAlign: "middle",
                         }}
                       />
@@ -315,7 +317,7 @@ const ProductsPage = () => {
       <Box className="flex items-center gap-2 mt-2">
         <AIButton
           variant="solid"
-          radius="full"
+          radius="lg"
           fullWidth
           onClick={handleSearch}
           className="flex-1"
@@ -325,10 +327,10 @@ const ProductsPage = () => {
         </AIButton>
         <AIButton
           startContent={<IconReset />}
-          variant="solid"
-          radius="full"
+          variant="outlined"
+          radius="lg"
           onClick={handleClearFilters}
-          className=" w-fit"
+          className="w-fit"
           isIconOnly
         ></AIButton>
       </Box>
@@ -358,7 +360,7 @@ const ProductsPage = () => {
 
   return (
     <div className="bg-girl-white">
-      {!isMobile && <Breadcrumb pageName="Products" />}
+      {!isMobile && <Breadcrumb pageName={t("products.title")} />}
 
       <Container
         maxWidth="xl"
@@ -459,7 +461,6 @@ const ProductsPage = () => {
                   count={totalPages}
                   page={page}
                   onChange={handlePageChange}
-                  color="primary"
                   size={isMobile ? "small" : "medium"}
                 />
               </Box>
