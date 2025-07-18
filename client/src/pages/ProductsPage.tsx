@@ -235,7 +235,7 @@ const ProductsPage = () => {
   const totalPages = Math.ceil(totalProducts / limit);
 
   const filtersContent = (
-    <Box className="px-3 pt-8">
+    <Box className="px-3 pt-8 overflow-x-hidden">
       <form onSubmit={handleSearch} className="mb-4">
         <TextField
           classes={{

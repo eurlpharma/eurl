@@ -44,6 +44,7 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
         valueLabelDisplay="auto"
         min={0}
         max={maxPrice}
+        className="max-w-[96%]"
         valueLabelFormat={(value) =>
           `${numeral(value).format("0,0")} ${t("ammount.da")}`
         }
