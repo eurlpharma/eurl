@@ -15,6 +15,9 @@ import i18n from "./i18n";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { trackPageView } from "./utils/facebookPixel";
+import 'nprogress/nprogress.css';
+import ProgressBar from "./components/ProgressBar";
+
 
 // Lazy-loaded pages
 const HomePage = lazy(() => import("@/pages/HomePage"));
@@ -84,6 +87,7 @@ const App = () => {
     <CacheProvider value={cache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <ProgressBar />
         <Suspense fallback={<Preloader />}>
           <Routes>
             {/* Public routes */}

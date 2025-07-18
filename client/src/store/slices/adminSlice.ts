@@ -3,6 +3,8 @@ import axios from '@/api/axios';
 import { ProductData } from '../../types/product';
 import { Order } from '../../types/order';
 
+import NProgress from 'nprogress';
+
 interface SalesStats {
   totalSales: number;
   totalRevenue: number;
@@ -209,58 +211,70 @@ const adminSlice = createSlice({
       // Get dashboard stats cases
       .addCase(getDashboardStats.pending, (state) => {
         state.loading = true;
+        NProgress.start();
         state.error = null;
       })
       .addCase(getDashboardStats.fulfilled, (state, action) => {
         state.loading = false;
+        NProgress.done();
         state.dashboardStats = action.payload.stats;
         state.recentProducts = action.payload.recentProducts;
         state.recentOrders = action.payload.recentOrders;
       })
       .addCase(getDashboardStats.rejected, (state, action) => {
         state.loading = false;
+        NProgress.done()
         state.error = action.payload as string;
       })
       
       // Get sales stats cases
       .addCase(getSalesStats.pending, (state) => {
         state.loading = true;
+        NProgress.start();
         state.error = null;
       })
       .addCase(getSalesStats.fulfilled, (state, action) => {
         state.loading = false;
+        NProgress.done()
         state.salesStats = action.payload;
       })
       .addCase(getSalesStats.rejected, (state, action) => {
         state.loading = false;
+        NProgress.done()
         state.error = action.payload as string;
       })
       
       // Get visitor stats cases
       .addCase(getVisitorStats.pending, (state) => {
         state.loading = true;
+        NProgress.start()
         state.error = null;
       })
       .addCase(getVisitorStats.fulfilled, (state, action) => {
         state.loading = false;
+        NProgress.done()
         state.visitorStats = action.payload;
       })
       .addCase(getVisitorStats.rejected, (state, action) => {
         state.loading = false;
+        NProgress.done()
         state.error = action.payload as string;
       })
       
       // Get product stats cases
       .addCase(getProductStats.pending, (state) => {
         state.loading = true;
+        NProgress.start()
         state.error = null;
       })
       .addCase(getProductStats.fulfilled, (state, action) => {
         state.loading = false;
+        NProgress.done()
         state.productStats = action.payload;
       })
       .addCase(getProductStats.rejected, (state, action) => {
         state.loading = false;
+        NProgress.done()
         state.error = action.payload as string;
       });
   },
