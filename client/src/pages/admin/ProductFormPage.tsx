@@ -15,7 +15,13 @@ import { getCategories } from "@/store/slices/categorySlice";
 import { toast } from "react-toastify";
 import { RootState } from "@/store";
 import { v4 as uuidv4 } from "uuid";
-import { Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  LinearProgress,
+  Paper,
+  Typography,
+} from "@mui/material";
 import FormField from "@/components/form/FormField";
 import RichTextEditor from "@/components/form/RichTextEditor";
 import ImageUpload from "@/components/form/ImageUpload";
@@ -293,7 +299,22 @@ const ProductFormPage = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Container className="flex items-center justify-center h-[80vh]">
+        <Box sx={{ width: "30%" }}>
+          <LinearProgress
+            sx={{
+              height: 6,
+              borderRadius: 2,
+              backgroundColor: "#fde6e1",
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: "#ff0066",
+              },
+            }}
+          />
+        </Box>
+      </Container>
+    );
   }
 
   const handleCreateDescription = async () => {
