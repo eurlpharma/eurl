@@ -1,5 +1,6 @@
 @import "@flaticon/flaticon-uicons/css/all/all.css";
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -172,7 +173,7 @@ main {
 /* custom classess end */
 
 #root .py-8 {
-  @apply px-1 md:px-2 lg:px-3;
+  @apply px-2 md:px-2 lg:px-3;
 }
 
 /* Global Section Start */

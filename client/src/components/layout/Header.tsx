@@ -34,8 +34,6 @@ import {
 import {
   Bars3Icon,
   XMarkIcon,
-  // SunIcon,
-  // MoonIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -57,6 +55,7 @@ import {
 
 import LogoOne from "../../assets/logo/LogoThree";
 import { ArrowRightIcon } from "lucide-react";
+// import { useTheme } from "@/hooks/useTheme";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -471,7 +470,7 @@ const Header = () => {
 
               {/* Actions */}
               <Box className="flex items-center gap-4 text-girl-black">
-                {/* <IconButton onClick={toggleTheme} color="inherit">
+{/*                 <IconButton onClick={toggleTheme} color="inherit">
                   {mode === "dark" ? (
                     <SunIcon className="w-5 h-5" />
                   ) : (

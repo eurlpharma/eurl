@@ -1,6 +1,13 @@
 {
+  "hero": "Nettoyer, embellir, favoriser l'attractivité sans affecter le corps",
   "ammount": {
     "da": "DA"
+  },
+  "typing": {
+    "type1": "accueillir",
+    "type2": "Produits de face cosmétique",
+    "type3": "construction",
+    "type4": "Ce que nous faisons"
   },
   "lang": {
     "english": "Anglais",

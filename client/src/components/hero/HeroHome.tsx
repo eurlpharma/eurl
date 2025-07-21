@@ -13,6 +13,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import FloatingLeaf from "./FloatingLeaf";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const images = import.meta.glob("../../assets/images/landing/*.jpg", {
   eager: true,
@@ -32,8 +33,8 @@ interface HeroHomeProps extends HTMLAttributes<HTMLElement> {
 }
 
 const HeroHome: FC<HeroHomeProps> = ({ isScreen = true, ...props }) => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [, setSize] = useState({ width: 0, height: 0 });
 
@@ -73,34 +74,38 @@ const HeroHome: FC<HeroHomeProps> = ({ isScreen = true, ...props }) => {
             </SwiperSlide>
           ))}
         </Swiper>
-        {/* <div className="overlay absolute top-0 left-0 w-full h-full z-10 bg-black/60"></div> */}
         <div
           className={clsx(
             "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50",
             "flex flex-col items-center gap-1 lg:gap-2 text-white w-full"
           )}
         >
-          <h1 data-aos="fade-down" className=" text-3xl capitalize text-girl-primary font-josefin">
+          <h1
+            data-aos="fade-down"
+            className=" text-3xl capitalize text-girl-primary font-josefin"
+          >
             <ReactTyped
               loop
               typeSpeed={50}
               backSpeed={40}
               backDelay={1500}
               strings={[
-                "welcome",
-                "Cosmetic face Products",
-                "construction",
-                "what we do",
+                t("typing.type1"),
+                t("typing.type2"),
+                t("typing.type3"),
+                t("typing.type4"),
               ]}
             />
           </h1>
           <div
             style={{ fontSize: "24px", color: "#007BFF", fontWeight: "bold" }}
           ></div>
-          <p data-aos="zoom-in-down" className="px-10 text-center text-2xl lg:text-5xl text-girl-black mx-auto max-w-5xl" 
-          style={{lineHeight: 1.6}}>
-            Cleansing, Beautifying, Promoting Attractiveness without Affecting
-            the Body
+          <p
+            data-aos="zoom-in-down"
+            className="px-10 text-center text-2xl lg:text-5xl text-girl-black mx-auto max-w-5xl"
+            style={{ lineHeight: 1.6 }}
+          >
+            {t("hero")}
           </p>
           <div
             data-aos="zoom-in"
@@ -124,7 +129,10 @@ const HeroHome: FC<HeroHomeProps> = ({ isScreen = true, ...props }) => {
             offset={-50}
             className="cursor-pointer text-girl-primary"
           >
-            <ChevronDown size={42} className="animate-bounce animate__delay-1s" />
+            <ChevronDown
+              size={42}
+              className="animate-bounce animate__delay-1s"
+            />
           </Link>
         </div>
 

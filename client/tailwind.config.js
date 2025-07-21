@@ -8,6 +8,7 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
     "./public/**/*.html",
   ],
+  // darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -65,7 +66,6 @@ module.exports = {
           white: "#ffffff",
           bluishGray: "#abb8c3",
           black: "#000000",
-          secondary: "#ed1b6f",
           secondary: "#ed1b6f",
           yellow: "#feefe1",
           typograph: "#232323",
@@ -156,7 +156,12 @@ module.exports = {
       animation: {
         'spin-slow': 'spin 8s linear infinite'
       }
+
+      
+
     },
+
+    
   },
   plugins: [heroui(), 
     require('@tailwindcss/aspect-ratio'),

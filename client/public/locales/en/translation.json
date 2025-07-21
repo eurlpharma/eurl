@@ -1,6 +1,14 @@
 {
+  "hero": "Cleansing, Beautifying, Promoting Attractiveness without Affecting the Body",
   "ammount": {
     "da": "DA"
+  },
+
+  "typing": {
+    "type1": "welcome",
+    "type2": "Cosmetic face Products",
+    "type3": "construction",
+    "type4": "what we do"
   },
   "lang": {
     "english": "English",

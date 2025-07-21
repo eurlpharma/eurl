@@ -47,7 +47,6 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ pageName, ...props }) => {
           className="absolute top-0 left-0 w-full h-full object-cover"
           loading="eager"
           decoding="async"
-          fetchPriority="high"
           alt="breadcrumb"
         />
       )}

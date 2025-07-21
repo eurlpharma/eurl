@@ -16,20 +16,17 @@ const ProgressBar = () => {
     NProgress.start();
 
     const finishProgress = () => {
-      // ننتظر حتى يكون المتصفح خامل ليؤكد انتهاء التحميل
       if ("requestIdleCallback" in window) {
         requestIdleCallback(() => {
           NProgress.done();
         });
       } else {
-        // كبديل إن لم يدعم المتصفح
         setTimeout(() => {
           NProgress.done();
         }, 300);
       }
     };
 
-    // عند تحميل الصفحة فعلياً
     if (document.readyState === "complete") {
       finishProgress();
     } else {

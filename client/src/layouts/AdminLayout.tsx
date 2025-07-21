@@ -29,13 +29,16 @@ import {
   IconHomeBold,
   IconLaptopBold,
   IconMenu,
+  IconMoon,
   IconOrderBold,
   IconSettingBold,
+  IconSun,
   IconUsersBold,
   IconWidgetBold,
 } from "@/components/Iconify";
 import clsx from "clsx";
 import LogoIcon from "../assets/logo/LogoThree";
+import { useTheme } from "@/hooks/useTheme";
 
 const drawerWidth = 280;
 
@@ -49,10 +52,11 @@ interface MenuItemType {
 
 const AdminLayout = () => {
   const { t } = useTranslation();
-  const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const muiTheme = useMuiTheme();
+  const { user, logout } = useAuth();
+  const { mode, toggleTheme } = useTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("md"));
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -247,6 +251,10 @@ const AdminLayout = () => {
           </Typography>
 
           <div className="">
+            <IconButton onClick={toggleTheme} color="inherit">
+              {mode === "dark" ? <IconSun /> : <IconMoon />}
+            </IconButton>
+
             <IconButton aria-label="alerts">
               <IconBellBold className="w-7 h-7" />
             </IconButton>
@@ -325,7 +333,7 @@ const AdminLayout = () => {
           width: { md: `calc(100% - ${drawerWidth}px)` },
           minHeight: "100vh",
         }}
-        className="pt-16 bg-girl-white"
+        className="pt-16"
       >
         <Outlet />
       </Box>

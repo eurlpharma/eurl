@@ -382,7 +382,7 @@ const ProductDetailPage = () => {
 
           {/* Product Info */}
           <Grid item xs={12} md={6}>
-            <Typography className="mb-2 font-josefin text-2xl lg:text-3xl text-gray-600">
+            <Typography className="mb-2 font-poppins text-xl lg:text-3xl font-semibold">
               {product.name}
             </Typography>
 

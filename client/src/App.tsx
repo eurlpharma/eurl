@@ -48,13 +48,10 @@ const App = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
 
-  // إدارة عنوان الصفحة الديناميكي
   usePageTitle();
   
-  // إدارة وصف الصفحة الديناميكي
   usePageMeta();
 
-  // Analytics
   useEffect(() => {
     trackPageView(location.pathname);
     const pageName = location.pathname.split("/")[1] || "home";

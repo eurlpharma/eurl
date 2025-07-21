@@ -177,12 +177,12 @@ const ProductCardList: FC<ProductCardListProps> = ({
       <div className={clsx("info", "flex flex-col-reverse items-start")}>
         <div className="flex items-end justify-between gap-2 w-full">
           <div
-            className="price "
+            className="price"
             onClick={() => navigate(`/products/${product.id}`)}
           >
-            {product.oldPrice && product.oldPrice > product.price ? (
+            {product.oldPrice && (product.oldPrice > product.price) ? (
               <div className="flex items-center gap-2">
-                <span className="text-girl-secondary">
+                <span className="text-girl-secondary font-semibold md:text-base">
                   <span>{product.price}</span>
                   <span>{t("ammount.da")}</span>
                 </span>
@@ -192,7 +192,7 @@ const ProductCardList: FC<ProductCardListProps> = ({
                 </span>
               </div>
             ) : (
-              <span>
+              <span className="font-semibold md:text-base">
                 <span>{product.price}</span>
                 <span>{t("ammount.da")}</span>
               </span>
