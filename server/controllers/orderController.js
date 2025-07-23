@@ -1,5 +1,5 @@
-import asyncHandler from 'express-async-handler';
-import prisma from '../lib/prisma.js';
+import asyncHandler from "express-async-handler";
+import prisma from "../lib/prisma.js";
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -10,22 +10,19 @@ const createOrder = asyncHandler(async (req, res) => {
     shippingAddress,
     paymentMethod,
     itemsPrice,
-    taxPrice,
-    shippingPrice,
-    totalPrice,
     guestInfo,
-    isGuest,
   } = req.body;
 
-  if (orderItems && orderItems.length === 0) {
+  console.log(req.body);
+
+  if (!orderItems || orderItems.length === 0) {
     res.status(400);
     throw new Error('No order items');
   }
 
-  // التحقق من توفر الكمية في المخزون
   for (const item of orderItems) {
     const product = await prisma.product.findUnique({
-      where: { id: item.product }
+      where: { id: item.product },
     });
     if (!product) {
       res.status(404);
@@ -35,121 +32,75 @@ const createOrder = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error(`Not enough stock for product: ${product.name}`);
     }
-  }
-
-  // تحقق من أن كل عنصر له qty صحيح
-  for (const item of orderItems) {
     if (typeof item.qty !== 'number' || isNaN(item.qty) || item.qty <= 0) {
       res.status(400);
-      throw new Error(`كمية المنتج غير صحيحة للمنتج: ${item.name || item.product}`);
+      throw new Error(`Invalid quantity for product: ${item.name || item.product}`);
     }
   }
 
-  // Prepare order data
-  let orderData = {
-    shippingAddress,
-    paymentMethod,
-    itemsPrice: Number(itemsPrice),
-    taxPrice: Number(taxPrice),
-    shippingPrice: Number(shippingPrice),
-    totalPrice: Number(totalPrice),
-  };
-
-  // Create order with order items
-  let order;
-  if (req.user && req.user.id) {
-    // مستخدم مسجل
-    order = await prisma.order.create({
-      data: {
-        ...orderData,
-        orderItems: {
-          create: orderItems.map(item => ({
-            productId: item.product,
-            name: item.name,
-            qty: item.qty,
-            image: item.image,
-            price: Number(item.price)
-          }))
-        },
-        user: {
-          connect: { id: req.user.id }
-        }
-      },
-      include: {
-        orderItems: {
-          include: {
-            product: {
-              select: {
-                id: true,
-                name: true,
-                price: true
-              }
-            }
-          }
-        },
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true
-          }
-        }
-      }
-    });
-  } else if (isGuest && guestInfo && guestInfo.name && guestInfo.phone) {
-    // ضيف: أنشئ مستخدم جديد أو اربطه إذا كان موجوداً
-    order = await prisma.order.create({
-      data: {
-        ...orderData,
-        orderItems: {
-          create: orderItems.map(item => ({
-            productId: item.product,
-            name: item.name,
-            qty: item.qty,
-            image: item.image,
-            price: Number(item.price)
-          }))
-        },
-        user: {
-          connectOrCreate: {
-            where: { email: guestInfo.email || `guest_${guestInfo.phone}@guest.com` },
-            create: {
-              name: guestInfo.name,
-              email: guestInfo.email || `guest_${guestInfo.phone}@guest.com`,
-              phone: guestInfo.phone,
-              password: 'guest',
-            }
-          }
-        }
-      },
-      include: {
-        orderItems: {
-          include: {
-            product: {
-              select: {
-                id: true,
-                name: true,
-                price: true
-              }
-            }
-          }
-        },
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true
-          }
-        }
-      }
-    });
-  } else {
+  if (!guestInfo || !guestInfo.name || !guestInfo.phone) {
     res.status(400);
-    throw new Error('Guest info (name & phone) is required for guest orders');
+    throw new Error('Guest info (name & phone) is required');
   }
+
+  const shippingPrice = Number(shippingAddress.deliveryPrice || 0);
+  const totalPrice = Number(itemsPrice) + shippingPrice;
+
+  const order = await prisma.order.create({
+    data: {
+      shippingAddress,
+      paymentMethod,
+      itemsPrice: Number(itemsPrice),
+      taxPrice: 0, // لا توجد ضريبة
+      shippingPrice,
+      totalPrice,
+      orderItems: {
+        create: orderItems.map(item => ({
+          productId: item.product,
+          name: item.name,
+          qty: item.qty,
+          image: item.image,
+          price: Number(item.price),
+        })),
+      },
+      user: {
+        connectOrCreate: {
+          where: { email: guestInfo.email || `guest_${guestInfo.phone}@guest.com` },
+          create: {
+            name: guestInfo.name,
+            email: guestInfo.email || `guest_${guestInfo.phone}@guest.com`,
+            phone: guestInfo.phone,
+            password: 'guest',
+          },
+        },
+      },
+    },
+    include: {
+      orderItems: {
+        include: {
+          product: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+            },
+          },
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+  });
 
   res.status(201).json({ success: true, order });
 });
+
+
 
 // @desc    Get order by ID
 // @route   GET /api/orders/:id
@@ -164,29 +115,29 @@ const getOrderById = asyncHandler(async (req, res) => {
             select: {
               id: true,
               name: true,
-              price: true
-            }
-          }
-        }
+              price: true,
+            },
+          },
+        },
       },
       user: {
         select: {
           id: true,
           name: true,
           email: true,
-          phone: true
-        }
-      }
-    }
+          phone: true,
+        },
+      },
+    },
   });
 
   if (!order) {
     res.status(404);
-    throw new Error('Order not found');
+    throw new Error("Order not found");
   }
 
   // Check if this is a print request
-  const isPrintRequest = req.originalUrl.includes('/print');
+  const isPrintRequest = req.originalUrl.includes("/print");
 
   if (isPrintRequest) {
     // For print requests, return order data without authentication
@@ -195,19 +146,16 @@ const getOrderById = asyncHandler(async (req, res) => {
     // For regular requests, require authentication
     if (!req.user) {
       res.status(401);
-      throw new Error('Not authorized, no token');
+      throw new Error("Not authorized, no token");
     }
 
     // Check if the order belongs to the user or if the user is an admin
-    if (
-      order.userId === req.user.id ||
-      req.user.role === 'ADMIN'
-    ) {
+    if (order.userId === req.user.id || req.user.role === "ADMIN") {
       if (order && order.status) order.status = order.status.toLowerCase();
       res.json({ success: true, order });
     } else {
       res.status(403);
-      throw new Error('Not authorized to view this order');
+      throw new Error("Not authorized to view this order");
     }
   }
 });
@@ -245,7 +193,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
           isPaid: true,
           paidAt: new Date(),
           paymentResult: req.body.paymentResult || {},
-          status: 'PROCESSING',
+          status: "PROCESSING",
         },
         include: {
           orderItems: {
@@ -268,16 +216,17 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
           },
         },
       });
-      if (updatedOrder && updatedOrder.status) updatedOrder.status = updatedOrder.status.toLowerCase();
+      if (updatedOrder && updatedOrder.status)
+        updatedOrder.status = updatedOrder.status.toLowerCase();
       res.json({ success: true, order: updatedOrder });
     } else {
       res.status(404);
-      throw new Error('Order not found');
+      throw new Error("Order not found");
     }
   } catch (error) {
-    console.error('Error in updateOrderToPaid:', error);
+    console.error("Error in updateOrderToPaid:", error);
     res.status(500);
-    throw new Error(error.message || 'Error updating order');
+    throw new Error(error.message || "Error updating order");
   }
 });
 
@@ -295,11 +244,11 @@ const revertOrderToUnpaid = asyncHandler(async (req, res) => {
     });
     if (!order) {
       res.status(404);
-      throw new Error('Order not found');
+      throw new Error("Order not found");
     }
     if (!order.isPaid) {
       res.status(400);
-      throw new Error('Order is not paid');
+      throw new Error("Order is not paid");
     }
     // أرجع الكمية للمنتجات
     for (const item of order.orderItems) {
@@ -319,7 +268,7 @@ const revertOrderToUnpaid = asyncHandler(async (req, res) => {
         isPaid: false,
         paidAt: null,
         paymentResult: {},
-        status: 'PENDING',
+        status: "PENDING",
       },
       include: {
         orderItems: {
@@ -342,12 +291,13 @@ const revertOrderToUnpaid = asyncHandler(async (req, res) => {
         },
       },
     });
-    if (updatedOrder && updatedOrder.status) updatedOrder.status = updatedOrder.status.toLowerCase();
+    if (updatedOrder && updatedOrder.status)
+      updatedOrder.status = updatedOrder.status.toLowerCase();
     res.json({ success: true, order: updatedOrder });
   } catch (error) {
-    console.error('Error in revertOrderToUnpaid:', error);
+    console.error("Error in revertOrderToUnpaid:", error);
     res.status(500);
-    throw new Error(error.message || 'Error reverting order to unpaid');
+    throw new Error(error.message || "Error reverting order to unpaid");
   }
 });
 
@@ -356,20 +306,20 @@ const revertOrderToUnpaid = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
   const order = await prisma.order.findUnique({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
   });
 
   if (order) {
     const updateData = {
       isDelivered: true,
       deliveredAt: new Date(),
-      status: 'DELIVERED'
+      status: "DELIVERED",
     };
 
     if (req.body.trackingNumber) {
       updateData.shippingAddress = {
         ...order.shippingAddress,
-        trackingNumber: req.body.trackingNumber
+        trackingNumber: req.body.trackingNumber,
       };
     }
 
@@ -383,26 +333,27 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
               select: {
                 id: true,
                 name: true,
-                price: true
-              }
-            }
-          }
+                price: true,
+              },
+            },
+          },
         },
         user: {
           select: {
             id: true,
             name: true,
-            email: true
-          }
-        }
-      }
+            email: true,
+          },
+        },
+      },
     });
 
-    if (updatedOrder && updatedOrder.status) updatedOrder.status = updatedOrder.status.toLowerCase();
+    if (updatedOrder && updatedOrder.status)
+      updatedOrder.status = updatedOrder.status.toLowerCase();
     res.json({ success: true, order: updatedOrder });
   } else {
     res.status(404);
-    throw new Error('Order not found');
+    throw new Error("Order not found");
   }
 });
 
@@ -414,7 +365,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
   const page = Number(req.query.page) || 1;
 
   const count = await prisma.order.count({
-    where: { userId: req.user.id }
+    where: { userId: req.user.id },
   });
 
   const orders = await prisma.order.findMany({
@@ -426,15 +377,15 @@ const getMyOrders = asyncHandler(async (req, res) => {
             select: {
               id: true,
               name: true,
-              price: true
-            }
-          }
-        }
-      }
+              price: true,
+            },
+          },
+        },
+      },
     },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
     take: pageSize,
-    skip: pageSize * (page - 1)
+    skip: pageSize * (page - 1),
   });
 
   res.json({
@@ -456,22 +407,22 @@ const getOrders = asyncHandler(async (req, res) => {
 
     // Build filter object
     const whereClause = {};
-    
+
     // Status filter
     if (req.query.status) {
       whereClause.status = req.query.status.toUpperCase();
     }
-    
+
     // Payment filter
     if (req.query.isPaid !== undefined) {
-      whereClause.isPaid = req.query.isPaid === 'true';
+      whereClause.isPaid = req.query.isPaid === "true";
     }
 
     // Date range filter
     if (req.query.startDate && req.query.endDate) {
       whereClause.createdAt = {
         gte: new Date(req.query.startDate),
-        lte: new Date(req.query.endDate)
+        lte: new Date(req.query.endDate),
       };
     }
 
@@ -481,12 +432,12 @@ const getOrders = asyncHandler(async (req, res) => {
       whereClause.OR = [
         { id: { contains: search } },
         { user: { name: { contains: search } } },
-        { orderItems: { some: { name: { contains: search } } } }
+        { orderItems: { some: { name: { contains: search } } } },
       ];
     }
 
     const count = await prisma.order.count({ where: whereClause });
-    
+
     const orders = await prisma.order.findMany({
       where: whereClause,
       include: {
@@ -496,29 +447,29 @@ const getOrders = asyncHandler(async (req, res) => {
               select: {
                 id: true,
                 name: true,
-                price: true
-              }
-            }
-          }
+                price: true,
+              },
+            },
+          },
         },
         user: {
           select: {
             id: true,
             name: true,
             email: true,
-            phone: true
-          }
-        }
+            phone: true,
+          },
+        },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       take: pageSize,
-      skip: pageSize * (page - 1)
+      skip: pageSize * (page - 1),
     });
 
     // إعادة status إلى lowercase لكل طلب
-    const ordersWithLowerStatus = orders.map(order => ({
+    const ordersWithLowerStatus = orders.map((order) => ({
       ...order,
-      status: order.status ? order.status.toLowerCase() : order.status
+      status: order.status ? order.status.toLowerCase() : order.status,
     }));
     res.json({
       success: true,
@@ -528,9 +479,9 @@ const getOrders = asyncHandler(async (req, res) => {
       totalOrders: count,
     });
   } catch (error) {
-    console.error('Error in getOrders:', error);
+    console.error("Error in getOrders:", error);
     res.status(500);
-    throw new Error(error.message || 'Error fetching orders');
+    throw new Error(error.message || "Error fetching orders");
   }
 });
 
@@ -542,14 +493,14 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   if (status) status = status.toUpperCase();
 
   const order = await prisma.order.findUnique({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
   });
 
   if (order) {
     const updateData = { status };
 
     // Update delivery status based on order status
-    if (status === 'DELIVERED') {
+    if (status === "DELIVERED") {
       updateData.isDelivered = true;
       updateData.deliveredAt = new Date();
     }
@@ -564,27 +515,28 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
               select: {
                 id: true,
                 name: true,
-                price: true
-              }
-            }
-          }
+                price: true,
+              },
+            },
+          },
         },
         user: {
           select: {
             id: true,
             name: true,
             email: true,
-            phone: true
-          }
-        }
-      }
+            phone: true,
+          },
+        },
+      },
     });
 
-    if (updatedOrder && updatedOrder.status) updatedOrder.status = updatedOrder.status.toLowerCase();
+    if (updatedOrder && updatedOrder.status)
+      updatedOrder.status = updatedOrder.status.toLowerCase();
     res.json({ success: true, order: updatedOrder });
   } else {
     res.status(404);
-    throw new Error('Order not found');
+    throw new Error("Order not found");
   }
 });
 
@@ -593,18 +545,18 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const deleteOrder = asyncHandler(async (req, res) => {
   const order = await prisma.order.findUnique({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
   });
 
   if (order) {
     await prisma.order.delete({
-      where: { id: req.params.id }
+      where: { id: req.params.id },
     });
 
-    res.json({ success: true, message: 'Order removed' });
+    res.json({ success: true, message: "Order removed" });
   } else {
     res.status(404);
-    throw new Error('Order not found');
+    throw new Error("Order not found");
   }
 });
 
@@ -615,22 +567,22 @@ const getOrderStats = asyncHandler(async (req, res) => {
   try {
     const totalOrders = await prisma.order.count();
     const pendingOrders = await prisma.order.count({
-      where: { status: 'PENDING' }
+      where: { status: "PENDING" },
     });
     const processingOrders = await prisma.order.count({
-      where: { status: 'PROCESSING' }
+      where: { status: "PROCESSING" },
     });
     const deliveredOrders = await prisma.order.count({
-      where: { status: 'DELIVERED' }
+      where: { status: "DELIVERED" },
     });
     const cancelledOrders = await prisma.order.count({
-      where: { status: 'CANCELLED' }
+      where: { status: "CANCELLED" },
     });
 
     // Calculate total revenue
     const revenueResult = await prisma.order.aggregate({
       where: { isPaid: true },
-      _sum: { totalPrice: true }
+      _sum: { totalPrice: true },
     });
 
     const totalRevenue = revenueResult._sum.totalPrice || 0;
@@ -643,13 +595,13 @@ const getOrderStats = asyncHandler(async (req, res) => {
         processingOrders,
         deliveredOrders,
         cancelledOrders,
-        totalRevenue
-      }
+        totalRevenue,
+      },
     });
   } catch (error) {
-    console.error('Error in getOrderStats:', error);
+    console.error("Error in getOrderStats:", error);
     res.status(500);
-    throw new Error(error.message || 'Error fetching order statistics');
+    throw new Error(error.message || "Error fetching order statistics");
   }
 });
 

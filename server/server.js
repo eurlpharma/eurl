@@ -8,7 +8,7 @@ import cors from "cors";
 import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
 import connectDB from "./config/db.js";
-import axios from "axios"
+import axios from "axios";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 // Routes
@@ -19,6 +19,7 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
+import deliveryRoutes from "./routes/deliveryRouter.js";
 
 // Load env vars
 dotenv.config();
@@ -61,7 +62,7 @@ app.use(express.urlencoded({ extended: true }));
 // Enable CORS
 const allowedOrigins = [
   "https://pharma-livid.vercel.app",
-  "http://localhost:3000", 
+  "http://localhost:3000",
 ];
 
 app.use(
@@ -97,6 +98,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/delivery", deliveryRoutes);
 
 const GEMINI_API_KEY = "AIzaSyA37Qz9kEi0Y9WAY4rtjfCZqzbkyrM3w98";
 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
@@ -125,8 +127,7 @@ app.post("/api/gemini", async (req, res) => {
       }
     );
 
-    res.send({success: true, message: 'CREATED', data: response.data})
-
+    res.send({ success: true, message: "CREATED", data: response.data });
   } catch (error) {
     res.send({ success: false, message: "ERROR", data: error });
   }
