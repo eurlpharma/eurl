@@ -181,7 +181,6 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
               {...register("wilaya")}
             >
               {wilayat &&
-                !wilayat.loading &&
                 wilayat.data &&
                 wilayat.data.length > 0 &&
                 wilayat.data.map((w: WilayaType) => (
