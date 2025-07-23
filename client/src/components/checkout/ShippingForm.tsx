@@ -58,10 +58,6 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
     (state: RootState) => state.delivery
   );
 
-  useEffect(() => {
-    dispatch(getWilayat());
-  }, [dispatch]);
-
   const schema = yup.object().shape({
     fullName: yup.string().required(t("validation.required")),
     phone: yup.string().required(t("validation.required")),
@@ -93,6 +89,15 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
   const selectedWilaya = watch("wilaya");
   const selectedDaira = watch("daira");
   const deliveryType = watch("deliveryType");
+
+
+  const fetchWilayat = async () => {
+    await dispatch(getWilayat());
+  }
+
+  useEffect(() => {
+    fetchWilayat()
+  }, [dispatch]);
 
   useEffect(() => {
     if (selectedWilaya) {

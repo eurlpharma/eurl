@@ -17,6 +17,6 @@ export const getReducers = async () => {
     orders: orderModule.default,
     admin: adminModule.default,
     ui: uiModule.default,
-    delivery: deliveryModule
+    delivery: deliveryModule.default
   };
 };

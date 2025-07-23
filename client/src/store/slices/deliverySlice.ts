@@ -164,10 +164,12 @@ const deliverySlice = createSlice({
     builder
       // Get parcels
       .addCase(getParcels.pending, (state) => {
+        if (!state.parcels) state.parcels = { ...initParcels };
         state.parcels.loading = true;
         state.parcels.error = null;
       })
       .addCase(getParcels.fulfilled, (state, action) => {
+        if (!state.parcels) state.parcels = { ...initParcels };
         const {
           message,
           data: { data, has_more, links, total_data },
@@ -180,16 +182,19 @@ const deliverySlice = createSlice({
         state.parcels.loading = false;
       })
       .addCase(getParcels.rejected, (state, action) => {
+        if (!state.parcels) state.parcels = { ...initParcels };
         state.parcels.loading = false;
         state.parcels.error = action.payload as string;
       })
 
       /* GET PRICING OF DELIVERY */
       .addCase(getPricing.pending, (state) => {
+        if (!state.pricing) state.pricing = { ...initPricing };
         state.pricing.loading = true;
         state.pricing.error = null;
       })
       .addCase(getPricing.fulfilled, (state, action) => {
+        if (!state.pricing) state.pricing = { ...initPricing };
         const {
           message,
           data: {
@@ -215,16 +220,19 @@ const deliverySlice = createSlice({
         state.pricing.loading = false;
       })
       .addCase(getPricing.rejected, (state, action) => {
+        if (!state.pricing) state.pricing = { ...initPricing };
         state.pricing.loading = false;
         state.pricing.error = action.payload as string;
       })
 
       /* GET WILAYAT OF DELIVERY */
       .addCase(getWilayat.pending, (state) => {
+        if (!state.wilayat) state.wilayat = { ...initWilayat };
         state.wilayat.loading = true;
         state.wilayat.error = null;
       })
       .addCase(getWilayat.fulfilled, (state, action) => {
+        if (!state.wilayat) state.wilayat = { ...initWilayat };
         const {
           message,
           data: { has_more, total_data, data },
@@ -236,9 +244,10 @@ const deliverySlice = createSlice({
         state.wilayat.total_data = total_data;
         state.wilayat.loading = false;
       })
-      .addCase(getWilayat.rejected, (state, action) => {
-        state.wilayat.loading = false;
-        state.wilayat.error = action.payload as string;
+      .addCase(getWilayat.rejected, (state) => {
+        if (!state.wilayat) state.wilayat = { ...initWilayat };
+        state.wilayat.error = "Feild to fetch wilayat !"
+        state.wilayat.loading = false
       });
   },
 });
