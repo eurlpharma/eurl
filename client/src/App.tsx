@@ -17,6 +17,7 @@ import "aos/dist/aos.css";
 import { trackPageView } from "./utils/facebookPixel";
 import 'nprogress/nprogress.css';
 import ProgressBar from "./components/ProgressBar";
+import DeliveryPage from "./pages/admin/DeliveryPage";
 
 
 // Lazy-loaded pages
@@ -161,6 +162,7 @@ const App = () => {
                 }
               />
               <Route path="users" element={<AdminUsersPage />} />
+              <Route path="delivery" element={<DeliveryPage />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>
 

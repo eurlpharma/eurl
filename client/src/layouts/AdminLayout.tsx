@@ -33,6 +33,7 @@ import {
   IconOrderBold,
   IconSettingBold,
   IconSun,
+  IconTruck,
   IconUsersBold,
   IconWidgetBold,
 } from "@/components/Iconify";
@@ -116,6 +117,12 @@ const AdminLayout = () => {
       label: t("admin.messages"),
       path: "/admin/analytics",
       icon: <IconChatBold className="w-6 h-6" />,
+    },
+    {
+      key: "Guepex",
+      label: t("Guepex"),
+      path: "/admin/delivery",
+      icon: <IconTruck className="w-6 h-6" />,
     },
     {
       key: "analytics",

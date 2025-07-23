@@ -244,11 +244,6 @@ const OrderDetailPage = () => {
     );
   }
 
-  // const currentStep = getCurrentStep(order.status);
-  // const shippingAddress = order.shippingAddress || {};
-  // const deliveryType = shippingAddress.deliveryType || "office";
-
-
   return (
     <Container maxWidth="lg" className="p-4">
       <Box className="flex justify-between items-center mb-6">
@@ -514,14 +509,14 @@ const OrderDetailPage = () => {
                   <div className="w-[40%] text-[#637381] text-sm capitalize">
                     Ship By
                   </div>
-                  <div className="capitalize text-sm">Yalidine</div>
+                  <div className="capitalize text-sm">Guepex</div>
                 </div>
 
                 <div className="flex items-center">
                   <div className="w-[40%] text-[#637381] text-sm capitalize">
                     Speedy
                   </div>
-                  <div className="capitalize text-sm">standard</div>
+                  <div className="capitalize text-sm">Economic</div>
                 </div>
 
                 <div className="flex items-center">
@@ -565,6 +560,15 @@ const OrderDetailPage = () => {
                   </div>
                   <div className="text-sm line-clamp-1">
                     {order.shippingAddress.address}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="capitalize w-[30%] text-sm text-[#637381]">
+                    duration
+                  </div>
+                  <div className="text-sm line-clamp-1 capitalize">
+                    {order.shippingAddress.deliveryType}
                   </div>
                 </div>
               </div>

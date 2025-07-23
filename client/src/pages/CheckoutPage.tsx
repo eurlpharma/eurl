@@ -26,11 +26,10 @@ import clsx from "clsx";
 const steps = ["shipping", "review"];
 
 const CheckoutPage = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { success } = useNotification();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { items: cartItems, loading: cartLoading } = useSelector(
     (state: RootState) => state.cart
@@ -42,15 +41,24 @@ const CheckoutPage = () => {
     order,
   } = useSelector((state: RootState) => state.orders);
 
+  interface ShippingType {
+    fullName: string;
+    phone: string;
+    wilaya: string;
+    daira: string;
+    address: string;
+  }
+
   const [activeStep, setActiveStep] = useState(0);
-  const [shippingData, setShippingData] = useState<any>({
+  const [shippingData, setShippingData] = useState<ShippingType>({
     fullName: "",
     phone: "",
     wilaya: "",
     daira: "",
     address: "",
+    
   });
-  // Método de pago fijo como contra reembolso
+
   const paymentMethod = "cash_on_delivery";
 
   // Redirect to order page when order is created successfully
@@ -111,28 +119,23 @@ const CheckoutPage = () => {
         : [],
       shippingAddress: {
         ...shippingData,
-        country: shippingData.country || "Algeria",
-        city: shippingData.city || shippingData.wilaya || "",
-        postalCode:
-          shippingData.postalCode && shippingData.postalCode.trim() !== ""
-            ? shippingData.postalCode
-            : "16000",
+        country: "Algeria",
+        city: shippingData.wilaya,
       },
       paymentMethod,
       itemsPrice,
       shippingPrice,
       taxPrice,
-      totalPrice,
-      isGuest: !user,
+      totalPrice
     };
 
-    if (!user) {
-      orderData.guestInfo = {
-        name: shippingData.fullName,
-        phone: shippingData.phone,
-        email: shippingData.email || "",
-      };
-    }
+
+    orderData.guestInfo = {
+      name: shippingData.fullName,
+      phone: shippingData.phone,
+    };
+
+
 
     try {
       await dispatch(createOrder(orderData)).unwrap();
@@ -142,6 +145,9 @@ const CheckoutPage = () => {
       }
       throw error;
     }
+
+
+
   };
 
   const getStepContent = (step: number) => {

@@ -101,7 +101,7 @@ const CategoriesPage = () => {
         setPreviewImage(
           category.image.startsWith("http")
             ? category.image
-            : `https://pharma-api-e5sd.onrender.com/uploads/categories/${category.image}`
+            : `http://localhost:5000/uploads/categories/${category.image}`
         );
       } else {
         setPreviewImage("");
@@ -199,7 +199,7 @@ const CategoriesPage = () => {
           setPreviewImage(
             result.image.startsWith("http")
               ? result.image
-              : `https://pharma-api-e5sd.onrender.com/uploads/categories/${result.image}`
+              : `http://localhost:5000/uploads/categories/${result.image}`
           );
         }
 
@@ -213,7 +213,7 @@ const CategoriesPage = () => {
           setPreviewImage(
             result.image.startsWith("http")
               ? result.image
-              : `https://pharma-api-e5sd.onrender.com/uploads/categories/${result.image}`
+              : `http://localhost:5000/uploads/categories/${result.image}`
           );
         }
 
@@ -345,7 +345,7 @@ const CategoriesPage = () => {
                               category.image
                                 ? category.image.startsWith("http")
                                   ? category.image
-                                  : `https://pharma-api-e5sd.onrender.com/uploads/categories/${category.image}`
+                                  : `http://localhost:5000/uploads/categories/${category.image}`
                                 : "/images/placeholder.png"
                             }
                             alt={category.localizedName}

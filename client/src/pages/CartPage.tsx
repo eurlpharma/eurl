@@ -17,7 +17,6 @@ import {
   CardMedia,
 } from "@mui/material";
 import {
-  TrashIcon,
   MinusIcon,
   PlusIcon,
   ArrowLeftIcon,
@@ -34,6 +33,7 @@ import EmptyCartDraw from "../assets/undraw/empty_cart.svg"
 
 import clsx from "clsx";
 import AIButton from "@/components/buttons/AIButton";
+import { IconTrashBold } from "@/components/Iconify";
 
 const CartPage = () => {
   const { t } = useTranslation();
@@ -146,7 +146,7 @@ const CartPage = () => {
                     color="error"
                     className="rounded-none"
                     onClick={handleClearCart}
-                    startIcon={<TrashIcon className="w-4 h-4" />}
+                    startIcon={<IconTrashBold className="w-5 h-5" />}
                   >
                     {t("cart.clearCart")}
                   </Button>
@@ -168,15 +168,19 @@ const CartPage = () => {
                         key={item.id}
                         className="flex flex-col sm:flex-row items-start sm:items-center py-4 border-b border-gray-200"
                       >
-                        <Card className="w-full sm:w-24 h-24 mr-4 flex-shrink-0 overflow-hidden">
+                        <Card className=" sm:w-24 h-24 mr-4 flex-shrink-0 overflow-hidden shadow-none">
                           <CardMedia
+
                             component="img"
                             image={formatImageUrl(item.image, item.product)}
                             alt={item.name}
                             className="w-full h-full object-cover"
+                            classes={{root: 'shadow-transparent'}}
+                            
                           />
                         </Card>
 
+                     
                         <Box className="flex-grow mt-2 sm:mt-0">
                           <Link
                             component={RouterLink}
@@ -186,15 +190,7 @@ const CartPage = () => {
                           >
                             {item.name}
                           </Link>
-
-                          {item.variant && (
-                            <Typography
-                              variant="body2"
-                              className="text-gray-600"
-                            >
-                              {item.variant}
-                            </Typography>
-                          )}
+                        
                         </Box>
 
                         <Box className="flex items-center mt-2 sm:mt-0 mr-4">
@@ -209,6 +205,7 @@ const CartPage = () => {
                           </IconButton>
 
                           <TextField
+                          
                             value={item.quantity}
                             onChange={(e) =>
                               handleQuantityChange(
@@ -219,6 +216,7 @@ const CartPage = () => {
                             inputProps={{
                               min: 1,
                               style: { textAlign: "center", width: "40px" },
+                              readOnly: true
                             }}
                             variant="standard"
                             className="mx-2"
@@ -247,7 +245,7 @@ const CartPage = () => {
                             color="error"
                             onClick={() => handleRemoveItem(item.id)}
                           >
-                            <TrashIcon className="w-5 h-5" />
+                            <IconTrashBold className="w-5 h-5" />
                           </IconButton>
                         </Box>
                       </Box>

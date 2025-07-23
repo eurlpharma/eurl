@@ -13,7 +13,8 @@ const initialReducers: ReducersMapObject = {
   orders: dummyReducer,
   admin: dummyReducer,
   ui: dummyReducer,
-  settings: dummyReducer
+  settings: dummyReducer,
+  delivery: dummyReducer
 };
 
 export const store = createAppStore(initialReducers);
@@ -63,6 +64,10 @@ const importReducers = async () => {
     const settingsReducer = (await import('./slices/settingsSlice')).default;
     const withSettings: ReducersMapObject = { ...withUI, settings: settingsReducer };
     store.replaceReducer(combineReducers(withSettings));
+
+    const deliveryReducer = (await import('./slices/deliverySlice')).default;
+    const withDelivery: ReducersMapObject = { ...withUI, delivery: deliveryReducer };
+    store.replaceReducer(combineReducers(withDelivery));
 
 
   } catch (error) {

@@ -1,13 +1,13 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import clsx from "clsx";
 import * as yup from "yup";
-import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { RootState } from "@/store";
+import { useTranslation } from "react-i18next";
+import { IconHouse, IconOffice } from "../Iconify";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { ShippingAddress as BaseShippingAddress } from "@/store/slices/cartSlice";
-import willayatData from "@/data/willayat.json";
-import i18n from "@/i18n";
 import {
   Box,
   Typography,
@@ -19,13 +19,27 @@ import {
   InputLabel,
   Select,
 } from "@mui/material";
-import clsx from "clsx";
-import { IconHouse, IconOffice } from "../Iconify";
+import { getPricing, getWilayat } from "@/store/slices/deliverySlice";
+
+interface WilayaType {
+  id: number;
+  name: string;
+  zone: number;
+  is_deliverable: number;
+}
+
+interface DayraType {
+  commune_id: number;
+  commune_name: string;
+  economic_desk: number;
+  economic_home: number;
+  express_desk: number;
+  express_home: number;
+}
 
 interface ShippingAddress extends BaseShippingAddress {
-  postalCode?: string;
   dairaName?: string;
-  deliveryType?: 'home' | 'office';
+  deliveryType?: "home" | "office";
 }
 
 interface ShippingFormProps {
@@ -36,7 +50,17 @@ interface ShippingFormProps {
 const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
   const { t } = useTranslation();
   const { user } = useSelector((state: RootState) => state.auth);
-  const [availableDairas, setAvailableDairas] = useState<any[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const [isDayrat, setIsDayrat] = useState<DayraType[] | null>([]);
+  const [isDayra, setIsDayra] = useState<DayraType | null>(null);
+
+  const { pricing, wilayat } = useSelector(
+    (state: RootState) => state.delivery
+  );
+
+  useEffect(() => {
+    dispatch(getWilayat());
+  }, [dispatch]);
 
   const schema = yup.object().shape({
     fullName: yup.string().required(t("validation.required")),
@@ -44,6 +68,7 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
     wilaya: yup.string().required(t("validation.required")),
     daira: yup.string().required(t("validation.required")),
     address: yup.string(),
+    deliveryPrice: yup.number().min(0).max(100000),
   });
 
   const {
@@ -60,58 +85,61 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
       wilaya: "",
       daira: "",
       address: "",
-      postalCode: "",
       deliveryType: "office",
+      deliveryPrice: 0,
     },
   });
 
   const selectedWilaya = watch("wilaya");
   const selectedDaira = watch("daira");
-  const deliveryType = watch('deliveryType');
+  const deliveryType = watch("deliveryType");
 
   useEffect(() => {
     if (selectedWilaya) {
-      const dairas = willayatData.filter((item: any) => item.wilaya_id === selectedWilaya);
-      setAvailableDairas(dairas);
-      setValue("daira", "");
-      setValue("postalCode", "");
+      dispatch(getPricing({ from: 16, to: Number(selectedWilaya) }));
     }
-  }, [selectedWilaya, setValue]);
+  }, [selectedWilaya, dispatch]);
+
+  useEffect(() => {
+    if (selectedWilaya) {
+      const dayrat = Object.values(pricing.per_commune || {}) as DayraType[];
+      if (dayrat && dayrat.length > 0) {
+        setValue("daira", "");
+        setIsDayrat(dayrat);
+      }
+    }
+  }, [dispatch, pricing, selectedWilaya]);
 
   useEffect(() => {
     if (selectedDaira) {
-      const dairaObj = willayatData.find((item: any) => item.id === selectedDaira);
-      if (dairaObj) {
-        setValue("postalCode", dairaObj.post_code);
-        setValue("dairaName", i18n.language.startsWith('ar') ? dairaObj.ar_name : dairaObj.name);
+      const getDayra: DayraType | undefined = isDayrat?.find(
+        (d) =>
+          d.commune_name.toLocaleLowerCase() ===
+          selectedDaira.toLocaleLowerCase()
+      );
+
+      if (getDayra) {
+        setIsDayra(getDayra);
+        setValue("dairaName", getDayra.commune_name);
       }
     }
-  }, [selectedDaira, setValue]);
+  }, [selectedDaira, setValue, dispatch]);
 
   useEffect(() => {
     if (!deliveryType) {
-      setValue('deliveryType', 'office');
+      setValue("deliveryType", "office");
     }
   }, [deliveryType, setValue]);
 
-  const wilayas = Array.from(
-    willayatData.reduce((acc: Map<string, any>, curr: any) => {
-      if (!acc.has(curr.wilaya_id)) {
-        acc.set(curr.wilaya_id, {
-          wilaya_id: curr.wilaya_id,
-          name: curr.name,
-          ar_name: curr.ar_name,
-        });
+  useEffect(() => {
+    if (isDayra) {
+      if (watch("deliveryType") === "home") {
+        setValue("deliveryPrice", isDayra.economic_home);
+      } else {
+        setValue("deliveryPrice", isDayra.economic_desk);
       }
-      return acc;
-    }, new Map()).values()
-  );
-
-  // Helper to get wilaya name by language
-  const getWilayaName = (wilaya: any) => {
-    if (i18n.language.startsWith('ar')) return wilaya.ar_name;
-    return wilaya.name;
-  };
+    }
+  }, [watch("deliveryType"), isDayra]);
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -120,7 +148,7 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
       </Typography>
 
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
             autoComplete="off"
@@ -131,7 +159,7 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
             autoComplete="off"
@@ -139,7 +167,7 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
             {...register("phone")}
             error={!!errors.phone}
             helperText={errors.phone?.message}
-            placeholder="0XXXXXXXXX"
+            placeholder="05 00 00 00 00"
             dir="ltr"
           />
         </Grid>
@@ -152,11 +180,15 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
               label={t("checkout.wilaya")}
               {...register("wilaya")}
             >
-              {wilayas.map((wilaya) => (
-                <MenuItem key={wilaya.wilaya_id} value={wilaya.wilaya_id}>
-                  {`${wilaya.wilaya_id} - ${getWilayaName(wilaya)}`}
-                </MenuItem>
-              ))}
+              {wilayat &&
+                !wilayat.loading &&
+                wilayat.data &&
+                wilayat.data.length > 0 &&
+                wilayat.data.map((w: WilayaType) => (
+                  <MenuItem key={w.id} value={w.id}>
+                    {`${w.id} - ${w.name}`}
+                  </MenuItem>
+                ))}
             </Select>
             {errors.wilaya && (
               <FormHelperText>{errors.wilaya.message}</FormHelperText>
@@ -168,7 +200,7 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
           <FormControl
             fullWidth
             error={!!errors.daira}
-            disabled={!selectedWilaya}
+            disabled={!isDayrat || isDayrat.length < 1}
           >
             <InputLabel id="daira-label">{t("checkout.daira")}</InputLabel>
             <Select
@@ -176,11 +208,12 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
               label={t("checkout.daira")}
               {...register("daira")}
             >
-              {availableDairas.map((daira) => (
-                <MenuItem key={daira.id} value={daira.id}>
-                  {i18n.language.startsWith('ar') ? daira.ar_name : daira.name}
-                </MenuItem>
-              ))}
+              {isDayrat &&
+                isDayrat.map((daira) => (
+                  <MenuItem key={daira.commune_name} value={daira.commune_name}>
+                    {daira.commune_name}
+                  </MenuItem>
+                ))}
             </Select>
             {errors.daira && (
               <FormHelperText>{errors.daira.message}</FormHelperText>
@@ -202,27 +235,39 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
 
         <Grid item xs={12}>
           <Typography variant="subtitle1" className="mb-2 font-josefin">
-            {t('checkout.deliveryType') || 'نوع التوصيل'}
+            {t("checkout.deliveryType") || "نوع التوصيل"}
           </Typography>
           <Box display="flex" gap={2} mt={1}>
             <button
               type="button"
-              className={`flex-1 flex flex-col items-center justify-center p-4 rounded-lg border transition shadow-sm ${deliveryType === 'home' ? 'border-girl-secondary bg-girl-secondary/10' : 'border-gray-300 bg-white'}`}
-              onClick={() => setValue('deliveryType', 'home')}
+              className={`flex-1 flex flex-col items-center justify-center p-4 rounded-lg border transition shadow-sm ${
+                deliveryType === "home"
+                  ? "border-girl-secondary bg-girl-secondary/10"
+                  : "border-gray-300 bg-white"
+              }`}
+              onClick={() => setValue("deliveryType", "home")}
             >
               <IconHouse className="w-8 h-8" />
-              <span className="mt-2 font-medium text-base">{t('checkout.deliveryHome') || 'توصيل للمنزل'}</span>
+              <span className="mt-2 font-medium text-base">
+                {t("checkout.deliveryHome") || "توصيل للمنزل"}
+              </span>
             </button>
             <button
               type="button"
-              className={`flex-1 flex flex-col items-center justify-center p-4 rounded-lg border transition shadow-sm ${deliveryType === 'office' ? 'border-girl-secondary bg-girl-secondary/10' : 'border-gray-300 bg-white'}`}
-              onClick={() => setValue('deliveryType', 'office')}
+              className={`flex-1 flex flex-col items-center justify-center p-4 rounded-lg border transition shadow-sm ${
+                deliveryType === "office"
+                  ? "border-girl-secondary bg-girl-secondary/10"
+                  : "border-gray-300 bg-white"
+              }`}
+              onClick={() => setValue("deliveryType", "office")}
             >
               <IconOffice className="w-8 h-8" />
-              <span className="mt-2 font-medium text-base">{t('checkout.deliveryOffice') || 'توصيل للمكتب'}</span>
+              <span className="mt-2 font-medium text-base">
+                {t("checkout.deliveryOffice") || "توصيل للمكتب"}
+              </span>
             </button>
           </Box>
-          <input type="hidden" {...register('deliveryType')} />
+          <input type="hidden" {...register("deliveryType")} />
         </Grid>
       </Grid>
 

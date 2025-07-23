@@ -26,6 +26,7 @@ export interface ShippingAddress {
   daira: string;
   address?: string;
   deliveryType?: 'home' | 'office';
+  deliveryPrice?: number
 }
 
 // حماية عند قراءة cartItems من LocalStorage

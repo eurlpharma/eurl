@@ -17,7 +17,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "https://pharma-api-e5sd.onrender.com",
+        target: "http://localhost:5000",
+        // target: "https://pharma-api-e5sd.onrender.com",
         changeOrigin: true,
         secure: false,
       },

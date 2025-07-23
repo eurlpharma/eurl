@@ -7,6 +7,7 @@ export const getReducers = async () => {
   const orderModule = await import('./slices/orderSlice');
   const adminModule = await import('./slices/adminSlice');
   const uiModule = await import('./slices/uiSlice');
+  const deliveryModule = await import("./slices/deliverySlice")
 
   return {
     auth: authModule.default,
@@ -16,5 +17,6 @@ export const getReducers = async () => {
     orders: orderModule.default,
     admin: adminModule.default,
     ui: uiModule.default,
+    delivery: deliveryModule
   };
 };
