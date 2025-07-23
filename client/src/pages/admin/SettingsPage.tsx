@@ -16,7 +16,7 @@ import { RootState } from "@/store/storeConfig";
 import { AppDispatch } from "@/store";
 
 const API_URL =
-  import.meta.env.VITE_API_URL || `http://localhost:5000`;
+  import.meta.env.VITE_API_URL || `https://pharma-api-e5sd.onrender.com`;
 import Preloader from "@/components/global/Preloader";
 import FormLayout from "@/components/layout/FormLayout";
 import UIButton from "@/components/design/UIButton";

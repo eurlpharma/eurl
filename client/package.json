@@ -111,5 +111,5 @@
     "vite": "^4.4.0",
     "vite-tsconfig-paths": "^4.2.0"
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "https://pharma-api-e5sd.onrender.com"
 }
