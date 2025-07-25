@@ -58,7 +58,7 @@ const HeroHome: FC<HeroHomeProps> = ({ isScreen = true, ...props }) => {
       <div className="swiper w-full h-full">
         <Swiper
           className="h-full"
-          loop={true}
+          loop={heroImages.length > 2}
           autoplay={{
             delay: 6000,
             disableOnInteraction: false,

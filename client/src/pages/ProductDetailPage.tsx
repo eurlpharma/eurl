@@ -74,7 +74,7 @@ const TabPanel = (props: TabPanelProps) => {
 };
 
 const API_URL =
-  import.meta.env.VITE_API_URL || `http://192.168.1.2:5000`;
+  import.meta.env.VITE_API_URL || `https://pharma-api-e5sd.onrender.com`;
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -323,6 +323,7 @@ const ProductDetailPage = () => {
                       setActiveImage(swiper.activeIndex)
                     }
                     initialSlide={activeImage}
+                    loop={productImages.length > 2}
                   >
                     {productImages.map((image: string, index: number) => (
                       <SwiperSlide key={index}>

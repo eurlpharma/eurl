@@ -75,7 +75,7 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
       .matches(/^\d{10}$/, t("validation.phoneFormat")),
     daira: yup.string().required(t("validation.required")),
     wilaya: yup.string().required(t("validation.required")),
-    address: yup.string(),
+    address: yup.string().min(0).max(200),
     deliveryPrice: yup.number().min(0).max(100000),
   });
 

@@ -52,7 +52,7 @@ const TopTheCharts = () => {
               <Swiper
                 className="w-full"
                 slidesPerView={3}
-                loop={true}
+                loop={categories.length > 2}
                 autoplay={{ delay: 3000, disableOnInteraction: false }}
                 modules={[Autoplay]}
                 breakpoints={{
@@ -95,7 +95,7 @@ const TopTheCharts = () => {
           <div className="products w-full">
             <Swiper
               spaceBetween={20}
-              loop
+              loop={products.length > 2}
               breakpoints={{
                 768: { slidesPerView: 1 },
                 992: { slidesPerView: 3 },

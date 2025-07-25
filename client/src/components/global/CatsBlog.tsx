@@ -78,7 +78,7 @@ const CatsBlog: FC<CatsBlogProps> = ({ ...props }) => {
       <Container>
         <Swiper
           slidesPerView={1}
-          loop={true}
+          loop={items.length > 2}
           autoplay={{delay: 6000, disableOnInteraction: true}}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           modules={[Autoplay, EffectFade]}

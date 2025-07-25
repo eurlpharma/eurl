@@ -7,9 +7,8 @@ import DeliveryTable from "@/components/tables/DeliveryTable";
 
 const DeliveryPage = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    parcels: { loading, data, error },
-  } = useSelector((state: RootState) => state.delivery);
+  const parcels = useSelector((state: RootState) => state.delivery.parcels) || { loading: false, data: [], error: null };
+  const { loading, data, error } = parcels;
 
   useEffect(() => {
     dispatch(getParcels());
@@ -22,8 +21,6 @@ const DeliveryPage = () => {
   if (!loading && error) {
     return <div>Error</div>;
   }
-
-  !loading && data.length > 0 && console.log(data);
 
   return (
     <DeliveryTable

@@ -4,6 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch, { SwitchProps } from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import React from "react";
 
 export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -94,9 +95,19 @@ export const Android12Switch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export const IOSSwitch = styled((props: SwitchProps) => (
-  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-))(({ theme }) => ({
+// تعريف IOSSwitch باستخدام forwardRef
+export const IOSSwitch = React.forwardRef<HTMLButtonElement, SwitchProps>(
+  (props, ref) => (
+    <Switch
+      focusVisibleClassName=".Mui-focusVisible"
+      disableRipple
+      ref={ref}
+      {...props}
+    />
+  )
+);
+
+export const IOSSwitchStyled = styled(IOSSwitch)(({ theme }) => ({
   width: 42,
   height: 26,
   padding: 0,
@@ -213,7 +224,7 @@ export default function CustomizedSwitches() {
         label="Android 12"
       />
       <FormControlLabel
-        control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+        control={<IOSSwitchStyled sx={{ m: 1 }} defaultChecked />}
         label="iOS style"
       />
       <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>

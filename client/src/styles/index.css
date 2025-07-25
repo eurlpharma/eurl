@@ -701,3 +701,18 @@ main {
     box-shadow: 0 0 5px #ed1b6f, 0 0 10px #ff4fa3;
   }
 }
+
+
+
+.ql-toolbar.ql-snow {
+  border-bottom: 1px solid #e9ecee !important;
+}
+
+.ql-container.ql-snow {
+  height: 20rem !important;
+}
+
+.quill {
+  min-height: fit-content !important;
+  height: fit-content;
+}
