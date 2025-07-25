@@ -52,7 +52,7 @@ const TopTheCharts = () => {
               <Swiper
                 className="w-full"
                 slidesPerView={3}
-                loop={categories.length > 2}
+                loop={categories && categories.length > 2 ? true : false}
                 autoplay={{ delay: 3000, disableOnInteraction: false }}
                 modules={[Autoplay]}
                 breakpoints={{
@@ -95,7 +95,7 @@ const TopTheCharts = () => {
           <div className="products w-full">
             <Swiper
               spaceBetween={20}
-              loop={products.length > 2}
+              loop={products && products.length > 2 ? true : false}
               breakpoints={{
                 768: { slidesPerView: 1 },
                 992: { slidesPerView: 3 },
@@ -103,7 +103,8 @@ const TopTheCharts = () => {
               }}
             >
               {!loading &&
-                products && products.length > 0 &&
+                products &&
+                products.length > 0 &&
                 products.map((product: ProductData, index) => (
                   <SwiperSlide key={index}>
                     <div
