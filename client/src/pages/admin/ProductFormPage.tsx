@@ -210,7 +210,7 @@ const ProductFormPage = () => {
           formData.append("image", file);
           formData.append("productId", productIdShort);
           const res = await fetch(
-            "https://pharma-api-e5sd.onrender.com/api/upload/product-image",
+            "http://192.168.1.2:5000/api/upload/product-image",
             {
               method: "POST",
               headers: token ? { Authorization: `Bearer ${token}` } : {},

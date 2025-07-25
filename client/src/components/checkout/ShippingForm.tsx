@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import * as yup from "yup";
 import { AppDispatch, RootState } from "@/store";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -59,10 +59,22 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
   );
 
   const schema = yup.object().shape({
-    fullName: yup.string().required(t("validation.required")),
-    phone: yup.string().required(t("validation.required")),
-    wilaya: yup.string().required(t("validation.required")),
+    fullName: yup
+      .string()
+      .required(t("validation.required"))
+      .min(4, t("validation.fullNameMin"))
+      .test(
+        "no-trim-spaces",
+        t("validation.fullNameTrim"),
+        (value) =>
+          value === undefined || (value.trim() === value && value.length > 0)
+      ),
+    phone: yup
+      .string()
+      .required(t("validation.required"))
+      .matches(/^\d{10}$/, t("validation.phoneFormat")),
     daira: yup.string().required(t("validation.required")),
+    wilaya: yup.string().required(t("validation.required")),
     address: yup.string(),
     deliveryPrice: yup.number().min(0).max(100000),
   });
@@ -71,6 +83,7 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
     register,
     handleSubmit,
     watch,
+    control,
     setValue,
     formState: { errors },
   } = useForm<ShippingAddress>({
@@ -90,13 +103,12 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
   const selectedDaira = watch("daira");
   const deliveryType = watch("deliveryType");
 
-
   const fetchWilayat = async () => {
     await dispatch(getWilayat());
-  }
+  };
 
   useEffect(() => {
-    fetchWilayat()
+    fetchWilayat();
   }, [dispatch]);
 
   useEffect(() => {
@@ -107,11 +119,13 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
 
   useEffect(() => {
     if (selectedWilaya) {
-      const dayrat = Object.values(pricing.per_commune || {}) as DayraType[];
-      if (dayrat && dayrat.length > 0) {
-        setValue("daira", "");
-        setIsDayrat(dayrat);
-      }
+      const dayrat =
+        pricing && pricing.per_commune
+          ? (Object.values(pricing.per_commune || {}) as DayraType[])
+          : [];
+
+      setIsDayrat(dayrat);
+      setValue("daira", ""); // تصفير الدائرة دائماً عند تغيير الولاية
     }
   }, [dispatch, pricing, selectedWilaya]);
 
@@ -172,28 +186,45 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
             {...register("phone")}
             error={!!errors.phone}
             helperText={errors.phone?.message}
-            placeholder="05 00 00 00 00"
+            placeholder="0500000000"
             dir="ltr"
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "\\d*",
+              maxLength: 10,
+              minLength: 10,
+            }}
+            onInput={(e) => {
+              const input = e.target as HTMLInputElement;
+              input.value = input.value.replace(/[^\d]/g, "");
+            }}
           />
         </Grid>
 
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth error={!!errors.wilaya}>
             <InputLabel id="wilaya-label">{t("checkout.wilaya")}</InputLabel>
-            <Select
-              labelId="wilaya-label"
-              label={t("checkout.wilaya")}
-              {...register("wilaya")}
-            >
-              {wilayat &&
-                wilayat.data &&
-                wilayat.data.length > 0 &&
-                wilayat.data.map((w: WilayaType) => (
-                  <MenuItem key={w.id} value={w.id}>
-                    {`${w.id} - ${w.name}`}
-                  </MenuItem>
-                ))}
-            </Select>
+            <Controller
+              name="wilaya"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  labelId="wilaya-label"
+                  label={t("checkout.wilaya")}
+                  {...field}
+                  value={field.value || ""}
+                >
+                  {wilayat &&
+                    wilayat.data &&
+                    wilayat.data.length > 0 &&
+                    wilayat.data.map((w: WilayaType) => (
+                      <MenuItem key={w.id} value={w.id}>
+                        {`${w.id} - ${w.name}`}
+                      </MenuItem>
+                    ))}
+                </Select>
+              )}
+            />
             {errors.wilaya && (
               <FormHelperText>{errors.wilaya.message}</FormHelperText>
             )}
@@ -207,18 +238,29 @@ const ShippingForm = ({ onSubmit, initialData }: ShippingFormProps) => {
             disabled={!isDayrat || isDayrat.length < 1}
           >
             <InputLabel id="daira-label">{t("checkout.daira")}</InputLabel>
-            <Select
-              labelId="daira-label"
-              label={t("checkout.daira")}
-              {...register("daira")}
-            >
-              {isDayrat &&
-                isDayrat.map((daira) => (
-                  <MenuItem key={daira.commune_name} value={daira.commune_name}>
-                    {daira.commune_name}
-                  </MenuItem>
-                ))}
-            </Select>
+
+            <Controller
+              name="daira"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  labelId="daira-label"
+                  label={t("checkout.daira")}
+                  {...field}
+                  value={field.value || ""} // ✅ لتجنب التحذيرات على الهاتف
+                >
+                  {isDayrat?.map((daira) => (
+                    <MenuItem
+                      key={daira.commune_name}
+                      value={daira.commune_name}
+                    >
+                      {daira.commune_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+
             {errors.daira && (
               <FormHelperText>{errors.daira.message}</FormHelperText>
             )}
