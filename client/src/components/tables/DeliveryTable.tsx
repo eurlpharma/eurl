@@ -432,6 +432,155 @@ const DeliveryTable: FC<DeliveryTableProps> = ({
                                 <div>
                                   <strong>Tracking:</strong> {parcel.tracking}
                                 </div>
+
+                                <div>
+                                  <strong>Stopdeskid:</strong> {parcel.stopdesk_id}
+                                </div>
+
+                                <div>
+                                  <strong>Stopdesk name:</strong> {parcel.stopdesk_name}
+                                </div>
+
+                                <div>
+                                  <strong>to_commune_name:</strong> {parcel.to_commune_name}
+                                </div>
+
+                                <div>
+                                  <strong>product_list:</strong> {parcel.product_list}
+                                </div>
+
+                                <div>
+                                  <strong>do_insurance:</strong> {parcel.do_insurance}
+                                </div>
+
+                                <div>
+                                  <strong>declared_value:</strong> {parcel.declared_value}
+                                </div>
+
+                                <div>
+                                  <strong>length:</strong> {parcel.length}
+                                </div>
+
+                                <div>
+                                  <strong>height:</strong> {parcel.height}
+                                </div>
+
+                                <div>
+                                  <strong>weight:</strong> {parcel.weight}
+                                </div>
+
+                                <div>
+                                  <strong>delivery_fee:</strong> {parcel.delivery_fee}
+                                </div>
+
+                                <div>
+                                  <strong>freeshipping:</strong> {parcel.freeshipping}
+                                </div>
+
+                                <div>
+                                  <strong>import_id:</strong> {parcel.import_id}
+                                </div>
+
+                                <div>
+                                  <strong>date_expedition:</strong> {parcel.date_expedition}
+                                </div>
+
+                                <div>
+                                  <strong>date_last_status:</strong> {parcel.date_last_status}
+                                </div>
+
+                                <div>
+                                  <strong>last_status:</strong> {parcel.last_status}
+                                </div>
+
+                                <div>
+                                  <strong>taxe_percentage:</strong> {parcel.taxe_percentage}
+                                </div>
+
+                                <div>
+                                  <strong>taxe_from:</strong> {parcel.taxe_from}
+                                </div>
+
+                                <div>
+                                  <strong>taxe_retour:</strong> {parcel.taxe_retour}
+                                </div>
+
+                                <div>
+                                  <strong>parcel_type:</strong> {parcel.parcel_type}
+                                </div>
+
+                                <div>
+                                  <strong>parcel_sub_type:</strong> {parcel.parcel_sub_type}
+                                </div>
+
+                                <div>
+                                  <strong>has_receipt:</strong> {parcel.has_receipt}
+                                </div>
+
+                                <div>
+                                  <strong>has_recouvrement:</strong> {parcel.has_recouvrement}
+                                </div>
+
+                                <div>
+                                  <strong>return_center_code:</strong> {parcel.return_center_code}
+                                </div>
+
+                                <div>
+                                  <strong>current_center_id:</strong> {parcel.current_center_id}
+                                </div>
+
+                                <div>
+                                  <strong>current_center_name:</strong> {parcel.current_center_name}
+                                </div>
+
+                                <div>
+                                  <strong>current_wilaya_id:</strong> {parcel.current_wilaya_id}
+                                </div>
+
+                                <div>
+                                  <strong>current_wilaya_name:</strong> {parcel.current_wilaya_name}
+                                </div>
+
+                                <div>
+                                  <strong>current_commune_id:</strong> {parcel.current_commune_id}
+                                </div>
+
+                                <div>
+                                  <strong>current_commune_name:</strong> {parcel.current_commune_name}
+                                </div>
+
+                                <div>
+                                  <strong>payment_status:</strong> {parcel.payment_status}
+                                </div>
+
+                                <div>
+                                  <strong>payment_id:</strong> {parcel.payment_id}
+                                </div>
+
+                                <div>
+                                  <strong>has_exchange:</strong> {parcel.has_exchange}
+                                </div>
+
+                                <div>
+                                  <strong>product_to_collect:</strong> {parcel.product_to_collect}
+                                </div>
+
+                                <div>
+                                  <strong>economic:</strong> {parcel.economic}
+                                </div>
+
+                                <div>
+                                  <strong>label:</strong> {parcel.label}
+                                </div>
+
+                                <div>
+                                  <strong>pin:</strong> {parcel.pin}
+                                </div>
+
+                                <div>
+                                  <strong>qr_text:</strong> {parcel.qr_text}
+                                </div>
+
                                 <div>
                                   <strong>Address:</strong> {parcel.address}
                                 </div>
@@ -439,7 +588,6 @@ const DeliveryTable: FC<DeliveryTableProps> = ({
                                   <strong>Created At:</strong>{" "}
                                   {parcel.date_creation}
                                 </div>
-                                {/* أضف ما تريد من بيانات إضافية هنا */}
                               </Box>
                             </Collapse>
                           </TableCell>
