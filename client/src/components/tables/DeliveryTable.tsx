@@ -32,7 +32,7 @@ import { FC, HTMLAttributes, useState } from "react";
 import unDrawError from "../../assets/undraw/bug_fix.svg";
 import { useTranslation } from "react-i18next";
 import UIButton from "../design/UIButton";
-import { IconFilter, IconPrintBold, IconTrashBold } from "../Iconify";
+import { IconFilter, IconMap, IconTrashBold } from "../Iconify";
 import { Link } from "react-router-dom";
 import { FunnelIcon, PlusIcon } from "lucide-react";
 import clsx from "clsx";
@@ -54,8 +54,7 @@ interface DeliveryTableProps extends HTMLAttributes<HTMLElement> {
 }
 
 const cells = [
-  { key: "TID" },
-  { key: "OID" },
+  { key: "ID" },
   { key: "Fullname" },
   { key: "Phone" },
   { key: "Wilaya" },
@@ -63,6 +62,29 @@ const cells = [
   { key: "Status" },
   { key: "common.actions" },
 ];
+
+const guepexStatusMap: Record<
+  string,
+  {
+    label: string;
+    color: "primary" | "secondary" | "info" | "success" | "warning" | "error";
+  }
+> = {
+  "colis prêt": { label: "ready", color: "warning" },
+  "étiquette créée": { label: "labeled", color: "info" },
+  "label created": { label: "labeled", color: "info" },
+  "en transit": { label: "transit", color: "primary" },
+  "en cours": { label: "processing", color: "info" },
+  "en chemin": { label: "transit", color: "primary" },
+  "en livraison": { label: "delivering", color: "primary" },
+  livré: { label: "delivered", color: "success" },
+  "retourné au vendeur": { label: "returned", color: "error" },
+  retardé: { label: "delayed", color: "warning" },
+  incident: { label: "issue", color: "error" },
+  anomalie: { label: "issue", color: "error" },
+  "livré en relais": { label: "pickup", color: "info" },
+  "retour au site": { label: "returned", color: "error" },
+};
 
 const DeliveryTable: FC<DeliveryTableProps> = ({
   header,
@@ -100,7 +122,7 @@ const DeliveryTable: FC<DeliveryTableProps> = ({
         title={header && t(header)}
         subheader={subHeader && t(`${subHeader}`)}
         classes={{
-          title: "font-public-sans text-medium lg:text-lg xl:text-xl",
+          title: "font-public-sans font-semibold text-lg lg:text-lg xl:text-xl",
         }}
         action={
           <div className="flex items-center gap-3">
@@ -280,89 +302,88 @@ const DeliveryTable: FC<DeliveryTableProps> = ({
                     </TableRow>
                   ))
                 : parcels &&
-                  parcels.map((parcel: GuepexParcel, idx) => (
-                    <TableRow
-                      key={parcel.tracking || idx}
-                      className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
-                    >
-                      <TableCell className="font-public-sans">
-                        <Link
-                          to={"#"}
-                          className="text-primary-600 hover:underline whitespace-nowrap"
-                        >
-                          {parcel.tracking}
-                        </Link>
-                      </TableCell>
+                  parcels.map((parcel: GuepexParcel, idx) => {
+                    const statusInfo = guepexStatusMap[
+                      parcel.last_status?.toLowerCase() || ""
+                    ] ?? {
+                      label: parcel.last_status,
+                      color: "default", // يمكنك استخدام لون رمادي أو تركها بدون لون
+                    };
 
-                      <TableCell className="font-public-sans">
-                        <Link
-                          to={"#"}
-                          className="text-primary-600 hover:underline"
-                        >
-                          #{parcel.order_id}
-                        </Link>
-                      </TableCell>
+                    return (
+                      <TableRow
+                        key={parcel.tracking || idx}
+                        className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
+                      >
 
-                      <TableCell>
-                        <Box>
-                          <Typography className="whitespace-nowrap font-public-sans">
-                            {parcel.firstname} {parcel.familyname}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-
-                      <TableCell>
-                        <Typography className="whitespace-nowrap font-barlow">
-                          {parcel.contact_phone}
-                        </Typography>
-                      </TableCell>
-
-                      <TableCell className="font-poppins">
-                        {parcel.to_wilaya_name}
-                      </TableCell>
-
-                      <TableCell>
-                        <Typography className="whitespace-nowrap flex items-center gap-1 font-barlow font-medium">
-                          {parcel.price.toFixed(2)}{" "}
-                          {t("ammount.da").toUpperCase()}
-                        </Typography>
-                      </TableCell>
-
-                      <TableCell>
-                        <UIChip
-                          size="sm"
-                          radius="full"
-                          variant="soft"
-                          className="capitalize px-2"
-                        >
-                          {parcel.last_status}
-                        </UIChip>
-                      </TableCell>
-
-                      <TableCell>
-                        <div className="flex items-center justify-end">
-                          <IconButton
-                            onClick={() =>
-                              (window.location.href = parcel.label)
-                            }
-                            color="secondary"
-                            title={t("orders.printInvoice")}
+                        <TableCell className="font-public-sans">
+                          <Link
+                            to={"#"}
+                            className="text-primary-600 hover:underline"
                           >
-                            <IconPrintBold />
-                          </IconButton>
-                          <IconButton
-                            /* onClick={() =>
+                            #{parcel.order_id}
+                          </Link>
+                        </TableCell>
+
+                        <TableCell>
+                          <Box>
+                            <Typography className="whitespace-nowrap font-public-sans">
+                              {parcel.firstname} {parcel.familyname}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+
+                        <TableCell>
+                          <Typography className="whitespace-nowrap font-barlow">
+                            {parcel.contact_phone}
+                          </Typography>
+                        </TableCell>
+
+                        <TableCell className="font-poppins">
+                          {parcel.to_wilaya_name}
+                        </TableCell>
+
+                        <TableCell>
+                          <Typography className="whitespace-nowrap flex items-center gap-1 font-barlow font-medium">
+                            {parcel.price.toFixed(2)}{" "}
+                            {t("ammount.da").toUpperCase()}
+                          </Typography>
+                        </TableCell>
+
+                        <TableCell>
+                          <UIChip
+                            size="sm"
+                            radius="full"
+                            variant="soft"
+                            color={statusInfo.color}
+                            className="capitalize px-2 line-clamp-1 whitespace-nowrap"
+                          >
+                            {statusInfo.label}
+                          </UIChip>
+                        </TableCell>
+
+                        <TableCell>
+                          <div className="flex items-center justify-end">
+                            <IconButton
+                              onClick={() => console.log(parcel.tracking)}
+                              color="default"
+                            >
+                              <IconMap />
+                            </IconButton>
+                            <IconButton
+                              /* onClick={() =>
                               handleDeleteClick(order._id || order.id || "")
                             } */
-                            color="error"
-                            title={t("common.delete")}
-                          >
-                            <IconTrashBold />
-                          </IconButton>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                              color="error"
+                              title={t("common.delete")}
+                            >
+                              <IconTrashBold />
+                            </IconButton>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
             </TableBody>
           </Table>
         </SimpleBar>

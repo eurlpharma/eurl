@@ -1906,11 +1906,6 @@ export const IconTruck: FC<IconifyProps> = ({ ...props }) => {
   );
 };
 
-/* export const MyIcon: FC<IconifyProps> = ({...props}) => {
-  return (
-
-  );
-}; */
 
 /* export const MyIcon: FC<IconifyProps> = ({...props}) => {
   return (

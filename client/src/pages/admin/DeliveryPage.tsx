@@ -14,18 +14,11 @@ const DeliveryPage = () => {
     dispatch(getParcels());
   }, [dispatch]);
 
-  if (loading) {
-    return <div>wait....</div>;
-  }
 
-  if (!loading && error) {
-    return <div>Error</div>;
-  }
 
   return (
     <DeliveryTable
-      header="Parcels"
-      subHeader="Guepex parcels"
+      header="GUEPEX"
       error={error}
       loading={loading}
       parcels={data}
