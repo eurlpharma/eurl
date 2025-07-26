@@ -1,6 +1,6 @@
 // Order types for order management and display
 
-import type { UserData } from './user';
+import type { UserData } from "./user";
 
 export interface GuestData {
   name: string;
@@ -23,8 +23,13 @@ export interface ShippingAddress {
   city: string;
   postalCode: string;
   country: string;
-  deliveryType?: string;
+  deliveryType?: "home" | "office";
+  daira?: string;
+  fullName?: string;
   dairaName?: string;
+  phone?: string;
+  wilaya?: string;
+  deliveryPrice?: number;
 }
 
 export interface PaymentResult {
@@ -34,7 +39,12 @@ export interface PaymentResult {
   email_address?: string;
 }
 
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderStatus =
+  | "pending"
+  | "processing"
+  | "shipped"
+  | "delivered"
+  | "cancelled";
 
 export interface GuestInfo {
   name: string;
@@ -72,7 +82,7 @@ export interface OrderFilter {
   dateTo?: string;
   search?: string;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
   page?: number;
   limit?: number;
 }
@@ -105,7 +115,11 @@ export interface UpdateOrderStatusData {
 
 // Helper function to calculate order summary
 export const calculateOrderSummary = (orderItems: OrderItem[]) => {
-  const itemsPrice = Number(orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2));
+  const itemsPrice = Number(
+    orderItems
+      .reduce((acc, item) => acc + item.price * item.quantity, 0)
+      .toFixed(2)
+  );
   const shippingPrice = itemsPrice > 100 ? 0 : 10;
   const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
   const totalPrice = Number((itemsPrice + shippingPrice + taxPrice).toFixed(2));

@@ -14,7 +14,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Button,
   TextField,
   InputAdornment,
   Select,
@@ -432,7 +431,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
 
             <TableBody>
               {loading
-                ? Array.from(Array(6)).map((_, index) => (
+                ? Array.from(Array(8)).map((_, index) => (
                     <TableRow key={index}>
                       <TableCell>
                         <Skeleton variant="text" component="h2" />
@@ -635,19 +634,22 @@ const OrdersTable: FC<OrdersTableProps> = ({
             count={pages}
             page={page}
             onChange={(_, value) => setPage(value)}
-            showFirstButton
-            showLastButton
           />
         </Box>
       )}
 
       <Dialog
+        className="backdrop-blur-sm bg-white/10 transition-transform-background duration-500"
+        classes={{
+          paper: "shadow-lighter rounded-xl",
+        }}
         open={deleteDialogOpen}
         onClose={handleDeleteCancel}
         aria-labelledby="delete-dialog-title"
         aria-describedby="delete-dialog-description"
+        container={document.getElementById("root")}
       >
-        <DialogTitle id="delete-dialog-title">
+        <DialogTitle id="delete-dialog-title" className="font-public-sans">
           {t("orders.deleteConfirmTitle")}
         </DialogTitle>
         <DialogContent>
@@ -656,16 +658,22 @@ const OrdersTable: FC<OrdersTableProps> = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel} color="primary">
+          <UIButton
+            onClick={handleDeleteCancel}
+            color="grey"
+            size="sm"
+            variant="light"
+          >
             {t("common.cancel")}
-          </Button>
-          <Button
+          </UIButton>
+          <UIButton
             onClick={handleDeleteConfirm}
             color="error"
-            variant="contained"
+            size="sm"
+            variant="filled"
           >
             {t("common.delete")}
-          </Button>
+          </UIButton>
         </DialogActions>
       </Dialog>
 
@@ -673,8 +681,14 @@ const OrdersTable: FC<OrdersTableProps> = ({
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
+        className="backdrop-blur-sm bg-white/10 transition-transform-background duration-500"
+        classes={{
+          paper: "shadow-lighter rounded-xl",
+        }}
+        container={document.getElementById("root")}
       >
         <MenuItem
+          className="font-public-sans"
           onClick={() =>
             selectedOrderId && handleStatusChange(selectedOrderId, "processing")
           }
@@ -682,6 +696,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
           {t("orders.status.processing")}
         </MenuItem>
         <MenuItem
+          className="font-public-sans"
           onClick={() =>
             selectedOrderId && handleStatusChange(selectedOrderId, "shipped")
           }
@@ -689,6 +704,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
           {t("orders.status.shipped")}
         </MenuItem>
         <MenuItem
+          className="font-public-sans"
           onClick={() =>
             selectedOrderId && handleStatusChange(selectedOrderId, "delivered")
           }
@@ -696,6 +712,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
           {t("orders.status.delivered")}
         </MenuItem>
         <MenuItem
+          className="font-public-sans"
           onClick={() =>
             selectedOrderId && handleStatusChange(selectedOrderId, "cancelled")
           }

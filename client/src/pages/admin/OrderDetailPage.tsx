@@ -28,6 +28,7 @@ import {
   FormControl,
   InputLabel,
   Avatar,
+  LinearProgress,
 } from "@mui/material";
 import {
   ArrowLeftIcon,
@@ -48,7 +49,6 @@ import { formatDate, formatPrice } from "@/utils/formatters";
 import AIButton from "@/components/buttons/AIButton";
 import willayatData from "@/data/willayat.json";
 import i18n from "@/i18n";
-import Preloader from "@/components/global/Preloader";
 import moment from "moment";
 import UIButton from "@/components/design/UIButton";
 import { IconPrintBold } from "@/components/Iconify";
@@ -162,24 +162,6 @@ const OrderDetailPage = () => {
     }
   };
 
-  /* const getCurrentStep = (status?: string) => {
-    if (!status) return 0;
-    switch (status.toLowerCase()) {
-      case "pending":
-        return 0;
-      case "processing":
-        return 1;
-      case "shipped":
-        return 2;
-      case "delivered":
-        return 3;
-      case "cancelled":
-        return -1;
-      default:
-        return 0;
-    }
-  }; */
-
   const getWilayaNameById = (wilayaId: string) => {
     const wilaya = willayatData.find((w: any) => w.wilaya_id === wilayaId);
     if (!wilaya) return wilayaId;
@@ -195,7 +177,22 @@ const OrderDetailPage = () => {
   };
 
   if (loading || !order) {
-    return <Preloader />;
+    return (
+      <Container className="flex items-center justify-center h-[80vh]">
+        <Box sx={{ width: "30%" }}>
+          <LinearProgress
+            sx={{
+              height: 6,
+              borderRadius: 2,
+              backgroundColor: "#fde6e1",
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: "#ff0066",
+              },
+            }}
+          />
+        </Box>
+      </Container>
+    );
   }
 
   if (error) {
@@ -291,12 +288,6 @@ const OrderDetailPage = () => {
                 <Typography variant="h6" className="font-public-sans">
                   {t("Details")}
                 </Typography>
-                {/* <Typography variant="body2" className="text-gray-600">
-                  {t("checkout.deliveryType")}:{" "}
-                  {deliveryType === "home"
-                    ? t("checkout.deliveryHome")
-                    : t("checkout.deliveryOffice")}
-                </Typography> */}
               </Box>
 
               <div className="mt-2 sm:mt-0">
@@ -314,40 +305,12 @@ const OrderDetailPage = () => {
               </div>
             </Box>
 
-            {/* {currentStep !== -1 ? (
-              <div>
-                <Box className="my-6">
-                  <Stepper activeStep={currentStep} alternativeLabel>
-                    {["pending", "processing", "shipped", "delivered"].map(
-                      (step) => (
-                        <Step key={step}>
-                          <StepLabel
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              setNewStatus(step as OrderStatus);
-                              setStatusDialogOpen(true);
-                            }}
-                          >
-                            {t(`orders.steps.${step}`)}
-                          </StepLabel>
-                        </Step>
-                      )
-                    )}
-                  </Stepper>
-                </Box>
-              </div>
-            ) : (
-              <Box className="flex items-center text-red-500 my-6">
-                <XCircleIcon className="w-6 h-6 mr-2" />
-                <Typography>{t("orders.cancelled")}</Typography>
-              </Box>
-            )} */}
-
             <Box className="mb-6">
               <TableContainer style={{ maxHeight: "50vh" }}>
-                <SimpleBar>
+                <SimpleBar className="w-full overflow-x-auto">
+                
                   <Table
-                    className="border-separate overflow-auto"
+                    className="border-separate overflow-auto min-w-[600px]"
                     sx={{
                       "& .MuiTableCell-root": {
                         borderBottom: "1px dashed #0000001f",
@@ -356,9 +319,9 @@ const OrderDetailPage = () => {
                   >
                     <TableBody>
                       {order.orderItems.map((item, idx) => (
-                        <TableRow key={item._id || idx}>
+                        <TableRow key={item._id || idx} className="overflow-x-auto">
                           <TableCell>
-                            <Box className="flex items-center gap-2">
+                            <div className="flex items-center gap-2">
                               {item.image && (
                                 <img
                                   src={item.image}
@@ -366,20 +329,20 @@ const OrderDetailPage = () => {
                                   className="w-14 h-14 object-cover"
                                 />
                               )}
-                              <Typography className="font-public-sans capitalize">
+                              <Typography className="font-public-sans capitalize whitespace-nowrap text-tiny md:text-medium lg:text-base max-w-12">
                                 {item.name}
                               </Typography>
-                            </Box>
+                            </div>
                           </TableCell>
                           <TableCell
                             align="right"
-                            className="font-barlow font-medium whitespace-nowrap min-w-fit px-3"
+                            className="font-barlow font-medium whitespace-nowrap px-3"
                           >
                             {formatPrice(item.price)}
                           </TableCell>
                           <TableCell
                             align="right"
-                            className="font-barlow font-medium whitespace-nowrap min-w-fit px-3"
+                            className="font-barlow font-medium whitespace-nowrap px-3"
                           >
                             x{item.quantity}
                           </TableCell>
@@ -398,7 +361,7 @@ const OrderDetailPage = () => {
             </Box>
 
             <div className="flex w-full justify-end">
-              <Box className="space-y-5 w-[70%] md:w-[60%] lg:w-[50%] py-2 self-end">
+              <Box className="space-y-5 w-full md:w-[70%] lg:w-[60%] xl:w-[50%] py-2 self-end">
                 <Box className="flex justify-between">
                   <Typography className="font-public-sans text-[#637381] text-sm">
                     {t("orders.subtotal")}

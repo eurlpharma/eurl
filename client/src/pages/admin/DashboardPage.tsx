@@ -9,23 +9,21 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Divider,
-  Button,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Chip,
+  Container,
+  LinearProgress,
 } from "@mui/material";
 import { ArrowUpIcon, ArrowDownIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getDashboardStats } from "@/store/slices/adminSlice";
-import { Order } from "../../types/order";
-import Preloader from "@/components/global/Preloader";
+import { Order, OrderStatus } from "../../types/order";
 import AIButton from "@/components/buttons/AIButton";
 import BarCharts from "@/components/charts/BarCharts";
 import { BarChartPaper } from "@/components/charts/PaperCharts/BarChartSetting";
@@ -36,6 +34,8 @@ import {
   IconUsersBold,
 } from "@/components/Iconify";
 import TableProducts from "@/components/tables/TableProducts";
+import UIButton from "@/components/design/UIButton";
+import UIChip from "@/components/design/UIChip";
 
 declare global {
   interface ImportMeta {
@@ -54,8 +54,42 @@ const bgColors: Record<string, string> = {
   primary: "#006FEE",
 };
 
+const getStatusColor = (status: OrderStatus) => {
+  switch (status) {
+    case "pending":
+      return "warning";
+    case "processing":
+      return "info";
+    case "shipped":
+      return "primary";
+    case "delivered":
+      return "success";
+    case "cancelled":
+      return "error";
+    default:
+      return "grey";
+  }
+};
+
+const cells = [
+  { key: "orders.id" },
+  { key: "orders.customerInfo" },
+  { key: "orders.phone" },
+  { key: "orders.orderDate" },
+  { key: "orders.totalAmount" },
+  { key: "orders.paidStatus" },
+  { key: "orders.titleStatus" },
+  { key: "orders.products" },
+];
+
+const shortenOrderId = (id: string) => {
+  return id.slice(-6).toUpperCase();
+};
+
 const DashboardPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
 
   const { dashboardStats, recentOrders, loading, error } = useSelector(
@@ -116,9 +150,20 @@ const DashboardPage = () => {
 
   if (loading) {
     return (
-      <Box className="flex items-center justify-center h-full">
-        <Preloader />
-      </Box>
+      <Container className="flex items-center justify-center h-[80vh]">
+        <Box sx={{ width: "30%" }}>
+          <LinearProgress
+            sx={{
+              height: 6,
+              borderRadius: 2,
+              backgroundColor: "#fde6e1",
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: "#ff0066",
+              },
+            }}
+          />
+        </Box>
+      </Container>
     );
   }
 
@@ -214,146 +259,184 @@ const DashboardPage = () => {
 
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Card className="shadow-lighter rounded-xl">
+          <Card classes={{ root: "shadow-lighter p-0 rounded-xl" }}>
             <CardHeader
               title={t("admin.recentOrders")}
+              className="font-public-sans"
+              classes={{
+                title: "font-public-sans text-medium lg:text-lg xl:text-xl",
+              }}
               action={
-                <Button component={Link} to="/admin/orders" color="primary">
+                <UIButton
+                  component={Link}
+                  to="/admin/orders"
+                  color="grey"
+                  variant="link"
+                  size="sm"
+                >
                   {t("common.viewAll")}
-                </Button>
+                </UIButton>
               }
             />
-            <Divider />
-            <CardContent>
-              <TableContainer>
-                <Table>
+            <CardContent className="p-0">
+              <TableContainer component={Paper} className="shadow-none">
+                <Table
+                  className="border-separate"
+                  sx={{
+                    "& .MuiTableCell-root": {
+                      borderBottom: "1px dashed #0000001f",
+                    },
+                  }}
+                >
                   <TableHead>
                     <TableRow>
-                      <TableCell>{t("admin.orderId")}</TableCell>
-                      <TableCell>{t("admin.customer")}</TableCell>
-                      <TableCell>{t("admin.date")}</TableCell>
-                      <TableCell align="right">{t("admin.total")}</TableCell>
-                      <TableCell>{t("admin.products") || "Products"}</TableCell>
-                      <TableCell>{t("admin.quantity") || "Quantity"}</TableCell>
-                      <TableCell align="center">{t("admin.status")}</TableCell>
+                      {cells.map(({ key }) => (
+                        <TableCell
+                          key={key}
+                          className="capitalize font-public-sans"
+                        >
+                          {t(key)}
+                        </TableCell>
+                      ))}
                     </TableRow>
                   </TableHead>
+
                   <TableBody>
                     {recentOrders && recentOrders.length > 0 ? (
                       recentOrders.map((order: Order, idx: number) => (
-                        <TableRow key={order.id ?? order._id ?? idx}>
+                        <TableRow
+                          key={order._id || order.id || idx}
+                          className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
+                        >
+                          <TableCell className="font-public-sans">
+                            {order.id ? (
+                              <Link
+                                to={`/admin/orders/${order.id}`}
+                                className="text-primary-600 hover:underline"
+                              >
+                                #{shortenOrderId(order._id || order.id || "")}
+                              </Link>
+                            ) : (
+                              <span>-</span>
+                            )}
+                          </TableCell>
+
+                          <TableCell
+                            onClick={() =>
+                              navigate(`/admin/orders/${order.id}`)
+                            }
+                          >
+                            <Box>
+                              <Typography className="whitespace-nowrap font-public-sans">
+                                {order.guestInfo?.name ||
+                                  (typeof order.user === "object" &&
+                                  order.user?.name
+                                    ? order.user.name
+                                    : "-")}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+
+                          <TableCell
+                            onClick={() =>
+                              navigate(`/admin/orders/${order.id}`)
+                            }
+                          >
+                            <Typography className="whitespace-nowrap font-barlow">
+                              {order.shippingAddress.phone}
+                            </Typography>
+                          </TableCell>
+
+                          <TableCell className="font-poppins">
+                            {order.createdAt
+                              ? new Date(order.createdAt).toLocaleDateString()
+                              : "-"}
+                          </TableCell>
                           <TableCell>
-                            <Link
-                              to={`/admin/orders/${order.id ?? order._id}`}
-                              className="text-primary-600 hover:underline"
-                            >
-                              #{(order.id ?? order._id)?.slice?.(-6) ?? ""}
-                            </Link>
-                          </TableCell>
-                          <TableCell className="whitespace-nowrap">
-                            {typeof order.user === "string"
-                              ? "Guest"
-                              : order.user?.name ||
-                                order.guestInfo?.name ||
-                                "Guest"}
-                          </TableCell>
-                          <TableCell>
-                            {new Date(order.createdAt).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography className="flex items-center gap-1">
-                              <span>{order.totalPrice}</span>
-                              <span className="text-sm">{t("ammount.da")}</span>
+                            <Typography className="whitespace-nowrap flex items-center gap-1 font-barlow font-medium">
+                              {order.totalPrice.toFixed(2)}{" "}
+                              {t("ammount.da").toUpperCase()}
                             </Typography>
                           </TableCell>
                           <TableCell>
-                            {order.orderItems && order.orderItems.length > 0 ? (
-                              <ul
-                                style={{
-                                  margin: 0,
-                                  padding: 0,
-                                  listStyle: "none",
-                                }}
-                              >
-                                {order.orderItems.map((item, i) => (
-                                  <li
-                                    key={i}
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: 6,
-                                      marginBottom: 2,
-                                    }}
-                                  >
-                                    {item.image ? (
-                                      <img
-                                        src={item.image}
-                                        alt={item.name}
-                                        style={{
-                                          width: 28,
-                                          height: 28,
-                                          objectFit: "cover",
-                                          borderRadius: 4,
-                                          marginRight: 4,
-                                        }}
-                                      />
-                                    ) : (
-                                      <span
-                                        style={{
-                                          width: 28,
-                                          height: 28,
-                                          display: "inline-block",
-                                          background: "#eee",
-                                          borderRadius: 4,
-                                          marginRight: 4,
-                                        }}
-                                      ></span>
-                                    )}
-                                    <span className="whitespace-nowrap">
-                                      {item.name}
-                                    </span>
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <span>-</span>
-                            )}
+                            <UIChip
+                              size="sm"
+                              radius="full"
+                              variant="soft"
+                              className="capitalize px-2"
+                              color={order.isPaid ? "success" : "error"}
+                            >
+                              {order.isPaid
+                                ? t("orders.paid")
+                                : t("orders.unpaid")}
+                            </UIChip>
                           </TableCell>
                           <TableCell>
-                            {order.orderItems && order.orderItems.length > 0 ? (
-                              <ul
-                                style={{
-                                  margin: 0,
-                                  padding: 0,
-                                  listStyle: "none",
-                                }}
-                              >
-                                {order.orderItems.map((item, i) => (
-                                  <li key={i}>
-                                    <p>{item.quantity}</p>
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <span>-</span>
-                            )}
-                          </TableCell>
-                          <TableCell align="center">
-                            <Chip
-                              label={t(
-                                `admin.${String(order.status).toLowerCase()}`
+                            <UIChip
+                              size="sm"
+                              radius="full"
+                              variant="soft"
+                              className="capitalize px-2"
+                              color={getStatusColor(order.status)}
+                            >
+                              {t(
+                                `orders.status.${order.status?.toLowerCase?.()}`
                               )}
-                              color={
-                                order.status === "delivered"
-                                  ? "success"
-                                  : order.status === "processing"
-                                  ? "primary"
-                                  : order.status === "cancelled"
-                                  ? "error"
-                                  : "warning"
-                              }
-                              size="small"
-                            />
+                            </UIChip>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center">
+                              <Box display="flex" alignItems="center">
+                                {order.orderItems &&
+                                  order.orderItems.length > 0 &&
+                                  order.orderItems
+                                    .slice(0, 1)
+                                    .map((item: any, idx: number) => (
+                                      <img
+                                        className="min-w-8 min-h-8 w-8 h-8"
+                                        alt={item.name}
+                                        key={idx}
+                                        src={item.product.images[0]}
+                                        style={{
+                                          objectFit: "cover",
+                                          borderRadius: 4,
+                                        }}
+                                      />
+                                    ))}
+                              </Box>
+
+                              <Box>
+                                {order.orderItems &&
+                                order.orderItems.length > 0 ? (
+                                  order.orderItems
+                                    .slice(0, 2)
+                                    .map((item: any, idx: number) => (
+                                      <Typography
+                                        key={item._id || item.productId || idx}
+                                        variant="caption"
+                                        display="block"
+                                        className="min-w-[10rem] max-w-[14rem] line-clamp-1"
+                                      >
+                                        {item.name}
+                                      </Typography>
+                                    ))
+                                ) : (
+                                  <span>Unknown</span>
+                                )}
+                              </Box>
+                            </div>
+
+                            <Box>
+                              {order.orderItems &&
+                                order.orderItems.length > 2 && (
+                                  <Typography
+                                    variant="caption"
+                                    color="textSecondary"
+                                  >
+                                    +{order.orderItems.length - 1} more
+                                  </Typography>
+                                )}
+                            </Box>
                           </TableCell>
                         </TableRow>
                       ))
