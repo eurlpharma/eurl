@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   CardHeader,
+  Collapse,
   Dialog,
   DialogActions,
   DialogContent,
@@ -27,12 +28,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, Fragment, HTMLAttributes, useState } from "react";
 
 import unDrawError from "../../assets/undraw/bug_fix.svg";
 import { useTranslation } from "react-i18next";
 import UIButton from "../design/UIButton";
-import { IconFilter, IconMap, IconTrashBold } from "../Iconify";
+import { IconEyeBold, IconFilter, IconSwitch, IconTrashBold } from "../Iconify";
 import { Link } from "react-router-dom";
 import { FunnelIcon, PlusIcon } from "lucide-react";
 import clsx from "clsx";
@@ -41,6 +42,7 @@ import SimpleBar from "simplebar-react";
 import UIChip from "../design/UIChip";
 import "simplebar-react/dist/simplebar.min.css";
 import { GuepexParcel } from "@/types/delivery";
+import { formatPhone } from "@/utils/numbers";
 
 interface DeliveryTableProps extends HTMLAttributes<HTMLElement> {
   header?: string;
@@ -86,6 +88,75 @@ const guepexStatusMap: Record<
   "retour au site": { label: "returned", color: "error" },
 };
 
+const PhoneCell = ({ rawPhones }: { rawPhones: string }) => {
+  const phones = rawPhones
+    .split(",")
+    .map((p) => p.trim())
+    .filter((p) => p);
+
+  const [index, setIndex] = useState(0);
+
+  const togglePhone = () => {
+    setIndex((prev) => (prev + 1) % phones.length);
+  };
+
+  const currentPhone = phones[index];
+
+  return (
+    <Typography className="whitespace-nowrap font-barlow text-sm md:text-base flex items-center gap-1">
+      <a
+        href={`tel:${currentPhone}`}
+        className="block w-[88px] md:w-[92px] hover:underline whitespace-nowrap text-sm md:text-base"
+      >
+        {formatPhone(currentPhone)}
+      </a>
+
+      {phones.length > 1 && (
+        <IconButton onClick={togglePhone} title="Switch Phone" size="small">
+          <IconSwitch className="w-5 h-5 transition" />
+        </IconButton>
+      )}
+    </Typography>
+  );
+};
+
+const SkeletonRows = () => {
+  return (
+    <>
+      <TableCell>
+        <Skeleton variant="text" component="h2" />
+      </TableCell>
+      <TableCell>
+        <Skeleton variant="text" component="h2" />
+      </TableCell>
+      <TableCell>
+        <Skeleton />
+      </TableCell>
+      <TableCell>
+        <Skeleton />
+      </TableCell>
+      <TableCell>
+        <Skeleton />
+      </TableCell>
+      <TableCell>
+        <Skeleton />
+      </TableCell>
+      <TableCell>
+        <Skeleton />
+      </TableCell>
+      <TableCell>
+        <Skeleton />
+      </TableCell>
+      <TableCell>
+        <Box className="flex justify-end items-center gap-2">
+          <Skeleton variant="circular" className="w-6 h-6" />
+          <Skeleton variant="circular" className="w-6 h-6" />
+        </Box>
+      </TableCell>
+    </>
+  );
+};
+
 const DeliveryTable: FC<DeliveryTableProps> = ({
   header,
   subHeader,
@@ -99,6 +170,7 @@ const DeliveryTable: FC<DeliveryTableProps> = ({
 }) => {
   const { t } = useTranslation();
   const [openFilter, setOpenFilter] = useState(false);
+  const [expandedTracking, setExpandedTracking] = useState<string | null>(null);
 
   if (error) {
     return (
@@ -184,13 +256,7 @@ const DeliveryTable: FC<DeliveryTableProps> = ({
             <Grid item xs={12} md={3}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel>{t("orders.filterByStatus")}</InputLabel>
-                <Select
-                  // value={statusFilter}
-                  // onChange={(e) =>
-                  //   setStatusFilter(e.target.value as OrderStatus | "")
-                  // }
-                  label={t("orders.filterByStatus")}
-                >
+                <Select label={t("orders.filterByStatus")}>
                   <MenuItem value="">{t("common.all")}</MenuItem>
                   {[
                     "pending",
@@ -267,38 +333,9 @@ const DeliveryTable: FC<DeliveryTableProps> = ({
 
             <TableBody>
               {loading
-                ? Array.from(Array(6)).map((_, index) => (
+                ? Array.from(Array(8)).map((_, index) => (
                     <TableRow key={index}>
-                      <TableCell>
-                        <Skeleton variant="text" component="h2" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton variant="text" component="h2" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton />
-                      </TableCell>
-                      <TableCell>
-                        <Box className="flex justify-end items-center gap-2">
-                          <Skeleton variant="circular" className="w-6 h-6" />
-                          <Skeleton variant="circular" className="w-6 h-6" />
-                        </Box>
-                      </TableCell>
+                      <SkeletonRows />
                     </TableRow>
                   ))
                 : parcels &&
@@ -307,81 +344,107 @@ const DeliveryTable: FC<DeliveryTableProps> = ({
                       parcel.last_status?.toLowerCase() || ""
                     ] ?? {
                       label: parcel.last_status,
-                      color: "default", // يمكنك استخدام لون رمادي أو تركها بدون لون
+                      color: "default",
                     };
 
                     return (
-                      <TableRow
-                        key={parcel.tracking || idx}
-                        className="font-public-sans hover:bg-[#cdcdcd0d] transition duration-700"
-                      >
+                      <Fragment key={parcel.tracking || idx}>
+                        <TableRow className="hover:bg-[#cdcdcd0d] transition duration-700">
+                          <TableCell>
+                            <Link
+                              to={"#"}
+                              className="text-primary-600 hover:underline font-barlow"
+                            >
+                              #{parcel.order_id.padStart(3, "0")}
+                            </Link>
+                          </TableCell>
 
-                        <TableCell className="font-public-sans">
-                          <Link
-                            to={"#"}
-                            className="text-primary-600 hover:underline"
-                          >
-                            #{parcel.order_id}
-                          </Link>
-                        </TableCell>
-
-                        <TableCell>
-                          <Box>
-                            <Typography className="whitespace-nowrap font-public-sans">
+                          <TableCell>
+                            <Typography className="whitespace-nowrap text-tiny sm:text-sm md:text-base capitalize">
                               {parcel.firstname} {parcel.familyname}
                             </Typography>
-                          </Box>
-                        </TableCell>
+                          </TableCell>
 
-                        <TableCell>
-                          <Typography className="whitespace-nowrap font-barlow">
-                            {parcel.contact_phone}
-                          </Typography>
-                        </TableCell>
+                          <TableCell>
+                            <PhoneCell rawPhones={parcel.contact_phone} />
+                          </TableCell>
 
-                        <TableCell className="font-poppins">
-                          {parcel.to_wilaya_name}
-                        </TableCell>
+                          <TableCell>
+                            <Typography className="whitespace-nowrap text-sm md:text-base">
+                              {parcel.to_wilaya_name}
+                            </Typography>
+                          </TableCell>
 
-                        <TableCell>
-                          <Typography className="whitespace-nowrap flex items-center gap-1 font-barlow font-medium">
-                            {parcel.price.toFixed(2)}{" "}
-                            {t("ammount.da").toUpperCase()}
-                          </Typography>
-                        </TableCell>
+                          <TableCell>
+                            <Typography className="whitespace-nowrap text-sm md:text-base">
+                              {parcel.price.toFixed(2)}{" "}
+                              {t("ammount.da").toUpperCase()}
+                            </Typography>
+                          </TableCell>
 
-                        <TableCell>
-                          <UIChip
-                            size="sm"
-                            radius="full"
-                            variant="soft"
-                            color={statusInfo.color}
-                            className="capitalize px-2 line-clamp-1 whitespace-nowrap"
+                          <TableCell>
+                            <UIChip
+                              size="sm"
+                              variant="soft"
+                              color={statusInfo.color}
+                            >
+                              {statusInfo.label}
+                            </UIChip>
+                          </TableCell>
+
+                          <TableCell>
+                            <div className="flex items-center justify-end">
+                              <IconButton
+                                onClick={() =>
+                                  setExpandedTracking(
+                                    expandedTracking === parcel.tracking
+                                      ? null
+                                      : parcel.tracking
+                                  )
+                                }
+                                color="default"
+                              >
+                                <IconEyeBold />
+                              </IconButton>
+
+                              <IconButton
+                                color="error"
+                                title={t("common.delete")}
+                              >
+                                <IconTrashBold />
+                              </IconButton>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+
+                        {/* Collapse row */}
+                        <TableRow>
+                          <TableCell
+                            colSpan={cells.length}
+                            sx={{ padding: 0, border: 0 }}
                           >
-                            {statusInfo.label}
-                          </UIChip>
-                        </TableCell>
-
-                        <TableCell>
-                          <div className="flex items-center justify-end">
-                            <IconButton
-                              onClick={() => console.log(parcel.tracking)}
-                              color="default"
+                            <Collapse
+                              in={expandedTracking === parcel.tracking}
+                              timeout="auto"
+                              unmountOnExit
                             >
-                              <IconMap />
-                            </IconButton>
-                            <IconButton
-                              /* onClick={() =>
-                              handleDeleteClick(order._id || order.id || "")
-                            } */
-                              color="error"
-                              title={t("common.delete")}
-                            >
-                              <IconTrashBold />
-                            </IconButton>
-                          </div>
-                        </TableCell>
-                      </TableRow>
+                              <Box className="p-4 bg-gray-50 text-sm text-gray-700 space-y-2 font-public-sans">
+                                <div>
+                                  <strong>Tracking:</strong> {parcel.tracking}
+                                </div>
+                                <div>
+                                  <strong>Address:</strong> {parcel.address}
+                                </div>
+                                <div>
+                                  <strong>Created At:</strong>{" "}
+                                  {parcel.date_creation}
+                                </div>
+                                {/* أضف ما تريد من بيانات إضافية هنا */}
+                              </Box>
+                            </Collapse>
+                          </TableCell>
+                        </TableRow>
+                      </Fragment>
                     );
                   })}
             </TableBody>
