@@ -62,6 +62,7 @@ app.use(express.urlencoded({ extended: true }));
 // Enable CORS
 const allowedOrigins = [
   "https://pharma-livid.vercel.app",
+  "https://pharmadz.vercel.app",
   "http://localhost:3000",
 ];
 
