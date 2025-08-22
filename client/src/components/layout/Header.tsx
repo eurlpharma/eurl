@@ -109,7 +109,7 @@ const Header = () => {
     }
 
     handleLangMenuClose();
-    window.location.reload()
+    window.location.reload();
   };
 
   const handleLogout = () => {
@@ -228,18 +228,21 @@ const Header = () => {
 
   const langsMobile = [
     {
+      to: "en",
       key: "english",
       label: "english",
       icon: IconFlagUS,
     },
 
     {
+      to: "fr",
       key: "french",
       label: "français",
       icon: IconFlagFR,
     },
 
     {
+      to: "ar",
       key: "arabic",
       label: "arabic",
       icon: IconFlagDZ,
@@ -292,10 +295,9 @@ const Header = () => {
           <NavLink
             to={link.key}
             key={link.key}
-            onClick={() => handleLanguageChange(link.key)}
             className="flex items-center gap-3"
           >
-            <link.icon className="text-gray-600" />
+            {/* <link.icon className="text-gray-600" /> */}
             <p className="capitalize font-poppins">
               {t(`header.${link.label}`)}
             </p>
@@ -308,7 +310,7 @@ const Header = () => {
         {langsMobile.map((lang) => (
           <div
             key={lang.key}
-            onClick={() => handleLanguageChange(lang.key)}
+            onClick={() => handleLanguageChange(lang.to)}
             className="flex items-center gap-3"
           >
             <lang.icon className="w-5 h-5" />
@@ -435,8 +437,11 @@ const Header = () => {
           {/* Bottom Navbar */}
           <Container maxWidth="xl" className="btm">
             <Toolbar disableGutters className="content">
-              {/* شعار الموقع */}
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box
+                className="cursor-pointer"
+                sx={{ display: "flex", alignItems: "center" }}
+                onClick={() => navigate("/")}
+              >
                 {logo ? (
                   <img
                     src={logo}
@@ -470,7 +475,7 @@ const Header = () => {
 
               {/* Actions */}
               <Box className="flex items-center gap-4 text-girl-black">
-{/*                 <IconButton onClick={toggleTheme} color="inherit">
+                {/*                 <IconButton onClick={toggleTheme} color="inherit">
                   {mode === "dark" ? (
                     <SunIcon className="w-5 h-5" />
                   ) : (

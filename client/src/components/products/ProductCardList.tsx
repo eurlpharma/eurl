@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
 import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/utils/facebookPixel";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { IconCart, IconCartBold } from "../Iconify";
 
@@ -141,7 +141,7 @@ const ProductCardList: FC<ProductCardListProps> = ({
     <div className="product" data-aos="fade-up" {...props}>
       <div
         className="thumbs relative"
-        onClick={() => navigate(`/products/${product.id}`)}
+        // onClick={() => navigate(`/products/${product.id}`)}
       >
         <img
           loading="lazy"
@@ -180,7 +180,7 @@ const ProductCardList: FC<ProductCardListProps> = ({
             className="price"
             onClick={() => navigate(`/products/${product.id}`)}
           >
-            {product.oldPrice && (product.oldPrice > product.price) ? (
+            {product.oldPrice && product.oldPrice > product.price ? (
               <div className="flex items-center gap-2">
                 <span className="text-girl-secondary font-semibold md:text-base">
                   <span>{product.price}</span>
@@ -211,13 +211,13 @@ const ProductCardList: FC<ProductCardListProps> = ({
           )}
         </div>
 
-        <div
+        <Link
           dir="auto"
-          className="name"
-          onClick={() => navigate(`/products/${product.id}`)}
+          className="name cursor-pointer hover:underline"
+          to={`/products/${product.id}`}
         >
           {product.name}
-        </div>
+        </Link>
       </div>
     </div>
   );
